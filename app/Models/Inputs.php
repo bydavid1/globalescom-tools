@@ -29,7 +29,7 @@ class Inputs extends Model
      * Get the Input_types of the input.
      */
     public function Input_type(){
-        return $this->belongsTo('App\Input_types', 'input_type_id');
+        return $this->belongsTo('App\InputTypes', 'input_type_id');
     }
 
     /**

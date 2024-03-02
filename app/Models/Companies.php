@@ -16,7 +16,7 @@ class Companies extends Model
      */
     public function Company_user()
     {
-        return $this->hasMany('App\Company_user', 'user_id');
+        return $this->hasMany('App\CompanyUser', 'user_id');
     }
     
 }

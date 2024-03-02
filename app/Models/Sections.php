@@ -43,7 +43,7 @@ class Sections extends Model
      * Get the section type.
      */
     public function Section_type(){
-        return  $this->belongsTo('App\Section_types','section_type');
+        return  $this->belongsTo('App\SectionTypes','section_type');
     }
 
     /**
