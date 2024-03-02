@@ -32,11 +32,6 @@
                       <CCol :xs="6">
                         <CButton color="primary" class="px-4"> Login </CButton>
                       </CCol>
-                      <CCol :xs="6" class="text-right">
-                        <CButton color="link" class="px-0">
-                          Forgot password?
-                        </CButton>
-                      </CCol>
                     </CRow>
                   </CForm>
                 </CCardBody>
@@ -50,9 +45,6 @@
                       sed do eiusmod tempor incididunt ut labore et dolore magna
                       aliqua.
                     </p>
-                    <CButton color="light" variant="outline" class="mt-3">
-                      Register Now!
-                    </CButton>
                   </div>
                 </CCardBody>
               </CCard>
