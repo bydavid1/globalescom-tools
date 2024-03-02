@@ -29,6 +29,7 @@ const router = createRouter({
                             children: [
                                 {
                                     path: '',
+                                    name: 'presentation',
                                     component: () => import('../views/tools/bizig/Presentation.vue'),
                                 },
                                 {

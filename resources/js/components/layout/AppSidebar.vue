@@ -10,7 +10,7 @@
   >
     <CSidebarBrand>
     </CSidebarBrand>
-    <AppSidebarNav />
+    <!-- <AppSidebarNav /> -->
     <CSidebarToggler
       class="d-none d-lg-flex"
       @click="store.toggleUnfoldable"
