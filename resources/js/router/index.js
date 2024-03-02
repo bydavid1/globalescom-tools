@@ -31,6 +31,11 @@ const router = createRouter({
                                     path: '',
                                     component: () => import('../views/tools/bizig/Presentation.vue'),
                                 },
+                                {
+                                    path: 'perspectiva',
+                                    name: 'perspectiva',
+                                    component: () => import('../views/tools/bizig/Perspectiva.vue'),
+                                }
                             ]
                         },
                     ]
