@@ -40,6 +40,11 @@ const router = createRouter({
                                     path: 'admin',
                                     name: 'admin',
                                     component: () => import('../views/tools/bizig/Administration.vue'),
+                                },
+                                {
+                                    path: 'dashboard',
+                                    name: 'dashboard',
+                                    component: () => import('../views/tools/bizig/Dashboard.vue'),
                                 }
                             ]
                         },

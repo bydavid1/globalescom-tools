@@ -24,7 +24,6 @@
                         <CTableHeaderCell>Tiempo:</CTableHeaderCell>
                         <CTableHeaderCell>Avance</CTableHeaderCell>
                         <CTableHeaderCell></CTableHeaderCell>
-                        <CTableHeaderCell></CTableHeaderCell>
                     </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -103,7 +102,6 @@ const answers = reactive([answerShape]);
 const progress = computed(() => answers.map((answer) => answer.avance));
 
 const saveAnswer = (index) => {
-    console.log('saveAnswer', index);
     answers[index].editing = false;
 
     if (index === answers.length - 1) {
@@ -113,12 +111,10 @@ const saveAnswer = (index) => {
 };
 
 const editAnswer = (index) => {
-    console.log('editAnswer', index);
     answers[index].editing = true;
 };
 
 watch(progress, (newProgress) => {
-    console.log('newProgress', newProgress);
     calculateGlobalProgress();
 });
 
