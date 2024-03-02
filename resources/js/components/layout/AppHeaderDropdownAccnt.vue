@@ -1,6 +1,6 @@
 <template>
   <CDropdown variant="nav-item">
-    <CDropdownToggle placement="bottom-end" class="py-0" :caret="false">
+    <CDropdownToggle placement="bottom-end" :caret="false">
         <CIcon icon="cil-user" size="lg" />
     </CDropdownToggle>
     <CDropdownMenu class="pt-0">

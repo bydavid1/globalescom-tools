@@ -11,15 +11,30 @@ const router = createRouter({
             component: () => import('../views/Login.vue')
         },
         {
-            path: '/app',
+            path: '/',
             component: AuthLayout,
             children: [
                 {
-                    path: '/dashboard',
+                    path: 'dashboard',
                     name: 'Dashboard',
-                    component: () =>
-                      import('../views/Dashboard.vue'),
-                  },
+                    component: () => import('../views/Dashboard.vue'),
+                },
+                {
+                    path: 'herramienta',
+                    name: 'herramienta',
+                    children: [
+                        {
+                            path: 'bizig',
+                            name: 'bizig',
+                            children: [
+                                {
+                                    path: '',
+                                    component: () => import('../views/tools/bizig/Presentation.vue'),
+                                },
+                            ]
+                        },
+                    ]
+                }
             ]
         }
     ]
