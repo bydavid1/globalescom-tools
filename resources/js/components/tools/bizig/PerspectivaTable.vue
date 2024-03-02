@@ -2,7 +2,7 @@
     <CCard>
         <CCardHeader>Perspectiva: "Aprendizaje y Crecimiento del Capital Humano".</CCardHeader>
         <CCardBody>
-            <CTable reponsive>
+            <CTable bordered>
                 <CTableHead>
                     <CTableRow>
                         <CTableHeaderCell>Objetivos Estratégicos:</CTableHeaderCell>
