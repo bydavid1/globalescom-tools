@@ -1,6 +1,6 @@
 export const registerFirebaseMessagingServiceWorker = async () => {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./firebase-messaging-sw.js')
+        navigator.serviceWorker.register('/firebase-messaging-sw.js')
             .then(reg => {
                 console.log(`Service Worker Registration (Scope: ${reg.scope})`);
             })

@@ -25,9 +25,10 @@ export const fetchToken = async () => {
     })
 }
 
-export const onMessageListener = () =>
-    new Promise((resolve) => {
+export const onMessageListener = async () => {
+    return new Promise((resolve) => {
         onMessage(messaging, (payload) => {
             resolve(payload);
         });
     });
+};

@@ -10,11 +10,10 @@
             </div>
             <AppFooter />
         </div>
-        <CToaster placement="top-end" visible>
-            <CToast v-for="(toast, index) in toasts" :key="index">
+        <CToaster placement="top-end">
+            <CToast v-for="(toast, index) in toasts" :key="index" visible>
                 <CToastHeader closeButton>
                     <span class="me-auto fw-bold">{{ toast.title }}</span>
-                    <small>7 min ago</small>
                 </CToastHeader>
                 <CToastBody>
                     {{ toast.content }}
@@ -37,12 +36,17 @@ const toasts = ref([])
 onMounted(async () => {
     console.log(await fetchToken())
 
+    toasts.value.push({
+        title: "Welcome",
+        content: "You are now logged in"
+    })
+
     await onMessageListener().then(payload => {
-        console.log("payload", payload)
         toasts.value.push({
             title: payload.notification.title,
             content: payload.notification.body
         })
     })
+
 })
 </script>
