@@ -83,7 +83,6 @@
 </template>
 
 <script setup>
-import { CTableHeaderCell } from '@coreui/vue';
 import { computed, reactive, ref, watch } from 'vue';
 
 const answerShape = {

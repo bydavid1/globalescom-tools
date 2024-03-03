@@ -6,10 +6,12 @@ import App from "./App.vue";
 import CoreuiVue from '@coreui/vue'
 import CIcon from '@coreui/icons-vue'
 import { iconsSet as icons } from '../icons/index'
+import { registerFirebaseMessagingServiceWorker } from './services/service-worker';
 
 const pinia = createPinia()
 const app = createApp(App)
 
+registerFirebaseMessagingServiceWorker()
 
 app.use(router)
 app.use(pinia)
