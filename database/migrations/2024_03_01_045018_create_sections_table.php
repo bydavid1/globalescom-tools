@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('tool_id')->constrained('tools', 'id');
-            $table->foreignId('section_type')->constrained('section_types', 'id');
+            $table->foreignId('section_type_id')->constrained('section_types', 'id');
             $table->foreignId('parent_id')->constrained('sections', 'id')->nullable();
             $table->timestamps();
         });
