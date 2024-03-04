@@ -1,6 +1,5 @@
 <template>
     <div>
-        <AppSidebar />
         <div class="wrapper d-flex flex-column min-vh-100 bg-light">
             <AppHeader />
             <div class="body flex-grow-1 px-3">
@@ -42,6 +41,7 @@ onMounted(async () => {
     })
 
     await onMessageListener().then(payload => {
+        console.log("payload", payload)
         toasts.value.push({
             title: payload.notification.title,
             content: payload.notification.body
