@@ -43,11 +43,9 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    /**
-     * Get the company user record associated with the user.
-     */
-    public function Company_user()
+
+    public function companies()
     {
-        return $this->hasOne('App\CompanyUser');
+        return $this->belongsToMany(Company::class, 'company_user');
     }
 }

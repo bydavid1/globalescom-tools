@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SectionTypes extends Model
+class SectionType extends Model
 {
     use HasFactory;
 
@@ -13,8 +13,7 @@ class SectionTypes extends Model
         'name',
     ];
 
-    /**Get the sections */
-    public function Sections() {
-        return  $this->hasMany('App\Sections', 'section_type');
+    public function sections() {
+        return  $this->hasMany(Section::class, 'section_type_id');
     }
 }
