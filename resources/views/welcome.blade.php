@@ -10,6 +10,10 @@
     </head>
     <body>
         <div id="app"></div>
+        <script >
+            window.appUrl = @json(config('app.url'));
+            window.pass = @json(config('app.psswd'));
+        </script>
         @vite('resources/js/app.js')
     </body>
 </html>
