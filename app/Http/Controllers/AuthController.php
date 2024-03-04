@@ -3,56 +3,66 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use App\Services\Tools\BiZig\Auth\AuthService;
+use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
 {
+
+    private $authService;
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     public function register(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8',
+            ]);
+    
+            $response = $this->authService->register($request);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        } catch (\Throwable $th) {
+            return ['message' => 'Error al registar usuario', 'Error' => $th->getMessage()];
+        }
 
-        return response()->json(['message' => 'User registered successfully', 'user_name' => $user->name], 201);
+        return $response;
+
     }
 
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
+        try {
+            $request->validate([
+                'email' => 'required|string|email',
+                'password' => 'required|string',
+            ]);
 
-        if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            $response = $this->authService->login($request);
+
+            return $response;
+
+        } catch (\Throwable $th) {
+            return ['message' => 'Error al ingresar', 'Error' => $th->getMessage()];
         }
 
-        $user = Auth::user();
-        $token = $user->createToken('token-name')->plainTextToken;
-
-        $data = [
-            'token' => $token,
-            'user_name' => $user->name
-        ];
-
-        return response()->json($data);
+        
+        
     }
 
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        try {
+            $response = $this->authService->logout($request);
+        } catch (\Throwable $th) {
+            return ['message' => 'Error al cerrar la sesion', 'Error' => $th->getMessage()];
+        }
 
-        return response()->json(['message' => 'Logged out successfully']);
+        return $response;
     }
 }
 
