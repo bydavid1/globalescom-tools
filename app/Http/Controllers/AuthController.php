@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\Tools\BiZig\Auth\AuthService;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -27,10 +27,11 @@ class AuthController extends Controller
             $response = $this->authService->register($request);
 
         } catch (\Throwable $th) {
-            return ['message' => 'Error al registar usuario', 'Error' => $th->getMessage()];
+            Log::error($th->getMessage());
+            return response()->json(['Error al registrar usuario, error interno del servidor'], 500);
         }
 
-        return $response;
+        return response()->json(['data' => $response], 200);
 
     }
 
@@ -44,13 +45,11 @@ class AuthController extends Controller
 
             $response = $this->authService->login($request);
 
-            return $response;
-
         } catch (\Throwable $th) {
-            return ['message' => 'Error al ingresar', 'Error' => $th->getMessage()];
+            Log::error($th->getMessage());
+            return response()->json(['Error al ingresar, error interno del servidor'], 500);
         }
-
-        
+        return response()->json(['data' => $response], 200);
         
     }
 
@@ -59,10 +58,11 @@ class AuthController extends Controller
         try {
             $response = $this->authService->logout($request);
         } catch (\Throwable $th) {
-            return ['message' => 'Error al cerrar la sesion', 'Error' => $th->getMessage()];
+            Log::error($th->getMessage());
+            return response()->json(['Error al salir de la sesion, error interno del servidor'], 500);
         }
 
-        return $response;
+        return response()->json(['data' => $response], 200);
     }
 }
 

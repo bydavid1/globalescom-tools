@@ -17,9 +17,3 @@ Route::post('logout', [
     App\Http\Controllers\AuthController::class,
     'logout'
 ]);
-
-// rutas roles
-Route::post('user-role', [
-    App\Http\Controllers\AuthController::class,
-    'getRoles'
-]);
