@@ -42,4 +42,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Get the company user record associated with the user.
+     */
+    public function Company_user()
+    {
+        return $this->hasOne('App\CompanyUser');
+    }
 }
