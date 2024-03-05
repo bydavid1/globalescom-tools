@@ -26,7 +26,8 @@
                         <CTableDataCell v-for="(input, inputIndex) in form.inputs" :key="inputIndex">
                             <CFormInput
                                 :disabled="!batch.editing"
-                                v-model="batch.answers.find(a => a.input_id == input.id).body"
+                                :value="getModel(batch, input.id)"
+                                @input="setModel(batch, input.id, $event.target.value)"
                                 placeholder="Ingrese la respuesta"
                                 type="text" size="sm"
                             />
@@ -67,6 +68,17 @@ const globalProgress = ref(0);
 
 const progress = computed(() => props.answerBatches.map((b) => b.answers.find(a => a.input_id == 14).body));
 
+const getModel = (batch, inputId) => {
+    const answer = batch.answers.find(a => a.input_id === inputId);
+    return answer ? answer.body : '';
+};
+
+const setModel = (batch, inputId, value) => {
+    const answer = batch.answers.find(a => a.input_id === inputId);
+    if (answer) {
+        answer.body = value;
+    }
+};
 const saveAnswer = (id, index) => {
     props.answerBatches.find(b => b.id == id).editing = false;
 
