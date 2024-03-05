@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Tools\Bizig\AnswerController;
 use App\Http\Controllers\Tools\Bizig\PerspectiveController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,4 +21,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/perspectives/{id}', [PerspectiveController::class, 'getPerspective']);
+
+Route::post('/answers/batch', [AnswerController::class, 'saveBatch']);
+
+Route::put('/answers/batch', [AnswerController::class, 'updateBatch']);
 
