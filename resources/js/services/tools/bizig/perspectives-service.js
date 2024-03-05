@@ -12,14 +12,7 @@ const getPerspective = async (id) => {
     return response.data;
 }
 
-const saveAnswers = async (answers) => {
-    const response = await api.post('/perspectives', answers);
-
-    return response.data;
-}
-
-export default {
+export {
     getPerspectives,
-    getPerspective,
-    saveAnswers
+    getPerspective
 }

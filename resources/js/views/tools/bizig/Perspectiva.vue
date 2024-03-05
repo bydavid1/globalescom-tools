@@ -17,7 +17,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import PerspectivaTable from '../../../components/tools/bizig/PerspectivaTable.vue';
-import perspectivesService from '../../../services/tools/bizig/perspectives-service';
+import { getPerspective } from '../../../services/tools/bizig/perspectives-service';
 
 const perspective = ref({});
 
@@ -26,7 +26,8 @@ onMounted(() => {
 });
 
 const loadPerspective = async () => {
-    const response = await perspectivesService.getPerspective(1);
+    console.log('loadPerspective');
+    const response = await getPerspective(1);
 
     perspective.value = response;
 }

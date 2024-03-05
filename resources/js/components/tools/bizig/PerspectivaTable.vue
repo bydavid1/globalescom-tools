@@ -68,8 +68,8 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref, watch } from 'vue';
-
+import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { updateBatch, saveBatch } from '../../../services/tools/bizig/answer-service';
 const props = defineProps({
     section: {
         type: Object
@@ -121,6 +121,10 @@ const answersBatchShape = {
 
 const globalProgress = ref(0);
 
+onMounted(() => {
+    calculateGlobalProgress();
+});
+
 const progress = computed(() => batches.value.map((b) => b.answers.find(a => a.input_id == 14).body));
 
 const getModel = (batch, inputId) => {
@@ -135,13 +139,27 @@ const setModel = (batch, inputId, value) => {
     }
 };
 
-const saveAnswer = (id, index) => {
-    batches.value.find(b => b.id == id).editing = false;
+const saveAnswer = async (id, index) => {
+    try {
+        batches.value.find(b => b.id == id).editing = false;
 
-    if (index === batches.value.length - 1) {
-        console.log('last batch');
-        const newAnswerBatch = reactive({ ...answersBatchShape, id: Math.random() * 100});
-        batches.value.push(newAnswerBatch);
+        const batch = batches.value.find(b => b.id == id);
+
+        if (batch.unhandled) {
+            await saveBatch({ ...batch, section_id: props.section.id, form_id: props.form.id });
+        } else {
+            await updateBatch(batch);
+        }
+
+        batches.value.find(b => b.id == id).unhandled = false;
+
+        if (index === batches.value.length - 1) {
+            console.log('last batch');
+            const newAnswerBatch = reactive({ ...answersBatchShape, id: Math.random() * 100});
+            batches.value.push(newAnswerBatch);
+        }
+    } catch (error) {
+        console.error('noooo', error);
     }
 };
 
@@ -155,6 +173,11 @@ watch(progress, (newProgress) => {
 
 const calculateGlobalProgress = () => {
     let totalProgress = 0;
+
+    if (batches.value.length === 0) {
+        globalProgress.value = 0;
+        return;
+    }
 
     for (let i = 0; i < batches.value.length; i++) {
         const avance = parseInt(batches.value[i].answers.find(a => a.input_id == 14).body);
