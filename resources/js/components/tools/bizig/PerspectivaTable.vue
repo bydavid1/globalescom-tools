@@ -22,18 +22,15 @@
                     </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                    <CTableRow v-for="(batch, batchIndex) in answerBatches" :key="batchIndex">
+                    <CTableRow v-for="(batch, batchIndex) in batches" :key="batchIndex">
                         <CTableDataCell v-for="(input, inputIndex) in form.inputs" :key="inputIndex">
-                            <CFormInput
-                                :disabled="!batch.editing"
-                                :value="getModel(batch, input.id)"
+                            <CFormInput :disabled="!batch.editing" :value="getModel(batch, input.id)"
                                 @input="setModel(batch, input.id, $event.target.value)"
-                                placeholder="Ingrese la respuesta"
-                                type="text" size="sm"
-                            />
+                                placeholder="Ingrese la respuesta" type="text" size="sm" />
                         </CTableDataCell>
                         <CTableDataCell class="text-white">
-                            <CButton v-if="batch.editing" color="primary" size="sm" @click="saveAnswer(batch.id, batchIndex)">
+                            <CButton v-if="batch.editing" color="primary" size="sm"
+                                @click="saveAnswer(batch.id, batchIndex)">
                                 Guardar
                             </CButton>
                             <CButton v-else color="success" size="sm" @click="editAnswer(batch.id)">
@@ -49,7 +46,6 @@
 </template>
 
 <script setup>
-import { CTableHeaderCell } from '@coreui/vue';
 import { computed, reactive, ref, watch } from 'vue';
 
 const props = defineProps({
@@ -64,9 +60,46 @@ const props = defineProps({
     }
 });
 
+const batches = ref(props.answerBatches);
+
+const answersBatchShape = {
+    answers: [
+        {
+            'input_id': 8,
+            'body': ''
+        },
+        {
+            'input_id': 9,
+            'body': ''
+        },
+        {
+            'input_id': 10,
+            'body': ''
+        },
+        {
+            'input_id': 11,
+            'body': ''
+        },
+        {
+            'input_id': 12,
+            'body': ''
+        },
+        {
+            'input_id': 13,
+            'body': ''
+        },
+        {
+            'input_id': 14,
+            'body': ''
+        }
+    ],
+    editing: true,
+    unhandled: true
+};
+
 const globalProgress = ref(0);
 
-const progress = computed(() => props.answerBatches.map((b) => b.answers.find(a => a.input_id == 14).body));
+const progress = computed(() => batches.value.map((b) => b.answers.find(a => a.input_id == 14).body));
 
 const getModel = (batch, inputId) => {
     const answer = batch.answers.find(a => a.input_id === inputId);
@@ -79,19 +112,19 @@ const setModel = (batch, inputId, value) => {
         answer.body = value;
     }
 };
+
 const saveAnswer = (id, index) => {
-    props.answerBatches.find(b => b.id == id).editing = false;
+    batches.value.find(b => b.id == id).editing = false;
 
-    if (index === props.answerBatches.length - 1) {
-        // const newAnswer = { ...answerShape, editing: true, avance: 0 }; // Avoid editing issues
-        // answers.push(newAnswer);
-
-        console.log('Last answer');
+    if (index === batches.value.length - 1) {
+        console.log('last batch');
+        const newAnswerBatch = reactive({ ...answersBatchShape, id: Math.random() * 100});
+        batches.value.push(newAnswerBatch);
     }
 };
 
 const editAnswer = (id) => {
-    props.answerBatches.find(b => b.id == id).editing = true;
+    batches.value.find(b => b.id == id).editing = true;
 };
 
 watch(progress, (newProgress) => {
@@ -101,13 +134,13 @@ watch(progress, (newProgress) => {
 const calculateGlobalProgress = () => {
     let totalProgress = 0;
 
-    for (let i = 0; i < answerBatches.length; i++) {
-        const avance = parseInt(props.answerBatches[i].find(a => a.input_id == 14).body);
+    for (let i = 0; i < batches.value.length; i++) {
+        const avance = parseInt(batches.value[i].answers.find(a => a.input_id == 14).body);
         if (!isNaN(avance) && avance >= 0 && avance <= 100) {
             totalProgress += avance;
         }
     }
 
-    globalProgress.value = (totalProgress / answers.length).toFixed(0);
+    globalProgress.value = (totalProgress / batches.value.length).toFixed(0);
 };
 </script>
