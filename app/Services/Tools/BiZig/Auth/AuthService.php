@@ -26,7 +26,7 @@ class AuthService
     public function login(Request $request)
     {
         if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            return response()->json(['Credenciales incorrectas'], 401);
+            return [ "message" => "Credenciales incorrectas"];
         }else {
             $user = Auth::user();
             $token = $user->createToken('token-name')->plainTextToken;
@@ -48,9 +48,8 @@ class AuthService
 
             return true;
         }  else {
-            return "No hay una sesión activa para cerrar.";
-        }  
-        
+            return [ "message" => "No hay una sesión activa para cerrar."];
+        }
 
     }
 }
