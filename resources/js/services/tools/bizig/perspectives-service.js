@@ -6,6 +6,12 @@ const getPerspectives = async () => {
     return response.data;
 }
 
+const getPerspective = async (id) => {
+    const response = await api.get(`/perspectives/${id}`);
+
+    return response.data;
+}
+
 const saveAnswers = async (answers) => {
     const response = await api.post('/perspectives', answers);
 
@@ -14,5 +20,6 @@ const saveAnswers = async (answers) => {
 
 export default {
     getPerspectives,
+    getPerspective,
     saveAnswers
 }

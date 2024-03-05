@@ -3,7 +3,7 @@
         <CCardHeader>
             <CRow class="align-items-center">
                 <CCol xl="10">
-                    Perspectiva: "Aprendizaje y Crecimiento del Capital Humano".
+                    {{ section.name }}
                 </CCol>
                 <CCol xl="2" class="text-end">
                     <CProgress>
@@ -16,68 +16,33 @@
             <CTable bordered>
                 <CTableHead>
                     <CTableRow>
-                        <CTableHeaderCell>Objetivos Estratégicos:</CTableHeaderCell>
-                        <CTableHeaderCell>Indicadores:</CTableHeaderCell>
-                        <CTableHeaderCell>¿De dónde obtendrá el Presupuesto?</CTableHeaderCell>
-                        <CTableHeaderCell>Presupuesto:</CTableHeaderCell>
-                        <CTableHeaderCell>Responsables:</CTableHeaderCell>
-                        <CTableHeaderCell>Tiempo:</CTableHeaderCell>
-                        <CTableHeaderCell>Avance</CTableHeaderCell>
-                        <CTableHeaderCell></CTableHeaderCell>
+                        <CTableHeaderCell v-for="(input, index) in form.inputs" :key="index">{{ input.label }}
+                        </CTableHeaderCell>
+                        <CTableHeaderCell>Acción</CTableHeaderCell>
                     </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                    <CTableRow v-for="(answer, index) in answers" :key="index">
-                        <CTableDataCell>
-                            <CFormInput :disabled="!answer.editing" type="text" size="sm"
-                                placeholder="Ingrese la respuesta" />
-                        </CTableDataCell>
-                        <CTableDataCell>
-                            <CFormInput :disabled="!answer.editing" type="text" size="sm"
-                                placeholder="Ingrese la respuesta" />
-                        </CTableDataCell>
-                        <CTableDataCell>
-                            <CFormInput :disabled="!answer.editing" type="text" size="sm"
-                                placeholder="Ingrese la respuesta" />
-                        </CTableDataCell>
-                        <CTableDataCell>
-                            <CFormInput :disabled="!answer.editing" type="text" size="sm"
-                                placeholder="Ingrese la respuesta" />
-                        </CTableDataCell>
-                        <CTableDataCell>
-                            <CFormInput :disabled="!answer.editing" type="text" size="sm"
-                                placeholder="Ingrese la respuesta" />
-                        </CTableDataCell>
-                        <CTableDataCell>
-                            <CFormInput :disabled="!answer.editing" type="text" size="sm"
-                                placeholder="Ingrese la respuesta" />
-                        </CTableDataCell>
-                        <CTableDataCell>
-                            <CFormSelect v-model="answer.avance" size="sm" aria-label="Seleccione el avance">
-                                <option value="0">0%</option>
-                                <option value="10">10%</option>
-                                <option value="20">20%</option>
-                                <option value="30">30%</option>
-                                <option value="40">40%</option>
-                                <option value="50">50%</option>
-                                <option value="60">60%</option>
-                                <option value="70">70%</option>
-                                <option value="80">80%</option>
-                                <option value="90">90%</option>
-                                <option value="100">100%</option>
-                            </CFormSelect>
+                    <CTableRow v-for="(batch, batchIndex) in answerBatches" :key="batchIndex">
+                        <CTableDataCell v-for="(input, inputIndex) in form.inputs" :key="inputIndex">
+                            <CFormInput
+                                :disabled="!batch.editing"
+                                v-model="batch.answers.find(a => a.input_id == input.id).body"
+                                placeholder="Ingrese la respuesta"
+                                type="text" size="sm"
+                            />
                         </CTableDataCell>
                         <CTableDataCell class="text-white">
-                            <CButton v-if="answer.editing" color="primary" size="sm" @click="saveAnswer(index)">
+                            <CButton v-if="batch.editing" color="primary" size="sm" @click="saveAnswer(batch.id, batchIndex)">
                                 Guardar
                             </CButton>
-                            <CButton v-else color="success" size="sm" @click="editAnswer(index)">
+                            <CButton v-else color="success" size="sm" @click="editAnswer(batch.id)">
                                 Editar
                             </CButton>
                         </CTableDataCell>
                     </CTableRow>
                 </CTableBody>
             </CTable>
+
         </CCardBody>
     </CCard>
 </template>
@@ -86,32 +51,35 @@
 import { CTableHeaderCell } from '@coreui/vue';
 import { computed, reactive, ref, watch } from 'vue';
 
-const answerShape = {
-    objetivo: '',
-    indicador: '',
-    presupuesto: '',
-    responsable: '',
-    tiempo: '',
-    avance: 0,
-    editing: true
-};
+const props = defineProps({
+    section: {
+        type: Object
+    },
+    form: {
+        type: Object
+    },
+    answerBatches: {
+        type: Array
+    }
+});
 
 const globalProgress = ref(0);
-const answers = reactive([answerShape]);
 
-const progress = computed(() => answers.map((answer) => answer.avance));
+const progress = computed(() => props.answerBatches.map((b) => b.answers.find(a => a.input_id == 14).body));
 
-const saveAnswer = (index) => {
-    answers[index].editing = false;
+const saveAnswer = (id, index) => {
+    props.answerBatches.find(b => b.id == id).editing = false;
 
-    if (index === answers.length - 1) {
-        const newAnswer = { ...answerShape, editing: true, avance: 0 }; // Avoid editing issues
-        answers.push(newAnswer);
+    if (index === props.answerBatches.length - 1) {
+        // const newAnswer = { ...answerShape, editing: true, avance: 0 }; // Avoid editing issues
+        // answers.push(newAnswer);
+
+        console.log('Last answer');
     }
 };
 
-const editAnswer = (index) => {
-    answers[index].editing = true;
+const editAnswer = (id) => {
+    props.answerBatches.find(b => b.id == id).editing = true;
 };
 
 watch(progress, (newProgress) => {
@@ -121,8 +89,8 @@ watch(progress, (newProgress) => {
 const calculateGlobalProgress = () => {
     let totalProgress = 0;
 
-    for (let i = 0; i < answers.length; i++) {
-        const avance = parseInt(answers[i].avance);
+    for (let i = 0; i < answerBatches.length; i++) {
+        const avance = parseInt(props.answerBatches[i].find(a => a.input_id == 14).body);
         if (!isNaN(avance) && avance >= 0 && avance <= 100) {
             totalProgress += avance;
         }
