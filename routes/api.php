@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Tools\Bizig\AnswerController;
 use App\Http\Controllers\Tools\Bizig\PerspectiveController;
+use App\Http\Controllers\ReminderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,3 +27,4 @@ Route::post('/answers/batch', [AnswerController::class, 'saveBatch']);
 
 Route::put('/answers/batch', [AnswerController::class, 'updateBatch']);
 
+Route::post('/reminder', [ReminderController::class, 'sendReminder']);

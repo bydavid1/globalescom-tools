@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import AuthLayout from '../layouts/AuthLayout.vue'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -12,7 +11,7 @@ const router = createRouter({
         },
         {
             path: '/',
-            component: AuthLayout,
+            component: () => import('../layouts/AuthLayout.vue'),
             children: [
                 {
                     path: 'dashboard',
@@ -20,16 +19,17 @@ const router = createRouter({
                     component: () => import('../views/Dashboard.vue'),
                 },
                 {
-                    path: 'herramienta',
-                    name: 'herramienta',
+                    path: 'herramientas',
+                    name: 'herramientas',
                     children: [
                         {
                             path: 'bizig',
                             name: 'bizig',
+                            component: () => import('../components/tools/bizig/layout/BizigLayout.vue'),
                             children: [
                                 {
                                     path: '',
-                                    name: 'presentation',
+                                    name: 'presentacion',
                                     component: () => import('../views/tools/bizig/Presentation.vue'),
                                 },
                                 {
