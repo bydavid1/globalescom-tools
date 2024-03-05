@@ -53,10 +53,12 @@ class AuthController extends Controller
         
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
         try {
-            $response = $this->authService->logout($request);
+
+            $response = $this->authService->logout();
+
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             return response()->json(['Error al salir de la sesion, error interno del servidor'], 500);

@@ -39,10 +39,16 @@ class AuthService
         }     
     }
 
-    public function logout(Request $request) : bool
+    public function logout()
     {
-        $request->user()->currentAccessToken()->delete();
+        if (Auth::check()) {
+            $user = Auth::user();
 
-        return true;
+            return $user->tokens()->delete();
+        }  else {
+            return "No hay una sesión activa para cerrar.";
+        }  
+        
+
     }
 }
