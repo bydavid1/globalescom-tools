@@ -45,4 +45,9 @@ class Section extends Model
     {
         return $this->belongsToMany(Form::class, 'form_section');
     }
+
+    public function answerBatches()
+    {
+        return $this->hasMany(AnswerBatch::class);
+    }
 }
