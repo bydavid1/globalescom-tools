@@ -15,7 +15,7 @@ class UserService
         $user = Auth::user();
 
         if (!$user) {
-            return response()->json(['message' => 'Usuario no autenticado'], 401);
+            return ['message' => 'Usuario no autenticado'];
         }
         $user->device_id = $data->device_id;
         $user->save();
