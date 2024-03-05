@@ -22,11 +22,33 @@
                     </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                    <CTableRow v-for="(batch, batchIndex) in batches" :key="batchIndex">
-                        <CTableDataCell v-for="(input, inputIndex) in form.inputs" :key="inputIndex">
-                            <CFormInput :disabled="!batch.editing" :value="getModel(batch, input.id)"
+                    <CTableRow
+                        v-for="(batch, batchIndex) in batches" :key="batchIndex"
+                    >
+                        <CTableDataCell
+                            v-for="(input, inputIndex) in form.inputs" :key="inputIndex"
+                        >
+                            <CFormInput
+                                v-if="input.type == 'text'"
+                                :disabled="!batch.editing"
+                                :value="getModel(batch, input.id)"
                                 @input="setModel(batch, input.id, $event.target.value)"
                                 placeholder="Ingrese la respuesta" type="text" size="sm" />
+                            <CFormSelect
+                                v-else-if="input.type == 'select'"
+                                :value="getModel(batch, input.id)"
+                                @input="setModel(batch, input.id, $event.target.value)"
+                                :disabled="!batch.editing"
+                                size="sm"
+                            >
+                                <option
+                                    v-for="(option, optionIndex) in input.options"
+                                    :key="optionIndex"
+                                    :value="option.value"
+                                >
+                                    {{ option.label }}
+                                </option>
+                            </CFormSelect>
                         </CTableDataCell>
                         <CTableDataCell class="text-white">
                             <CButton v-if="batch.editing" color="primary" size="sm"
@@ -141,6 +163,6 @@ const calculateGlobalProgress = () => {
         }
     }
 
-    globalProgress.value = (totalProgress / batches.value.length).toFixed(0);
+    globalProgress.value = parseInt((totalProgress / batches.value.length).toFixed(0));
 };
 </script>

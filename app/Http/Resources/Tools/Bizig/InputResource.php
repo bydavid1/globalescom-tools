@@ -19,6 +19,8 @@ class InputResource extends JsonResource
             'type' => $this->type->name,
             'label' => $this->label,
             'placeholder' => $this->placeholder,
+            'options' => json_decode($this->options),
+
         ];
     }
 }
