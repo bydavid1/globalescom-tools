@@ -44,7 +44,9 @@ class AuthService
         if (Auth::check()) {
             $user = Auth::user();
 
-            return $user->tokens()->delete();
+            $user->tokens()->delete();
+
+            return true;
         }  else {
             return "No hay una sesión activa para cerrar.";
         }  
