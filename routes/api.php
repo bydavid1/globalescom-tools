@@ -21,6 +21,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/perspectives', [PerspectiveController::class, 'getPerspectives']);
+
 Route::get('/perspectives/{id}', [PerspectiveController::class, 'getPerspective']);
 
 Route::post('/answers/batch', [AnswerController::class, 'saveBatch']);

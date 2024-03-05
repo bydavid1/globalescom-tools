@@ -68,7 +68,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import { updateBatch, saveBatch } from '../../../services/tools/bizig/answer-service';
 const props = defineProps({
     section: {
@@ -117,14 +117,15 @@ const answersBatchShape = {
     unhandled: true
 };
 
-const batches = ref([...props.answerBatches, reactive({ ...answersBatchShape, id: Math.random() * 100})]);
+const batches = ref([]);
 
 
 const globalProgress = ref(0);
 
-onMounted(() => {
-    calculateGlobalProgress();
-});
+const initBatches = () => {
+    batches.value = props.answerBatches.map(batch => reactive({ ...batch }));
+    batches.value.push(reactive({ ...answersBatchShape, id: Math.random() * 100}));
+};
 
 const progress = computed(() => batches.value.map((b) => b.answers.find(a => a.input_id == 14).body));
 
@@ -189,4 +190,10 @@ const calculateGlobalProgress = () => {
 
     globalProgress.value = parseInt((totalProgress / batches.value.length).toFixed(0));
 };
+
+watch(() => props.answerBatches, () => {
+    initBatches();
+    calculateGlobalProgress();
+}, { immediate: true });
+
 </script>
