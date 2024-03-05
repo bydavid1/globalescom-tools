@@ -82,8 +82,6 @@ const props = defineProps({
     }
 });
 
-const batches = ref(props.answerBatches);
-
 const answersBatchShape = {
     answers: [
         {
@@ -118,6 +116,9 @@ const answersBatchShape = {
     editing: true,
     unhandled: true
 };
+
+const batches = ref([...props.answerBatches, reactive({ ...answersBatchShape, id: Math.random() * 100})]);
+
 
 const globalProgress = ref(0);
 
