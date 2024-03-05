@@ -22,3 +22,7 @@ Route::prefix('auth')->group(function () {
     require __DIR__ . '/Auth/auth.php';
 });
 
+Route::prefix('user')->group(function () {
+    require __DIR__ . '/User/user.php';
+})->middleware(["auth:sanctum"]); // Protege las rutas con autenticación
+
