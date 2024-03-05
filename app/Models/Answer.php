@@ -14,9 +14,9 @@ class Answer extends Model
         'body'
     ];
 
-
-    public function user() {
-        return $this->belongsTo(User::class, 'user_id');
+    public function batch()
+    {
+        return $this->belongsTo(AnswerBatch::class);
     }
 
     public function input(){

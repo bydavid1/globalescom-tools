@@ -31,4 +31,9 @@ class Input extends Model
     {
         return $this->hasOne(Answer::class, 'input_id');
     }
+
+    public function answers()
+    {
+        return $this->hasMany(Answer::class, 'input_id');
+    }
 }

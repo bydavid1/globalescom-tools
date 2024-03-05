@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('input_type_id')->constrained('input_types','id');
             $table->foreignId('form_id')->constrained('forms','id');
-            $table->string('placeholder');
+            $table->string('placeholder')->nullable();
             $table->string('label');
-            $table->json('options');
+            $table->json('options')->nullable();
             $table->timestamps();
         });
     }

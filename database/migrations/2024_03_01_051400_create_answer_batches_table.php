@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sections', function (Blueprint $table) {
+        Schema::create('answer_batches', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('tool_id')->constrained('tools', 'id');
-            $table->foreignId('section_type_id')->constrained('section_types', 'id');
-            $table->foreignId('parent_id')->nullable()->default(null)->constrained('sections', 'id');
+            $table->foreignId('form_id')->constrained();
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('section_id')->constrained();
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sections');
+        Schema::dropIfExists('answer_batches');
     }
 };

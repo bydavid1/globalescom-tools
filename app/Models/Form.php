@@ -22,4 +22,9 @@ class Form extends Model
     {
         return $this->belongsToMany(Section::class, 'form_section');
     }
+
+    public function answerBatches()
+    {
+        return $this->hasMany(AnswerBatch::class);
+    }
 }

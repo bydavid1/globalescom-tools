@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('answers', function (Blueprint $table) {
             $table->id();
             $table->string('body');
-            $table->foreignId('user_id')->constrained('users', 'id');
+            $table->foreignId('answer_batch_id')->constrained('answer_batches', 'id');
             $table->foreignId('input_id')->constrained('inputs', 'id');
             $table->timestamps();
         });

@@ -26,7 +26,7 @@ class Section extends Model
     */
     public function parent()
     {
-        return $this->belongsTo('App\Sections', 'parent_id');
+        return $this->belongsTo(Section::class, 'parent_id');
     }
 
     /**
@@ -34,9 +34,8 @@ class Section extends Model
     */
     public function children()
     {
-        return $this->hasMany('App\Sections', 'parent_id');
+        return $this->hasMany(Section::class, 'parent_id');
     }
-
 
     public function sectionType(){
         return  $this->belongsTo(SectionType::class, 'section_type_id');
