@@ -9,6 +9,8 @@ class Company extends Model
 {
     use HasFactory;
 
+    public static string $mediaPath = 'empresas/';
+
     protected  $fillable = ['name'];
 
 
