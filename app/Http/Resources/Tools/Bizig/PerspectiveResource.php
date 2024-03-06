@@ -18,6 +18,7 @@ class PerspectiveResource extends JsonResource
     {
         return [
             'name' => $this->name,
+            'data' => json_decode($this->data),
             'children' => $this->children->map(function ($child) {
                 return [
                     'id' => $child->id,

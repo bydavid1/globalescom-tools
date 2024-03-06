@@ -20,7 +20,15 @@ class PerspectiveController extends Controller
         try {
             $perspectives = $this->perspectiveService->getPerspectives();
 
-            return response()->json($perspectives);
+            return response()->json($perspectives->map(function ($perspective) {
+                return [
+                    'id' => $perspective->id,
+                    'name' => $perspective->name,
+                    'section_type_id' => $perspective->section_type_id,
+                    'data' => json_decode($perspective->data),
+
+                ];
+            }));
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['message' => 'Internal Server Error'], 500);
