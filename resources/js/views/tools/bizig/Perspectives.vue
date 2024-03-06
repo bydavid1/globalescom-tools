@@ -6,7 +6,7 @@
                 :key="perspective.id"
             >
                 <CNavLink
-                    href="#"
+                    :style="{ backgroundColor: perspective.data.accent_color, color: '#ffffff', cursor: 'pointer' }"
                     :active="perspective.id == route.params.id"
                     @click="choosePerspective(perspective.id)"
                 >
