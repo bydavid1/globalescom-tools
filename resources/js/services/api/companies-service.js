@@ -18,8 +18,15 @@ const saveCompany = async (company) => {
     return response.data;
 }
 
+const updateCompany = async (id, company) => {
+    const response = await api.put(`/companies/${id}`, company);
+
+    return response.data;
+}
+
 export {
     getCompanies,
     getCompany,
-    saveCompany
+    saveCompany,
+    updateCompany
 }
