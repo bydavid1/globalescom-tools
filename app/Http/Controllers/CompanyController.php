@@ -36,4 +36,16 @@ class CompanyController extends Controller
 
         return response()->json($company);
     }
+
+    public function updateCompany(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required',
+            'logo' => 'image',
+        ]);
+
+        $company = $this->companyService->updateCompany($id, $request->all());
+
+        return response()->json($company);
+    }
 }

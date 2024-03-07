@@ -32,4 +32,21 @@ class CompanyService
 
         return $company;
     }
+
+    public function updateCompany($id, $data) : Company
+    {
+        $company = Company::find($id);
+
+        if (isset($data['logo'])) {
+            $logo = $data['logo'];
+            $filename = time() . '.' . $logo->getClientOriginalExtension();
+            Storage::disk('public')->put(Company::$mediaPath . $filename, file_get_contents($logo));
+            $company->logo = $filename;
+        }
+
+        $company->name = $data['name'];
+        $company->save();
+
+        return $company;
+    }
 }

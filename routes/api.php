@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\Tools\Bizig\AnswerController;
 use App\Http\Controllers\Tools\Bizig\PerspectiveController;
 use App\Http\Controllers\ReminderController;
@@ -30,3 +31,10 @@ Route::post('/answers/batch', [AnswerController::class, 'saveBatch']);
 Route::put('/answers/batch', [AnswerController::class, 'updateBatch']);
 
 Route::post('/reminder', [ReminderController::class, 'sendReminder']);
+
+Route::group('/companies', function () {
+    Route::get('/', [CompanyController::class, 'getCompanies']);
+    Route::get('/{id}', [CompanyController::class, 'getCompany']);
+    Route::post('/', [CompanyController::class, 'createCompany']);
+    Route::put('/{id}', [CompanyController::class, 'updateCompany']);
+});
