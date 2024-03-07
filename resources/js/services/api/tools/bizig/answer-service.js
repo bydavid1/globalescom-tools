@@ -1,4 +1,4 @@
-import api from "../../api"
+import api from "../../../api"
 
 const saveBatch = async (batch) => {
     const response = await api.post('/answers/batch', batch);
