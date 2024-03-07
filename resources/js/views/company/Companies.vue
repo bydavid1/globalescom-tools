@@ -1,11 +1,10 @@
 <template>
     <div>
-        <h1>Empresas</h1>
         <CCard>
             <CCardHeader>
                 <CRow>
                     <CCol>
-                        <h2 class="card-title">Empresas</h2>
+                        <h5>Empresas</h5>
                     </CCol>
                     <CCol class="text-end">
                         <CButton @click="openCreateModal" color="primary">Nueva Empresa</CButton>
@@ -40,23 +39,23 @@
                 <CModalTitle>Registrar empresa</CModalTitle>
             </CModalHeader>
             <CModalBody @submit="sendCompany">
-                <CForm>
-                    <CFormGroup>
-                        <CLabel for="name">Nombre</CLabel>
-                        <CInput v-model="formState.name" type="text" id="name" />
-                    </CFormGroup>
-                    <CFormGroup>
-                        <CLabel for="name">Logo</CLabel>
-                        <CFormInput v-model="formState.logo" type="file" id="logo"/>
-                    </CFormGroup>
-                    <CFormGroup>
-                        <CLabel for="user">Usuario</CLabel>
-                        <CInput v-model="formState.user" type="text" id="user" />
-                    </CFormGroup>
-                    <CFormGroup>
-                        <CLabel for="user">Contrasena</CLabel>
-                        <CInput v-model="formState.password" type="text" id="password" />
-                    </CFormGroup>
+                <CForm class="row gy-3 align-items-center">
+                    <CCol xs="12">
+                        <CFormLabel for="name">Nombre</CFormLabel>
+                        <CFormInput v-model="formState.name" type="text" id="name" placeholder="Ingrese el nombre de la empresa" />
+                    </CCol>
+                    <CCol xs="12">
+                        <CFormLabel for="logo">Logo</CFormLabel>
+                        <CFormInput v-model="formState.logo" type="file" id="logo" placeholder="Suba el logo de la empresa" />
+                    </CCol>
+                    <CCol xs="12">
+                        <CFormLabel for="user">Usuario</CFormLabel>
+                        <CFormInput v-model="formState.user" type="text" id="user" placeholder="Ingrese el usuario de la empresa" />
+                    </CCol>
+                    <CCol xs="12">
+                        <CFormLabel for="password">Contrseña</CFormLabel>
+                        <CFormInput v-model="formState.password" type="text" id="password" placeholder="Ingrese la contraseña de la empresa" />
+                    </CCol>
                 </CForm>
             </CModalBody>
             <CModalFooter>
