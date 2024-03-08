@@ -39,3 +39,13 @@ Route::controller(CompanyController::class)->prefix('/companies')->group(functio
     Route::post('/', 'createCompany');
     Route::put('/{id}', 'updateCompany');
 });
+
+// Rutas de login y registro
+Route::prefix('auth')->group(function () {
+    require __DIR__ . '/Auth/auth.php';
+});
+
+Route::prefix('user')->group(function () {
+    require __DIR__ . '/User/user.php';
+})->middleware(["auth:sanctum"]); // Protege las rutas con autenticación
+
