@@ -8,7 +8,7 @@
       </CHeaderBrand>
       <CHeaderNav class="d-none d-md-flex me-auto">
         <CNavItem>
-          <CNavLink href="#">Empresas</CNavLink>
+          <CNavLink href="/empresas">Empresas</CNavLink>
         </CNavItem>
         <CNavItem>
           <CNavLink href="#">Herramientas</CNavLink>

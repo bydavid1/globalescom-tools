@@ -33,7 +33,7 @@ Route::put('/answers/batch', [AnswerController::class, 'updateBatch']);
 
 Route::post('/reminder', [ReminderController::class, 'sendReminder']);
 
-Route::controller(CompanyController::class)->group(function () {
+Route::controller(CompanyController::class)->prefix('/companies')->group(function () {
     Route::get('/', 'getCompanies');
     Route::get('/{id}', 'getCompany');
     Route::post('/', 'createCompany');
