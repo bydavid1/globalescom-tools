@@ -2,27 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CompanyResource;
 use App\Services\CompanyService;
+use App\Services\UserService;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Log;
 class CompanyController extends Controller
 {
     public function __construct(
-        private CompanyService $companyService
+        private CompanyService $companyService,
+        private UserService $userService
     ) { }
 
     public function getCompanies()
     {
-        $companies = $this->companyService->getCompanies();
+        try {
+            $companies = $this->companyService->getCompanies();
 
-        return response()->json($companies);
+            return response()->json(CompanyResource::collection($companies));
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['message' => 'Internal Server Error'], 500);
+        }
     }
 
     public function getCompany($id)
     {
-        $company = $this->companyService->getCompany($id);
-
-        return response()->json($company);
+        try {
+            $company = $this->companyService->getCompany($id);
+            return response()->json($company);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['message' => 'Internal Server Error'], 500);
+        }
     }
 
     public function createCompany(Request $request)
@@ -30,22 +42,37 @@ class CompanyController extends Controller
         $request->validate([
             'name' => 'required',
             'logo' => 'required|image',
+            'email' => 'required|email',
+            'password' => 'required',
         ]);
 
-        $company = $this->companyService->createCompany($request->all());
+        try {
+            $company = $this->companyService->createCompany($request->all());
+            $user = $this->userService->register($request->name, $request->email, $request->password);
 
-        return response()->json($company);
+            $company->users()->save($user);
+
+            return response()->json($company);
+        } catch (\Error $e) {
+            Log::error($e->getMessage());
+            return response()->json(['message' => 'Internal Server Error'], 500);
+        }
     }
 
     public function updateCompany(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required',
-            'logo' => 'image',
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required',
+                'logo' => 'image',
+            ]);
 
-        $company = $this->companyService->updateCompany($id, $request->all());
+            $company = $this->companyService->updateCompany($id, $request->all());
 
-        return response()->json($company);
+            return response()->json($company);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['message' => 'Internal Server Error'], 500);
+        }
     }
 }
