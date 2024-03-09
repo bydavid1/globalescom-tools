@@ -1,4 +1,4 @@
-import api from "../../api"
+import api from "../.."
 
 const getPerspectives = async () => {
     const response = await api.get('/perspectives');

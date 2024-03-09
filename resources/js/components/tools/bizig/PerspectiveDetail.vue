@@ -33,7 +33,7 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue';
 import PerspectivaTable from './PerspectivaTable.vue';
-import { getPerspective } from '../../../services/tools/bizig/perspectives-service';
+import { getPerspective } from '../../../services/api/tools/bizig/perspectives-service';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();

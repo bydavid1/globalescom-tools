@@ -69,7 +69,7 @@
 
 <script setup>
 import { computed, reactive, ref, watch } from 'vue';
-import { updateBatch, saveBatch } from '../../../services/tools/bizig/answer-service';
+import { updateBatch, saveBatch } from '../../../services/api/tools/bizig/answer-service';
 const props = defineProps({
     section: {
         type: Object

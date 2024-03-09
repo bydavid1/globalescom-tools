@@ -20,7 +20,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
-import { getPerspectives } from '../../../services/tools/bizig/perspectives-service';
+import { getPerspectives } from '../../../services/api/tools/bizig/perspectives-service';
 import { useRouter, useRoute } from 'vue-router';
 import PerspectiveDetail from '../../../components/tools/bizig/PerspectiveDetail.vue';
 
