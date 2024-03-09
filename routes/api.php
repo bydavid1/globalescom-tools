@@ -4,6 +4,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\Tools\Bizig\AnswerController;
 use App\Http\Controllers\Tools\Bizig\PerspectiveController;
 use App\Http\Controllers\ReminderController;
+use App\Http\Controllers\ToolController;
 use App\Http\Controllers\Tools\Bizig\DashboardController;
 use App\Models\Company;
 use Illuminate\Http\Request;
@@ -52,3 +53,5 @@ Route::prefix('user')->group(function () {
 
 
 Route::get('/dashboard', [DashboardController::class, 'getProgress']);
+
+Route::get('/tools', [ToolController::class, 'getTools']);
