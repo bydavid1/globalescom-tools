@@ -1,32 +1,34 @@
 <?php
 
-namespace App\Services\Tools\BiZig\Auth;
+namespace App\Services;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Hash;
 
 class AuthService
 {
 
-    public function register(Request $request) : User
+    public function register(string $name, string $email, string $password) : User
     {
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'name' => $name,
+            'email' => $email,
+            'password' => Hash::make($password),
         ]);
+
         $user->assignRole('user'); // Assign role to new user by default.
 
         return $user;
     }
 
 
-    public function login(Request $request)
+    public function login(string $email, string $password)
     {
-        if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            return [ "message" => "Credenciales incorrectas"];
+        if (!Auth::attempt(['email' => $email, 'password' => $password])) {
+            throw new AuthenticationException('Contraseña o email incorrecto.');
         }else {
             $user = Auth::user();
             $token = $user->createToken('token-name')->plainTextToken;
@@ -36,20 +38,15 @@ class AuthService
                 'role_name' => $user->roles->value('name'),
                 'token' => $token
             ];
-        }     
+        }
     }
 
-    public function logout()
+    public function logout() : void
     {
         if (Auth::check()) {
             $user = Auth::user();
 
             $user->tokens()->delete();
-
-            return true;
-        }  else {
-            return [ "message" => "No hay una sesión activa para cerrar."];
         }
-
     }
 }

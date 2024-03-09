@@ -43,4 +43,4 @@ const loadPerspectives = async () => {
 
     perspectives.value = response;
 }
-</script>./PerspectiveDetail.vue
+</script>

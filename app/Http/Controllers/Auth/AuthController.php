@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
-use App\Services\Tools\BiZig\Auth\AuthService;
+use App\Http\Controllers\Controller;
+use App\Services\Auth\AuthService;
 use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
@@ -23,7 +24,7 @@ class AuthController extends Controller
                 'email' => 'required|string|email|max:255|unique:users',
                 'password' => 'required|string|min:8',
             ]);
-    
+
             $response = $this->authService->register($request);
 
         } catch (\Throwable $th) {
@@ -50,7 +51,7 @@ class AuthController extends Controller
             return response()->json(['Error al ingresar, error interno del servidor'], 500);
         }
         return response()->json(['data' => $response], 200);
-        
+
     }
 
     public function logout()
