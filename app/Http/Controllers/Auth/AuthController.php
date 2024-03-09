@@ -25,7 +25,7 @@ class AuthController extends Controller
                 'password' => 'required|string|min:8',
             ]);
 
-            $response = $this->authService->register($request);
+            $response = $this->authService->register($request->name, $request->email, $request->password);
 
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
@@ -38,20 +38,19 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
         try {
-            $request->validate([
-                'email' => 'required|string|email',
-                'password' => 'required|string',
-            ]);
+            $response = $this->authService->login($request->email, $request->password);
 
-            $response = $this->authService->login($request);
-
-        } catch (\Throwable $th) {
-            Log::error($th->getMessage());
-            return response()->json(['Error al ingresar, error interno del servidor'], 500);
+            return response()->json(['data' => $response], 200);
+        } catch (\Error $e) {
+            Log::error($e->getMessage());
+            return response()->json(['message' => 'Error al ingresar, error interno del servidor'], 500);
         }
-        return response()->json(['data' => $response], 200);
-
     }
 
     public function logout()

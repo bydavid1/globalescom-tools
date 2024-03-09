@@ -29,7 +29,7 @@ class UserService
             'password' => Hash::make($password),
         ]);
 
-        // $user->assignRole('user');
+        $user->assignRole('user');
 
         return $user;
     }

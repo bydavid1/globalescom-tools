@@ -5,17 +5,18 @@ namespace App\Services\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Hash;
 
 class AuthService
 {
 
-    public function register(Request $request) : User
+    public function register(string $name, string $email, string $password) : User
     {
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'name' => $name,
+            'email' => $email,
+            'password' => Hash::make($password),
         ]);
         $user->assignRole('user'); // Assign role to new user by default.
 
@@ -23,11 +24,11 @@ class AuthService
     }
 
 
-    public function login(Request $request)
+    public function login(string $email, string $password)
     {
-        if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            return [ "message" => "Credenciales incorrectas"];
-        }else {
+        if (!Auth::attempt(['email' => $email, 'password' => $password])) {
+            throw new AuthenticationException('Credenciales inválidas');
+        } else {
             $user = Auth::user();
             $token = $user->createToken('token-name')->plainTextToken;
 
