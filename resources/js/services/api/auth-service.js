@@ -8,8 +8,11 @@ const login = async (email, password) => {
 
     const data = response.data;
 
-    if (data.access_token) {
-        localStorage.setItem('user', JSON.stringify(data));
+    console.log(data);
+
+    if (data.token) {
+        console.log(data.token);
+        localStorage.setItem('user', JSON.stringify(data.token));
     }
 
     return response.data;

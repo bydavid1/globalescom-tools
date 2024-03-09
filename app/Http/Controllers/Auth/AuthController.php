@@ -46,7 +46,7 @@ class AuthController extends Controller
         try {
             $response = $this->authService->login($request->email, $request->password);
 
-            return response()->json(['data' => $response], 200);
+            return response()->json($response, 200);
         } catch (\Error $e) {
             Log::error($e->getMessage());
             return response()->json(['message' => 'Error al ingresar, error interno del servidor'], 500);

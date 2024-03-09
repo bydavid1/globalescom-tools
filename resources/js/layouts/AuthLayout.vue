@@ -28,25 +28,30 @@ import { fetchToken, onMessageListener } from "../services/firebase";
 import { CContainer } from '@coreui/vue'
 import AppFooter from '../components/layout/AppFooter.vue'
 import AppHeader from '../components/layout/AppHeader.vue'
-import AppSidebar from '../components/layout/AppSidebar.vue'
-
+import { useRouter } from "vue-router";
 const toasts = ref([])
 
+const router = useRouter()
+
 onMounted(async () => {
-    console.log(await fetchToken())
+    const user = localStorage.getItem("user")
+    if (!user) {
+        router.push({ name: "login" })
+    } else {
+        await fetchToken()
 
-    toasts.value.push({
-        title: "Welcome",
-        content: "You are now logged in"
-    })
-
-    await onMessageListener().then(payload => {
-        console.log("payload", payload)
         toasts.value.push({
-            title: payload.notification.title,
-            content: payload.notification.body
+            title: "Welcome",
+            content: "You are now logged in"
         })
-    })
 
+        await onMessageListener().then(payload => {
+            console.log("payload", payload)
+            toasts.value.push({
+                title: payload.notification.title,
+                content: payload.notification.body
+            })
+        })
+    }
 })
 </script>
