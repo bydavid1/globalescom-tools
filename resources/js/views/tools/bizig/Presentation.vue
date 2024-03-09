@@ -60,7 +60,7 @@
             </CTableBody>
         </CTable>
     </CContainer>
-    <!-- <CContainer>
-        <router-link to="/herramientas/bizig/perspectiva" class="btn btn-secondary">Continuar</router-link>
-    </CContainer> -->
+    <CContainer class="text-center">
+        <router-link to="/herramientas/bizig/perspectivas/1" class="btn btn-secondary">Ver progreso</router-link>
+    </CContainer>
 </template>

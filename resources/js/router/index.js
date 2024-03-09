@@ -34,7 +34,7 @@ const router = createRouter({
                     children: [
                         {
                             path: 'bizig',
-                            name: 'bizig',
+                            name: 'Bizig',
                             component: () => import('../components/tools/bizig/layout/BizigLayout.vue'),
                             children: [
                                 {

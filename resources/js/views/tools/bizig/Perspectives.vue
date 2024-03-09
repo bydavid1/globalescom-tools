@@ -13,6 +13,14 @@
                     {{ perspective.name }}
                 </CNavLink>
             </CNavItem>
+            <CNavItem>
+                <CNavLink
+                    :style="{ backgroundColor: '#000', color: '#fff', cursor: 'pointer' }"
+                    @click="goToDashboard"
+                >
+                    Dashboard
+                </CNavLink>
+            </CNavItem>
         </CNav>
         <PerspectiveDetail />
     </CContainer>
@@ -42,5 +50,9 @@ const loadPerspectives = async () => {
     const response = await getPerspectives();
 
     perspectives.value = response;
+}
+
+const goToDashboard = () => {
+    router.push({ path: '/herramientas/bizig/dashboard' });
 }
 </script>
