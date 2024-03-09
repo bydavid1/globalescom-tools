@@ -57,8 +57,10 @@ import { reactive, ref } from 'vue';
 import { login } from '../services/api/auth-service';
 import CustomLoadingButton from '../components/widgets/CustomLoadingButton.vue';
 import { useRouter } from 'vue-router';
+import { useAlerts } from '../store/alert';
 
 const router = useRouter();
+const alert = useAlerts();
 
 const isLoading = ref(false);
 
@@ -73,14 +75,16 @@ const attemptLogin = async () => {
 
         // validate form
         if (!formState.email || !formState.password) {
-            console.log('Invalid form');
+            alert.add({ title: 'Error',  content: 'Por favor, complete todos los campos'});
             return;
         }
 
         await login(formState.email, formState.password);
+        alert.add({ title: 'Bienvenido', content: 'Bienvenido de nuevo a Global Escom' });
 
         router.replace({ path: '/' });
     } catch (error) {
+        alert.add({ title: 'Error', content: 'Ocurrio un error al iniciar sesion' });
         console.log(error);
     } finally {
         isLoading.value = false;

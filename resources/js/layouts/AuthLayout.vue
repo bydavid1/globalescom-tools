@@ -9,29 +9,20 @@
             </div>
             <AppFooter />
         </div>
-        <CToaster placement="top-end">
-            <CToast v-for="(toast, index) in toasts" :key="index" visible>
-                <CToastHeader closeButton>
-                    <span class="me-auto fw-bold">{{ toast.title }}</span>
-                </CToastHeader>
-                <CToastBody>
-                    {{ toast.content }}
-                </CToastBody>
-            </CToast>
-        </CToaster>
     </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { fetchToken, onMessageListener } from "../services/firebase";
 import { CContainer } from '@coreui/vue'
 import AppFooter from '../components/layout/AppFooter.vue'
 import AppHeader from '../components/layout/AppHeader.vue'
 import { useRouter } from "vue-router";
-const toasts = ref([])
+import { useAlerts } from '../store/alert';
 
 const router = useRouter()
+const alert = useAlerts()
 
 onMounted(async () => {
     const user = localStorage.getItem("user")
@@ -40,18 +31,15 @@ onMounted(async () => {
     } else {
         await fetchToken()
 
-        toasts.value.push({
-            title: "Welcome",
-            content: "You are now logged in"
-        })
-
         await onMessageListener().then(payload => {
             console.log("payload", payload)
-            toasts.value.push({
+            alert.add({
                 title: payload.notification.title,
                 content: payload.notification.body
             })
         })
     }
 })
+
+
 </script>
