@@ -1,62 +1,89 @@
 <template>
     <div class="bg-light min-vh-100 d-flex flex-row align-items-center">
-      <CContainer>
-        <CRow class="justify-content-center">
-          <CCol :md="8">
-            <CCardGroup>
-              <CCard class="p-4">
-                <CCardBody>
-                  <CForm>
-                    <h1>Login</h1>
-                    <p class="text-medium-emphasis">Sign In to your account</p>
-                    <CInputGroup class="mb-3">
-                      <CInputGroupText>
-                        <CIcon icon="cil-user" />
-                      </CInputGroupText>
-                      <CFormInput
-                        placeholder="Username"
-                        autocomplete="username"
-                      />
-                    </CInputGroup>
-                    <CInputGroup class="mb-4">
-                      <CInputGroupText>
-                        <CIcon icon="cil-lock-locked" />
-                      </CInputGroupText>
-                      <CFormInput
-                        type="password"
-                        placeholder="Password"
-                        autocomplete="current-password"
-                      />
-                    </CInputGroup>
-                    <CRow>
-                      <CCol :xs="6">
-                        <CButton color="primary" class="px-4"> Login </CButton>
-                      </CCol>
-                    </CRow>
-                  </CForm>
-                </CCardBody>
-              </CCard>
-              <CCard class="text-white bg-primary py-5" style="width: 44%">
-                <CCardBody class="text-center">
-                  <div>
-                    <h2>Sign up</h2>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua.
-                    </p>
-                  </div>
-                </CCardBody>
-              </CCard>
-            </CCardGroup>
-          </CCol>
-        </CRow>
-      </CContainer>
+        <CContainer>
+            <CRow class="justify-content-center">
+                <CCol :md="8">
+                    <CCardGroup>
+                        <CCard class="p-4">
+                            <CCardBody>
+                                <CForm @submit.prevent="attemptLogin">
+                                    <h1>Iniciar sesion</h1>
+                                    <p class="text-medium-emphasis">Inicia sesion con tu cuenta de Global Escom</p>
+                                    <CInputGroup class="mb-3">
+                                        <CInputGroupText>
+                                            <CIcon icon="cil-user" />
+                                        </CInputGroupText>
+                                        <CFormInput v-model="formState.email" placeholder="Ingrese su email"
+                                            autocomplete="email" />
+                                    </CInputGroup>
+                                    <CInputGroup class="mb-4">
+                                        <CInputGroupText>
+                                            <CIcon icon="cil-lock-locked" />
+                                        </CInputGroupText>
+                                        <CFormInput v-model="formState.password" type="password"
+                                            placeholder="Ingrese su contraseña" autocomplete="current-password" />
+                                    </CInputGroup>
+                                    <CRow>
+                                        <CCol :xs="6">
+                                            <CustomLoadingButton class="btn btn-primary" type="submit" :loading="isLoading">
+                                                Iniciar sesion
+                                            </CustomLoadingButton>
+                                        </CCol>
+                                    </CRow>
+                                </CForm>
+                            </CCardBody>
+                        </CCard>
+                        <CCard class="text-white bg-primary py-5" style="width: 44%">
+                            <CCardBody class="text-center">
+                                <div>
+                                    <h2>Global Escom Platform</h2>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                                        sed do eiusmod tempor incididunt ut labore et dolore magna
+                                        aliqua.
+                                    </p>
+                                </div>
+                            </CCardBody>
+                        </CCard>
+                    </CCardGroup>
+                </CCol>
+            </CRow>
+        </CContainer>
     </div>
-  </template>
+</template>
 
-  <script>
-  export default {
-    name: 'Login',
-  }
-  </script>
+<script setup>
+import { reactive, ref } from 'vue';
+import { login } from '../services/api/auth-service';
+import CustomLoadingButton from '../components/widgets/CustomLoadingButton.vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const isLoading = ref(false);
+
+const formState = reactive({
+    email: '',
+    password: '',
+});
+
+const attemptLogin = async () => {
+    isLoading.value = true;
+    try {
+
+        // validate form
+        if (!formState.email || !formState.password) {
+            console.log('Invalid form');
+            return;
+        }
+
+        await login(formState.email, formState.password);
+
+        router.replace({ path: '/' });
+    } catch (error) {
+        console.log(error);
+    } finally {
+        isLoading.value = false;
+    }
+}
+</script>
