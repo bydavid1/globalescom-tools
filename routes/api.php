@@ -4,6 +4,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\Tools\Bizig\AnswerController;
 use App\Http\Controllers\Tools\Bizig\PerspectiveController;
 use App\Http\Controllers\ReminderController;
+use App\Http\Controllers\Tools\Bizig\DashboardController;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -49,3 +50,5 @@ Route::prefix('user')->group(function () {
     require __DIR__ . '/User/user.php';
 })->middleware(["auth:sanctum"]); // Protege las rutas con autenticación
 
+
+Route::get('/dashboard', [DashboardController::class, 'getProgress']);

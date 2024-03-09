@@ -35,7 +35,7 @@
         </CCol>
         <CCol xs="4">
             <CRow :xs="{ gutter: 1 }">
-                <CCol v-for="(iniciative, j) in item.iniciatives" :key="j">
+                <CCol v-for="(iniciative, j) in item.initiatives" :key="j">
                     <CCard style="height: 8rem; width: 8rem;" :class="`bg-${getColor(iniciative.progress)}`"
                         class="text-white">
                         <CCardBody>
@@ -81,112 +81,22 @@
 </template>
 
 <script setup>
-import { CCol } from '@coreui/vue';
-import { computed, reactive } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { loadDashboard } from '../../../services/api/tools/bizig/dashboard-service';
 
 
-const perspectives = reactive([
-    {
-        name: 'Gestión del Talento y Capital Humano.',
-        bigs: [
-            {
-                name: 'Atracción y Retención del Talento.',
-                progress: 0,
-            },
-            {
-                name: 'Desarrollo y Capacitación del Talento.',
-                progress: 30,
-            },
-            {
-                name: 'Clima y Cultura Organizacional.',
-                progress: 70,
-            }
-        ],
-        iniciatives: [
-            {
-                name: 'Implementación de un Programa de Capacitación.',
-                progress: 70,
-            },
-            {
-                name: 'Implementación de un Programa de Clima y Cultura Organizacional.',
-                progress: 10,
-            },
-            {
-                name: 'Implementación de un Programa de Atracción y Retención del Talento.',
-                progress: 50,
-            }
-        ],
-        progress: 10,
-    },
-    {
-        name: 'Gestión de la Innovación y el Conocimiento.',
-        bigs: [
-            {
-                name: 'Gestión del Conocimiento.',
-                progress: 0,
-            },
-            {
-                name: 'Gestión de la Innovación.',
-                progress: 30,
-            },
-            {
-                name: 'Gestión de la Tecnología.',
-                progress: 70,
-            }
-        ],
-        iniciatives: [
-            {
-                name: 'Implementación de un Programa de Gestión del Conocimiento.',
-                progress: 70,
-            },
-            {
-                name: 'Implementación de un Programa de Gestión de la Innovación.',
-                progress: 10,
-            },
-            {
-                name: 'Implementación de un Programa de Gestión de la Tecnología.',
-                progress: 50,
-            }
-        ],
-        progress: 40,
-    },
-    {
-        name: 'Gestión de la Calidad y la Excelencia.',
-        bigs: [
-            {
-                name: 'Gestión de la Calidad.',
-                progress: 0,
-            },
-            {
-                name: 'Gestión de la Excelencia.',
-                progress: 30,
-            },
-            {
-                name: 'Gestión de la Sostenibilidad.',
-                progress: 70,
-            }
-        ],
-        iniciatives: [
-            {
-                name: 'Implementación de un Programa de Gestión de la Calidad.',
-                progress: 70,
-            },
-            {
-                name: 'Implementación de un Programa de Gestión de la Excelencia.',
-                progress: 10,
-            },
-            {
-                name: 'Implementación de un Programa de Gestión de la Sostenibilidad.',
-                progress: 50,
-            }
-        ],
-        progress: 70,
-    },
-]);
+const perspectives = ref([]);
+const globalProgress = ref(0);
 
-const globalProgress = computed(() => {
-    return perspectives.reduce((acc, perspective) => acc + perspective.progress, 0) / perspectives.length;
+onMounted(async () => {
+    await getData();
 });
+
+const getData = async () => {
+    const response = await loadDashboard();
+    perspectives.value = response.perspectives;
+    globalProgress.value = response.global_progress;
+}
 
 function getColor(progress) {
     if (progress < 20) {
