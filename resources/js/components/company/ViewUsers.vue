@@ -1,7 +1,7 @@
 <template>
     <div>
         <h5>Usuarios</h5>
-        <CTable v-if="users.length > 0">
+        <CTable v-if="users.length > 0" small class="mt-3">
             <CTableHead>
                 <CTableRow>
                     <CTableHeaderCell scope="col">ID</CTableHeaderCell>
@@ -21,6 +21,9 @@
                 </CTableRow>
             </CTableBody>
         </CTable>
+        <div v-else class="text-center mt-2">
+            <h6>No hay usuarios registrados</h6>
+        </div>
     </div>
 </template>
 

@@ -36,6 +36,8 @@ const props = defineProps({
     }
 });
 
+const emit = defineEmits(['onSucess']);
+
 const isLoading = ref(false);
 
 const name = ref('');
@@ -61,5 +63,6 @@ const createUser = async () => {
     email.value = '';
     password.value = '';
 
+    emit('onSucess');
 }
 </script>
