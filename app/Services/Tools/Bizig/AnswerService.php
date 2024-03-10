@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 class AnswerService
 {
 
-    public function saveBatch(array $answers, int $formId, int $sectionId) : AnswerBatch
+    public function saveBatch(array $answers, int $formId, int $sectionId, int $userId) : AnswerBatch
     {
         $form = Form::find($formId);
         $section = Section::find($sectionId);
@@ -18,7 +18,7 @@ class AnswerService
         $answerBatch = new AnswerBatch();
         $answerBatch->form()->associate($form);
         $answerBatch->section()->associate($section);
-        $answerBatch->user_id = 1;
+        $answerBatch->user_id = $userId;
 
         $answerBatch->save();
 
@@ -42,5 +42,15 @@ class AnswerService
                 'body' => $answer['body']
             ]);
         }
+    }
+
+    public function getAnswers(int $sectionId, int $userId) : Collection
+    {
+        $answers = AnswerBatch::where('section_id', $sectionId)
+            ->where('user_id', $userId)
+            ->with('answers')
+            ->get();
+
+        return $answers;
     }
 }

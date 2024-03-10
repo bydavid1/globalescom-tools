@@ -29,9 +29,11 @@ Route::get('/perspectives', [PerspectiveController::class, 'getPerspectives']);
 
 Route::get('/perspectives/{id}', [PerspectiveController::class, 'getPerspective']);
 
-Route::post('/answers/batch', [AnswerController::class, 'saveBatch']);
+Route::post('/answers/batch', [AnswerController::class, 'saveBatch'])->middleware('auth:sanctum');
 
 Route::put('/answers/batch', [AnswerController::class, 'updateBatch']);
+
+Route::get('/answers', [AnswerController::class, 'getAnswers'])->middleware('auth:sanctum');
 
 Route::post('/reminder', [ReminderController::class, 'sendReminder']);
 

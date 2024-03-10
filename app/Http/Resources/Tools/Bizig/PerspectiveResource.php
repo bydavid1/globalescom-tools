@@ -27,11 +27,7 @@ class PerspectiveResource extends JsonResource
 
                 ];
             }),
-            'form' => FormResource::make($this->children->first()->forms->first()),
-            'answers_batches' => AnswerBatchResource::collection($this->children->flatMap(function ($child) {
-                return $child->answerBatches;
-            }))
-
+            'form' => FormResource::make($this->children->first()->forms->first())
         ];
     }
 }
