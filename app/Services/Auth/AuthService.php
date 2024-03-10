@@ -18,7 +18,8 @@ class AuthService
             'email' => $email,
             'password' => Hash::make($password),
         ]);
-        $user->assignRole('user'); // Assign role to new user by default.
+
+        $user->assignRole('admin'); // Assign role to new user by default.
 
         return $user;
     }

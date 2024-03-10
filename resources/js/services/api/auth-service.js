@@ -16,6 +16,12 @@ const login = async (email, password) => {
     return response.data;
 }
 
+const logout = async () => {
+    await api.post('/auth/logout');
+    localStorage.removeItem('user');
+}
+
 export {
     login,
+    logout
 }
