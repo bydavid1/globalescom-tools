@@ -4,10 +4,16 @@ namespace App\Http\Controllers\Tools\Bizig;
 
 use App\Http\Controllers\Controller;
 use App\Models\Section;
+use App\Services\Tools\Bizig\ProgressService;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
+
+    public function __construct(
+        private ProgressService $progressService
+    ) { }
+
     public function getProgress(Request $request)
     {
         $currentUser = $request->user();
@@ -45,7 +51,7 @@ class DashboardController extends Controller
             // load progress of wach initiatives and bigs
             // Cargar el progreso de cada "big"
             foreach ($bigs as $big) {
-                $progress = $this->calculateProgress($big->answerBatches->where('user_id', $userId));
+                $progress = $this->progressService->calculateProgressFromAnswerBatches($big->answerBatches->where('user_id', $userId));
                 $big->progress = $progress;
                 $perspectiveProgress += $progress;
 
@@ -55,7 +61,7 @@ class DashboardController extends Controller
 
             // Cargar el progreso de cada "iniciativa"
             foreach ($initiatives as $initiative) {
-                $progress = $this->calculateProgress($initiative->answerBatches->where('user_id', $userId));
+                $progress = $this->progressService->calculateProgressFromAnswerBatches($initiative->answerBatches->where('user_id', $userId));
                 $initiative->progress = $progress;
                 $perspectiveProgress += $progress;
 
@@ -72,22 +78,5 @@ class DashboardController extends Controller
         }
 
         return response()->json(['perspectives' => $perspectives, 'global_progress' => intval($globalProgress / count($perspectives))]);
-    }
-
-    private function calculateProgress($answerBatches)
-    {
-
-        if (count($answerBatches) === 0) {
-            return 0;
-        }
-
-        $total = 0;
-
-        foreach ($answerBatches as $batch) {
-            $progress = $batch->answers->where('input_id', 14)->first();
-            $total += $progress->body;
-        }
-
-        return $total / count($answerBatches);
     }
 }

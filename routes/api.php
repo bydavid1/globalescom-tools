@@ -5,6 +5,7 @@ use App\Http\Controllers\Tools\Bizig\AnswerController;
 use App\Http\Controllers\Tools\Bizig\PerspectiveController;
 use App\Http\Controllers\ReminderController;
 use App\Http\Controllers\ToolController;
+use App\Http\Controllers\Tools\Bizig\AdminController;
 use App\Http\Controllers\Tools\Bizig\DashboardController;
 use App\Models\Company;
 use Illuminate\Http\Request;
@@ -57,3 +58,5 @@ Route::prefix('user')->group(function () {
 Route::get('/dashboard', [DashboardController::class, 'getProgress'])->middleware('auth:sanctum');
 
 Route::get('/tools', [ToolController::class, 'getTools']);
+
+Route::get('/bizig/admin/companies', [AdminController::class, 'getCompanies'])->middleware('auth:sanctum');

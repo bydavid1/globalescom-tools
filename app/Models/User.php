@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Company::class, 'company_user');
     }
+
+    public function answerBatches()
+    {
+        return $this->hasMany(AnswerBatch::class);
+    }
 }
