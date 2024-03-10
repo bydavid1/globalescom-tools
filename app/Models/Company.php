@@ -24,4 +24,8 @@ class Company extends Model
         return $this->belongsToMany(Tool::class, 'company_tool');
     }
 
+    public function answerBatches()
+    {
+        return $this->hasMany(AnswerBatch::class);
+    }
 }
