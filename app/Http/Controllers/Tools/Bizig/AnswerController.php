@@ -13,19 +13,18 @@ class AnswerController extends Controller
 
     public function __construct(
         private AnswerService $answerService,
-    ) {
-
-    }
+    ) { }
 
     public function saveBatch(Request $request) {
         try {
-            $userId = $request->user()->id;
+            $user = $request->user();
 
             $this->answerService->saveBatch(
                 $request->input('answers'),
                 $request->input('form_id'),
                 $request->input('section_id'),
-                $userId
+                $user->id,
+                $user->companies->first()->id
             );
 
             return response()->json(['message' => 'Answers saved successfully']);

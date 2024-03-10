@@ -3,6 +3,7 @@ namespace App\Services\Tools\Bizig;
 
 use App\Models\Answer;
 use App\Models\AnswerBatch;
+use App\Models\Company;
 use App\Models\Form;
 use App\Models\Section;
 use Illuminate\Support\Collection;
@@ -10,14 +11,16 @@ use Illuminate\Support\Collection;
 class AnswerService
 {
 
-    public function saveBatch(array $answers, int $formId, int $sectionId, int $userId) : AnswerBatch
+    public function saveBatch(array $answers, int $formId, int $sectionId, int $userId, int $company_id) : AnswerBatch
     {
-        $form = Form::find($formId);
-        $section = Section::find($sectionId);
+        $form = Form::findOrFail($formId);
+        $section = Section::findOrFail($sectionId);
+        $company = Company::findOrFail($company_id);
 
         $answerBatch = new AnswerBatch();
         $answerBatch->form()->associate($form);
         $answerBatch->section()->associate($section);
+        $answerBatch->company()->associate($company);
         $answerBatch->user_id = $userId;
 
         $answerBatch->save();

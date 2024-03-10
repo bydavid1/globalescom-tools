@@ -83,17 +83,26 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { loadDashboard } from '../../../services/api/tools/bizig/dashboard-service';
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
 
 const perspectives = ref([]);
 const globalProgress = ref(0);
 
 onMounted(async () => {
+
+    if (route.params.companyId && !isUserAdmin) {
+        router.push({ name: 'home' });
+    }
+
     await getData();
 });
 
+const isUserAdmin = () => JSON.parse(localStorage.getItem('user')).role_name === 'admin';
+
 const getData = async () => {
-    const response = await loadDashboard();
+    const response = await loadDashboard(route.params.companyId ?? null);
     perspectives.value = response.perspectives;
     globalProgress.value = response.global_progress;
 }
