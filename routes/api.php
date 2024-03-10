@@ -54,6 +54,6 @@ Route::prefix('user')->group(function () {
 })->middleware(["auth:sanctum"]); // Protege las rutas con autenticación
 
 
-Route::get('/dashboard', [DashboardController::class, 'getProgress']);
+Route::get('/dashboard', [DashboardController::class, 'getProgress'])->middleware('auth:sanctum');
 
 Route::get('/tools', [ToolController::class, 'getTools']);

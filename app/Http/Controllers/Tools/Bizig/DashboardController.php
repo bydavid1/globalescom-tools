@@ -10,7 +10,15 @@ class DashboardController extends Controller
 {
     public function getProgress(Request $request)
     {
-        $userId = 1; // $request->user()->id;
+        $currentUser = $request->user();
+        $userIdFromQuery = $request->query('user_id');
+
+        if ($currentUser->roles?->first()->name !== 'admin' && $userIdFromQuery) {
+            return response()->json(['error' => 'No tienes permisos para ver el progreso de otro usuario'], 403);
+        }
+
+        $userId = $userIdFromQuery ? $userIdFromQuery : $currentUser->id;
+
         $perspectives = Section::whereRelation('sectionType', function ($query) {
             $query->where('name', 'perspective');
         })->get();
