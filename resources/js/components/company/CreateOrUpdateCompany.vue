@@ -29,6 +29,9 @@
 import { reactive, ref, watch } from 'vue';
 import { getCompany, saveCompany, updateCompany } from '../../services/api/companies-service';
 import CustomLoadingButton from '../widgets/CustomLoadingButton.vue';
+import { useAlerts } from '../../store/alert';
+
+const alert = useAlerts();
 
 const props = defineProps({
     isEditing: {
@@ -68,7 +71,7 @@ const sendCompany = async (event) => {
     try {
         // validate form
         if (formState.name === '' || formState.email === '' || formState.password === '') {
-            return;
+            alert.add({ title: 'Error',  content: 'Por favor, complete todos los campos'});
         }
 
         console.log('formState', formState.logo);
@@ -89,6 +92,7 @@ const sendCompany = async (event) => {
             await saveCompany(formData);
         }
 
+        alert.add({ title: 'Exito', content: 'Empresa guardada con exito' });
         emit('onSucess');
     } catch (error) {
         console.error(error);

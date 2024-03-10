@@ -28,6 +28,9 @@
 import { ref } from 'vue';
 import { saveUser } from '../../services/api/companies-service'
 import CustomLoadingButton from '../widgets/CustomLoadingButton.vue';
+import { useAlerts } from '../../store/alert';
+
+const alert = useAlerts();
 
 const props = defineProps({
     companyId: {
@@ -47,13 +50,18 @@ const password = ref('');
 const createUser = async () => {
     isLoading.value = true;
     try {
+
+        if (!name.value || !email.value || !password.value) {
+            alert.add({ title: 'Todos los campos son requeridos', content: 'danger' });
+        }
+
         await saveUser(props.companyId, {
             name: name.value,
             email: email.value,
             password: password.value
         });
     } catch (error) {
-        console.error(error);
+        alert.add({ title: 'Error', content: 'No se pudo guardar el usuario' });
     } finally {
         isLoading.value = false;
     }
@@ -63,6 +71,7 @@ const createUser = async () => {
     email.value = '';
     password.value = '';
 
+    alert.add({ title: 'Usuario guardado', content: 'Usuario guardado con exito' });
     emit('onSucess');
 }
 </script>
