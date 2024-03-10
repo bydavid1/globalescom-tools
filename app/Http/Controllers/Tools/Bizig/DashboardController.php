@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Tools\Bizig;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\Section;
 use App\Services\Tools\Bizig\ProgressService;
 use Illuminate\Http\Request;
@@ -17,13 +18,19 @@ class DashboardController extends Controller
     public function getProgress(Request $request)
     {
         $currentUser = $request->user();
-        $userIdFromQuery = $request->query('user_id');
+        $companyIdFromQuery = $request->query('company_id');
 
-        if ($currentUser->roles?->first()->name !== 'admin' && $userIdFromQuery) {
+        if ($currentUser->roles?->first()->name !== 'admin' && $companyIdFromQuery) {
             return response()->json(['error' => 'No tienes permisos para ver el progreso de otro usuario'], 403);
         }
 
-        $userId = $userIdFromQuery ? $userIdFromQuery : $currentUser->id;
+        $company = null;
+
+        if ($companyIdFromQuery) {
+            $company = Company::findOrFail($companyIdFromQuery);
+        }
+
+        $companyId = $company?->id ?  : $currentUser->companies?->first()->id;
 
         $perspectives = Section::whereRelation('sectionType', function ($query) {
             $query->where('name', 'perspective');
@@ -51,7 +58,9 @@ class DashboardController extends Controller
             // load progress of wach initiatives and bigs
             // Cargar el progreso de cada "big"
             foreach ($bigs as $big) {
-                $progress = $this->progressService->calculateProgressFromAnswerBatches($big->answerBatches->where('user_id', $userId));
+                $progress = $this->progressService->calculateProgressFromAnswerBatches(
+                    $big->answerBatches->where('company_id', $companyId)
+                );
                 $big->progress = $progress;
                 $perspectiveProgress += $progress;
 
@@ -61,7 +70,9 @@ class DashboardController extends Controller
 
             // Cargar el progreso de cada "iniciativa"
             foreach ($initiatives as $initiative) {
-                $progress = $this->progressService->calculateProgressFromAnswerBatches($initiative->answerBatches->where('user_id', $userId));
+                $progress = $this->progressService->calculateProgressFromAnswerBatches(
+                    $initiative->answerBatches->where('company_id', $companyId)
+                );
                 $initiative->progress = $progress;
                 $perspectiveProgress += $progress;
 

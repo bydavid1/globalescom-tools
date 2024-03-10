@@ -19,11 +19,6 @@ const router = createRouter({
                     component: () => import('../views/Home.vue')
                 },
                 {
-                    path: 'dashboard',
-                    name: 'Dashboard',
-                    component: () => import('../views/Dashboard.vue'),
-                },
-                {
                     path: 'empresas',
                     name: 'empresas',
                     component: () => import('../views/company/Companies.vue'),
@@ -53,7 +48,7 @@ const router = createRouter({
                                     component: () => import('../views/tools/bizig/Administration.vue'),
                                 },
                                 {
-                                    path: 'dashboard',
+                                    path: 'dashboard/:companyId?',
                                     name: 'dashboard',
                                     component: () => import('../views/tools/bizig/Dashboard.vue'),
                                 }

@@ -13,7 +13,8 @@ class AdminController extends Controller
     public function __construct(
         private CompanyService $companyService,
         private ProgressService $progressService
-    ) { }
+    ) {
+    }
 
     public function getCompanies()
     {
@@ -21,22 +22,7 @@ class AdminController extends Controller
             $companies = $this->companyService->getCompanies();
 
             foreach ($companies as $company) {
-                $companyProgress = 0;
-
-                $users = $company->users;
-
-                if (count($users) === 0) {
-                    $company->progress = 0;
-                    continue;
-                }
-
-                foreach ($users as $user) {
-                    $userProgress = $this->progressService->calculateProgressFromAnswerBatches($user->answerBatches);
-                    $companyProgress += $userProgress;
-                }
-
-                $company->progress = $companyProgress / count($users);
-                unset($company->users);
+                $company->progress = $this->progressService->calculateProgressFromAnswerBatches($company->answerBatches);
             }
 
             return response()->json($companies->map(function ($company) {

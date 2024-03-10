@@ -23,7 +23,9 @@
                             <CTableDataCell>{{ company.name }}</CTableDataCell>
                             <CTableDataCell>{{ company.progress  }}%</CTableDataCell>
                             <CTableDataCell>
-                                <CButton color="success" class="me-2">Ver Dashboard</CButton>
+                                <router-link :to="{ name: 'dashboard', params: { companyId: company.id } }">
+                                    Ver Dashboard
+                                </router-link>
                             </CTableDataCell>
                         </CTableRow>
                     </CTableBody>
