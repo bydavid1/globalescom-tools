@@ -27,7 +27,8 @@
                             <CTableDataCell>{{ company.name }}</CTableDataCell>
                             <CTableDataCell>{{ company.email }}</CTableDataCell>
                             <CTableDataCell>
-                                <CButton @click="openEditModal(company.id)" to="/company/edit">Editar</CButton>
+                                <CButton class="btn btn-success btn-sm" @click="openEditModal(company.id)">Editar</CButton>
+                                <CButton class="btn btn-primary btn-sm" @click="openUsersModal(company.id)">Ver Usuarios</CButton>
                             </CTableDataCell>
                         </CTableRow>
                     </CTableBody>
@@ -37,7 +38,12 @@
                 </div>
             </CCardBody>
         </CCard>
-        <CModal :visible="showModal" @close="() => { visibleLiveDemo = false }">
+        <CModal :visible="showUsersModal" size="lg" @close="() => { showUsersModal = false }">
+            <CModalBody>
+                <ViewUsers :company-id="currentCompanyId"/>
+            </CModalBody>
+        </CModal>
+        <CModal :visible="showModal" size="lg" @close="() => { showModal = false }">
             <CModalHeader>
                 <CModalTitle>Registrar empresa</CModalTitle>
             </CModalHeader>
@@ -80,9 +86,12 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
 import { getCompanies, saveCompany, updateCompany } from '../../services/api/companies-service';
+import ViewUsers from '../../components/company/ViewUsers.vue';
+
+const showModal = ref(false);
+const showUsersModal = ref(false);
 
 const companies = ref([]);
-const showModal = ref(false);
 const isEditing = ref(false);
 const currentCompanyId = ref(null);
 const isLoading = ref(false);
@@ -102,10 +111,15 @@ const openCreateModal = () => {
     showModal.value = true;
 }
 
+const openUsersModal = (id) => {
+    currentCompanyId.value = id;
+    showUsersModal.value = true;
+}
+
 const openEditModal = (id) => {
+    currentCompanyId.value = id;
     showModal.value = true;
     isEditing.value = true;
-    currentCompanyId.value = id;
 }
 
 const loadCompanies = async () => {
