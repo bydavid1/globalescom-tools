@@ -29,6 +29,7 @@
                             <CTableDataCell>
                                 <CButton class="btn btn-success btn-sm" @click="openEditModal(company.id)">Editar</CButton>
                                 <CButton class="btn btn-primary btn-sm" @click="openUsersModal(company.id)">Ver Usuarios</CButton>
+                                <CButton class="btn btn-secondary btn-sm" @click="openCreateUserModal(company.id)">Nuevo Usuario</CButton>
                             </CTableDataCell>
                         </CTableRow>
                     </CTableBody>
@@ -38,9 +39,14 @@
                 </div>
             </CCardBody>
         </CCard>
-        <CModal :visible="showUsersModal" size="lg" @close="() => { showUsersModal = false }">
+        <CModal :visible="showUsersModal" size="xl" @close="() => { showUsersModal = false }">
             <CModalBody>
                 <ViewUsers :company-id="currentCompanyId"/>
+            </CModalBody>
+        </CModal>
+        <CModal :visible="showCreateUserModal" size="lg" @close="() => { showCreateUserModal = false }">
+            <CModalBody>
+                <AddUser :company-id="currentCompanyId"/>
             </CModalBody>
         </CModal>
         <CModal :visible="showModal" size="lg" @close="() => { showModal = false }">
@@ -87,9 +93,11 @@
 import { onMounted, reactive, ref } from 'vue';
 import { getCompanies, saveCompany, updateCompany } from '../../services/api/companies-service';
 import ViewUsers from '../../components/company/ViewUsers.vue';
+import AddUser from '../../components/company/AddUser.vue';
 
 const showModal = ref(false);
 const showUsersModal = ref(false);
+const showCreateUserModal = ref(false);
 
 const companies = ref([]);
 const isEditing = ref(false);
@@ -120,6 +128,11 @@ const openEditModal = (id) => {
     currentCompanyId.value = id;
     showModal.value = true;
     isEditing.value = true;
+}
+
+const openCreateUserModal = (id) => {
+    currentCompanyId.value = id;
+    showCreateUserModal.value = true;
 }
 
 const loadCompanies = async () => {
