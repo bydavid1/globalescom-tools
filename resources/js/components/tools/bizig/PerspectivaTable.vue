@@ -34,6 +34,14 @@
                                 :value="getModel(batch, input.id)"
                                 @input="setModel(batch, input.id, $event.target.value)"
                                 placeholder="Ingrese la respuesta" type="text" size="sm" />
+                            <select2
+                                v-else-if="input.id == 12"
+                                :data="users"
+                                :value="setSelectedUsers(batch, input.id)"
+                                :multiple="true"
+                                :disabled="!batch.editing"
+                                @update="syncSelectUsers(batch, input.id, $event)"
+                            />
                             <CFormSelect
                                 v-else-if="input.type == 'select'"
                                 :value="getModel(batch, input.id)"
@@ -70,6 +78,9 @@
 <script setup>
 import { computed, reactive, ref, watch } from 'vue';
 import { updateBatch, saveBatch, getMyAnswers } from '../../../services/api/tools/bizig/answer-service';
+import { useUsers } from '../../../store/user';
+
+const store = useUsers();
 
 const props = defineProps({
     section: {
@@ -115,10 +126,12 @@ const answersBatchShape = {
     unhandled: true
 };
 
+
 const batches = ref([]);
 
 const globalProgress = ref(0);
 
+const users = computed(() => store.getUsers.map(user => ({ label: user.name, value: user.id })));
 
 const initBatches = async () => {
     const response = await getMyAnswers(props.section.id);
@@ -137,6 +150,23 @@ const setModel = (batch, inputId, value) => {
     const answer = batch.answers.find(a => a.input_id === inputId);
     if (answer) {
         answer.body = value;
+    }
+};
+
+const syncSelectUsers = (batch, inputId, value) => {
+    const answer = batch.answers.find(a => a.input_id === inputId);
+
+    if (answer) {
+        answer.body = JSON.stringify(value);
+    }
+}
+
+const setSelectedUsers = (batch, inputId) => {
+    try {
+        const answer = batch.answers.find(a => a.input_id === inputId);
+        return answer ? JSON.parse(answer.body) : [];
+    } catch (error) {
+        return [];
     }
 };
 

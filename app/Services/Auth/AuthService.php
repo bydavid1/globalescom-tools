@@ -29,13 +29,17 @@ class AuthService
         if (!Auth::attempt(['email' => $email, 'password' => $password])) {
             throw new AuthenticationException('Credenciales inválidas');
         } else {
+            /**
+             * @var User $user
+             */
             $user = Auth::user();
             $token = $user->createToken('token-name')->plainTextToken;
 
             return [
                 'user_name'  => $user->name,
                 'role_name' => $user->roles->value('name'),
-                'token' => $token
+                'token' => $token,
+                'company_id' => $user->companies?->first()?->id
             ];
         }
     }
@@ -43,6 +47,9 @@ class AuthService
     public function logout()
     {
         if (Auth::check()) {
+            /**
+             * @var User $user
+             */
             $user = Auth::user();
 
             $user->tokens()->delete();
