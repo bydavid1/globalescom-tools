@@ -24,7 +24,6 @@
             :key="index"
             :section="item"
             :form="perspective.form"
-            :answer-batches="getAnswerBatches(item.id)"
             class="mb-3"
         />
     </CContainer>
@@ -43,10 +42,6 @@ const perspective = ref({});
 const loadPerspective = async (id) => {
     const response = await getPerspective(id);
     perspective.value = response;
-}
-
-const getAnswerBatches = (sectionId) => {
-    return perspective.value.answers_batches.filter(b => b.section_id == sectionId);
 }
 
 watch(() => route.params.id, async () => {

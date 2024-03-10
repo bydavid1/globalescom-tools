@@ -69,7 +69,8 @@
 
 <script setup>
 import { computed, reactive, ref, watch } from 'vue';
-import { updateBatch, saveBatch } from '../../../services/api/tools/bizig/answer-service';
+import { updateBatch, saveBatch, getMyAnswers } from '../../../services/api/tools/bizig/answer-service';
+
 const props = defineProps({
     section: {
         type: Object
@@ -77,9 +78,6 @@ const props = defineProps({
     form: {
         type: Object
     },
-    answerBatches: {
-        type: Array
-    }
 });
 
 const answersBatchShape = {
@@ -119,11 +117,12 @@ const answersBatchShape = {
 
 const batches = ref([]);
 
-
 const globalProgress = ref(0);
 
-const initBatches = () => {
-    batches.value = props.answerBatches.map(batch => reactive({ ...batch }));
+
+const initBatches = async () => {
+    const response = await getMyAnswers(props.section.id);
+    batches.value = response.map(batch => reactive({ ...batch }));
     batches.value.push(reactive({ ...answersBatchShape, id: Math.random() * 100}));
 };
 
@@ -156,7 +155,6 @@ const saveAnswer = async (id, index) => {
         batches.value.find(b => b.id == id).unhandled = false;
 
         if (index === batches.value.length - 1) {
-            console.log('last batch');
             const newAnswerBatch = reactive({ ...answersBatchShape, id: Math.random() * 100});
             batches.value.push(newAnswerBatch);
         }
@@ -191,7 +189,7 @@ const calculateGlobalProgress = () => {
     globalProgress.value = parseInt((totalProgress / batches.value.length).toFixed(0));
 };
 
-watch(() => props.answerBatches, () => {
+watch(() => props.section, () => {
     initBatches();
     calculateGlobalProgress();
 }, { immediate: true });

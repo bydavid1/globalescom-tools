@@ -12,7 +12,30 @@ const updateBatch = async (batch) => {
     return response.data;
 }
 
+const getMyAnswers = async (sectionId) => {
+    const response = await api.get('/answers', {
+        params: {
+            section_id: sectionId
+        }
+    });
+
+    return response.data;
+}
+
+const getAnswersByUser = async (userId, sectionId) => {
+    const response = await api.get(`/answers`, {
+        params: {
+            user_id: userId,
+            section_id: sectionId
+        }
+    });
+
+    return response.data;
+}
+
 export {
     saveBatch,
-    updateBatch
+    updateBatch,
+    getMyAnswers,
+    getAnswersByUser
 }
