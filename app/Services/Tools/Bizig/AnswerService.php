@@ -47,10 +47,10 @@ class AnswerService
         }
     }
 
-    public function getAnswers(int $sectionId, int $userId) : Collection
+    public function getAnswers(int $sectionId, int $companyId) : Collection
     {
         $answers = AnswerBatch::where('section_id', $sectionId)
-            ->where('user_id', $userId)
+            ->where('company_id', $companyId)
             ->with('answers')
             ->get();
 
