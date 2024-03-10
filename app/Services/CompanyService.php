@@ -49,4 +49,10 @@ class CompanyService
 
         return $company;
     }
+
+    public function getCompanyUsers($id) {
+        $company = Company::find($id);
+
+        return $company->users;
+    }
 }

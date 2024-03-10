@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Tools\Bizig;
 use App\Http\Controllers\Controller;
 use App\Services\CompanyService;
 use App\Services\Tools\Bizig\ProgressService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller

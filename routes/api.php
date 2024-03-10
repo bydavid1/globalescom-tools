@@ -43,6 +43,8 @@ Route::controller(CompanyController::class)->prefix('/companies')->group(functio
     Route::get('/{id}', 'getCompany');
     Route::post('/', 'createCompany');
     Route::put('/{id}', 'updateCompany');
+    Route::post('/{id}/users', 'addUser')->middleware('auth:sanctum');
+    Route::get('/{id}/users', 'getUsers');
 });
 
 // Rutas de login y registro
