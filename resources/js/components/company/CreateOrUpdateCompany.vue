@@ -14,7 +14,7 @@
         </CCol>
         <CCol v-if="!isEditing" xs="12">
             <CFormLabel for="password">Contrseña</CFormLabel>
-            <CFormInput v-model="formState.password" type="text" id="password"
+            <CFormInput v-model="formState.password" type="password" id="password"
                 placeholder="Ingrese la contraseña de la empresa" />
         </CCol>
         <CContainer class="mt-4">
@@ -46,7 +46,7 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(['onSucess']);
+const emit = defineEmits(['onSuccess']);
 
 const isLoading = ref(false);
 
@@ -93,7 +93,7 @@ const sendCompany = async (event) => {
         }
 
         alert.add({ title: 'Exito', content: 'Empresa guardada con exito' });
-        emit('onSucess');
+        emit('onSuccess');
     } catch (error) {
         console.error(error);
     } finally {

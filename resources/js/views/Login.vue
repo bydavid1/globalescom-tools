@@ -33,15 +33,10 @@
                                 </CForm>
                             </CCardBody>
                         </CCard>
-                        <CCard class="text-white bg-primary py-5" style="width: 44%">
-                            <CCardBody class="text-center">
-                                <div>
-                                    <h2>Global Escom Platform</h2>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                                        sed do eiusmod tempor incididunt ut labore et dolore magna
-                                        aliqua.
-                                    </p>
+                        <CCard class="text-white py-5" style="width: 44%">
+                            <CCardBody>
+                                <div class="h-100 d-flex justify-content-center align-items-center"> <!-- Add text-center class -->
+                                    <CImage src="/assets/logos/GLOBAL_ESCOM.png" width="200" />
                                 </div>
                             </CCardBody>
                         </CCard>
@@ -58,6 +53,7 @@ import { login } from '../services/api/auth-service';
 import CustomLoadingButton from '../components/widgets/CustomLoadingButton.vue';
 import { useRouter } from 'vue-router';
 import { useAlerts } from '../store/alert';
+import { CImage } from '@coreui/vue';
 
 const router = useRouter();
 const alert = useAlerts();

@@ -13,11 +13,11 @@
             </CCol>
             <CCol xs="12">
                 <CFormLabel for="password">Contraseña</CFormLabel>
-                <CFormInput v-model="password" type="text" id="password"
+                <CFormInput v-model="password" type="password" id="password"
                     placeholder="Ingrese la contraseña del usuario" />
             </CCol>
 
-            <CustomLoadingButton type="submit" class="btn btn-primary mt-4" :isLoading="false">
+            <CustomLoadingButton type="submit" class="btn btn-primary mt-4" :loading="isLoading">
                 Guardar
             </CustomLoadingButton>
         </CForm>
@@ -39,7 +39,7 @@ const props = defineProps({
     }
 });
 
-const emit = defineEmits(['onSucess']);
+const emit = defineEmits(['onSuccess']);
 
 const isLoading = ref(false);
 
@@ -72,6 +72,6 @@ const createUser = async () => {
     password.value = '';
 
     alert.add({ title: 'Usuario guardado', content: 'Usuario guardado con exito' });
-    emit('onSucess');
+    emit('onSuccess');
 }
 </script>

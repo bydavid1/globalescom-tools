@@ -105,6 +105,7 @@ const openCreateUserModal = (id) => {
 }
 
 const closeModals = () => {
+    console.log('closeModals');
     showCompanyModal.value = false;
     showUsersModal.value = false;
     showCreateUserModal.value = false;
