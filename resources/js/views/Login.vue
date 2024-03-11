@@ -80,8 +80,7 @@ const attemptLogin = async () => {
 
         router.replace({ path: '/' });
     } catch (error) {
-        alert.add({ title: 'Error', content: 'Ocurrio un error al iniciar sesion' });
-        console.log(error);
+        alert.add({ title: 'Error', content: error.response.data?.message || 'Ocurrio un error inesperado'});
     } finally {
         isLoading.value = false;
     }

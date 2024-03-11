@@ -1,6 +1,6 @@
 <template>
     <CBreadcrumb class="d-md-down-none me-auto mb-0">
-        <CBreadcrumbItem href="#">
+        <CBreadcrumbItem style="cursor: pointer;">
             <CIcon icon="cil-home" @click="router.push('/')"/>
         </CBreadcrumbItem>
         <CBreadcrumbItem v-for="item in breadcrumbs" :key="item" :href="item.active ? '' : item.path"
