@@ -1,7 +1,7 @@
 <template>
     <CBreadcrumb class="d-md-down-none me-auto mb-0">
         <CBreadcrumbItem href="#">
-            <CIcon icon="cil-home" />
+            <CIcon icon="cil-home" @click="router.push('/')"/>
         </CBreadcrumbItem>
         <CBreadcrumbItem v-for="item in breadcrumbs" :key="item" :href="item.active ? '' : item.path"
             :active="item.active">
@@ -10,36 +10,30 @@
     </CBreadcrumb>
 </template>
 
-<script>
+<script setup>
 import { onMounted, ref } from 'vue'
-import router from '@/router'
+import { useRouter } from 'vue-router'
 
-export default {
-    name: 'AppBreadcrumb',
-    setup() {
-        const breadcrumbs = ref()
+const router = useRouter()
 
-        const getBreadcrumbs = () => {
-            return router.currentRoute.value.matched.filter(route => route.path != '/').map((route) => {
-                return {
-                    active: route.path === router.currentRoute.value.fullPath,
-                    name: route.name,
-                    path: `${router.options.history.base}${route.path}`,
-                }
-            })
-        }
+const breadcrumbs = ref()
 
-        router.afterEach(() => {
-            breadcrumbs.value = getBreadcrumbs()
-        })
-
-        onMounted(() => {
-            breadcrumbs.value = getBreadcrumbs()
-        })
-
+const getBreadcrumbs = () => {
+    return router.currentRoute.value.matched.filter(route => route.path != '/').map((route) => {
         return {
-            breadcrumbs,
+            active: route.path === router.currentRoute.value.fullPath,
+            name: route.name,
+            path: `${router.options.history.base}${route.path}`,
         }
-    },
+    })
 }
+
+router.afterEach(() => {
+    breadcrumbs.value = getBreadcrumbs()
+})
+
+onMounted(() => {
+    breadcrumbs.value = getBreadcrumbs()
+})
+
 </script>

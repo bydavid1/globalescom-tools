@@ -86,6 +86,8 @@ class DashboardController extends Controller
             $globalProgress += $perspective->progress;
 
             unset($perspective->children); // clean children
+
+            $perspective->data = json_decode($perspective->data);
         }
 
         return response()->json(['perspectives' => $perspectives, 'global_progress' => intval($globalProgress / count($perspectives))]);

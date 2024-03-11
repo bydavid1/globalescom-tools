@@ -185,8 +185,10 @@ const saveAnswer = async (id, index) => {
         batches.value.find(b => b.id == id).unhandled = false;
 
         if (index === batches.value.length - 1) {
-            const newAnswerBatch = reactive({ ...answersBatchShape, id: Math.random() * 100});
-            batches.value.push(newAnswerBatch);
+            const newAnswerBatch = JSON.parse(JSON.stringify(answersBatchShape));
+            newAnswerBatch.id = Math.random() * 100;
+            newAnswerBatch.editing = true;
+            batches.value.push(reactive(newAnswerBatch));
         }
     } catch (error) {
         console.error('noooo', error);

@@ -7,10 +7,10 @@
       <CHeaderBrand class="mx-auto d-lg-none" to="/">
       </CHeaderBrand>
       <CHeaderNav class="d-none d-md-flex me-auto">
-        <CNavItem>
+        <CNavItem v-if="isAdmin">
           <CNavLink href="/empresas">Empresas</CNavLink>
         </CNavItem>
-        <CNavItem>
+        <CNavItem v-if="isAdmin">
           <CNavLink href="#">Herramientas</CNavLink>
         </CNavItem>
       </CHeaderNav>
@@ -31,10 +31,12 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import AppBreadcrumb from './AppBreadcrumb.vue'
 import AppHeaderDropdownAccnt from './AppHeaderDropdownAccnt.vue'
-// import { useLayoutStore } from '../../store/layout';
+import useUser from '../../composables/useUserComposable';
 
-// const store = useLayoutStore()
+const isAdmin = computed(() => user.value?.role === 'admin');
+const { user } = useUser();
 
 </script>
