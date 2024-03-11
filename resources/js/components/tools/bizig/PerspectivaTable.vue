@@ -13,7 +13,10 @@
             </CRow>
         </CCardHeader>
         <CCardBody>
-            <CTable bordered>
+            <div v-if="loading" class="d-flex justify-content-center">
+                <CSpinner color="primary"/>
+            </div>
+            <CTable v-else bordered>
                 <CTableHead>
                     <CTableRow>
                         <CTableHeaderCell v-for="(input, index) in form.inputs" :key="index">{{ input.label }}
@@ -89,6 +92,9 @@ const props = defineProps({
     form: {
         type: Object
     },
+    loading: {
+        type: Boolean
+    }
 });
 
 const answersBatchShape = {
@@ -136,7 +142,8 @@ const users = computed(() => store.getUsers.map(user => ({ label: user.name, val
 const initBatches = async () => {
     const response = await getMyAnswers(props.section.id);
     batches.value = response.map(batch => reactive({ ...batch }));
-    batches.value.push(reactive({ ...answersBatchShape, id: Math.random() * 100}));
+    const answerBatch = JSON.parse(JSON.stringify(answersBatchShape));
+    batches.value.push(reactive({ ...answerBatch, id: Math.random() * 100}));
 };
 
 const progress = computed(() => batches.value.map((b) => b.answers.find(a => a.input_id == 14).body));
@@ -185,6 +192,7 @@ const saveAnswer = async (id, index) => {
         batches.value.find(b => b.id == id).unhandled = false;
 
         if (index === batches.value.length - 1) {
+            console.log(answersBatchShape)
             const newAnswerBatch = JSON.parse(JSON.stringify(answersBatchShape));
             newAnswerBatch.id = Math.random() * 100;
             newAnswerBatch.editing = true;

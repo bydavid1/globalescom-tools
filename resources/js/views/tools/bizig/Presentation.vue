@@ -62,6 +62,5 @@
     </CContainer>
     <CContainer class="text-center">
         <router-link to="/herramientas/bizig/perspectivas/1" class="btn btn-secondary">Ver progreso</router-link><br>
-        <router-link to="/herramientas/bizig/admin" class="btn btn-secondary">Ver empresas</router-link>
     </CContainer>
 </template>

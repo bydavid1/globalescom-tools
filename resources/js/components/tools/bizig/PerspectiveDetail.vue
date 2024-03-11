@@ -21,6 +21,7 @@
     <CContainer class="mt-5">
         <PerspectivaTable
             v-for="(item, index) in perspective.children"
+            :loading="isLoading"
             :key="index"
             :section="item"
             :form="perspective.form"
@@ -30,18 +31,21 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import PerspectivaTable from './PerspectivaTable.vue';
 import { getPerspective } from '../../../services/api/tools/bizig/perspectives-service';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
 
+const isLoading = ref(false);
 const perspective = ref({});
 
 const loadPerspective = async (id) => {
+    isLoading.value = true;
     const response = await getPerspective(id);
     perspective.value = response;
+    isLoading.value = false;
 }
 
 watch(() => route.params.id, async () => {
