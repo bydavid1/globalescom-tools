@@ -34,6 +34,12 @@ const updateCompany = async (id, company) => {
     return response.data;
 }
 
+const getMyCompany = async () => {
+    const response = await api.get('/companies/my');
+
+    return response.data;
+}
+
 const getUsers = async (id) => {
     console.log(id);
     const response = await api.get(`/companies/${id}/users`);
@@ -52,6 +58,7 @@ export {
     getCompany,
     saveCompany,
     updateCompany,
+    getMyCompany,
     getUsers,
     saveUser
 }

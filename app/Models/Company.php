@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Storage;
 
 class Company extends Model
 {
@@ -11,8 +13,14 @@ class Company extends Model
 
     public static string $mediaPath = 'empresas/';
 
-    protected  $fillable = ['name'];
+    protected  $fillable = ['name', 'logo'];
 
+    protected function logo() : Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => Storage::url($this::$mediaPath . '' . $value)
+        );
+    }
 
     public function users()
     {

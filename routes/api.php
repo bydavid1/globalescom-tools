@@ -39,6 +39,7 @@ Route::get('/answers', [AnswerController::class, 'getAnswers'])->middleware('aut
 Route::post('/reminder', [ReminderController::class, 'sendReminder']);
 
 Route::controller(CompanyController::class)->prefix('/companies')->group(function () {
+    Route::get('/my', 'getMyCompany')->middleware('auth:sanctum');
     Route::get('/', 'getCompanies');
     Route::get('/{id}', 'getCompany');
     Route::post('/', 'createCompany');

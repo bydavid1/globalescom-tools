@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Models\Company;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class CompanyService
@@ -31,6 +32,16 @@ class CompanyService
         ]);
 
         return $company;
+    }
+
+    public function getMyCompany() : Company|null
+    {
+        /**
+         * @var \App\Models\User $user
+         */
+        $user = Auth::user();
+
+        return $user->companies?->first();
     }
 
     public function updateCompany($id, $data) : Company

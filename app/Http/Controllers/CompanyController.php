@@ -6,6 +6,7 @@ use App\Http\Resources\CompanyResource;
 use App\Services\CompanyService;
 use App\Services\User\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 class CompanyController extends Controller
 {
@@ -54,6 +55,22 @@ class CompanyController extends Controller
 
             return response()->json($company);
         } catch (\Error $e) {
+            Log::error($e->getMessage());
+            return response()->json(['message' => 'Internal Server Error'], 500);
+        }
+    }
+
+    public function getMyCompany(Request $request)
+    {
+        try {
+            $company = $this->companyService->getMyCompany();
+
+            if (!$company) {
+                return response()->json(['message' => 'El usuario no tiene empresa relacionada'], 404);
+            }
+
+            return response()->json($company);
+        } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['message' => 'Internal Server Error'], 500);
         }

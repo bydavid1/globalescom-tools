@@ -2,7 +2,7 @@
     <CContainer class="my-4">
         <CRow class="justify-content-between align-items-center">
             <CCol xs="2">
-                <CImage src="/assets/logos/GLOBAL_ESCOM.png" width="140" />
+                <CImage :src="company?.logo" width="140" />
             </CCol>
             <CCol xs="2">
                 <CImage src="/assets/logos/BIZIG.png" width="130" />
@@ -64,3 +64,28 @@
         <router-link to="/herramientas/bizig/perspectivas/1" class="btn btn-secondary">Ver progreso</router-link><br>
     </CContainer>
 </template>
+
+
+<script setup>
+import { onMounted, ref } from 'vue';
+import { getMyCompany } from '../../../services/api/companies-service';
+import { useAlerts } from '../../../store/alert'
+
+const alert = useAlerts();
+
+const company = ref(null);
+
+onMounted(() => {
+    loadMyCompanyInfo();
+});
+
+const loadMyCompanyInfo = async () => {
+    try {
+        const response = await getMyCompany();
+        company.value = response.data;
+        alert.add({ title: 'Información de la empresa cargada', content: 'Se ha cargado la información de la empresa.'})
+    } catch (error) {
+        alert.add({ title: 'No se puede cargar la información de la empresa', content: 'Puede que no esté asociado a ninguna empresa o que no se pueda cargar la información de la empresa.'})
+    }
+}
+</script>
