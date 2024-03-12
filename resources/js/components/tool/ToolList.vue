@@ -1,6 +1,6 @@
 <template>
     <CCard v-for="tool in tools" :key="tool.id" @click="goToTool(tool.name)" class="tool-card">
-        <CCardImage orientation="top" src="https://coreui.io/demos/vue/4.0/free/img/vue.24fc173a.jpg" />
+        <CCardImage orientation="top" src="/assets/logos/BIZIG.png" />
         <CCardBody>
             <CCardTitle>{{ tool.name }}</CCardTitle>
         </CCardBody>

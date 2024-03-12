@@ -2,7 +2,7 @@
     <CContainer class="my-4">
         <CRow class="justify-content-between align-items-center">
             <CCol xs="2">
-                <CImage :src="company?.logo" width="140" />
+                <CImage :src="company?.logo || '/assets/logos/GLOBAL_ESCOM.png'" width="140" />
             </CCol>
             <CCol xs="2">
                 <CImage src="/assets/logos/BIZIG.png" width="130" />
@@ -18,9 +18,8 @@
                 <CCard>
                     <CCardHeader class="bg-black text-white">Misión o propósito de Global Escom®.</CCardHeader>
                     <CCardBody>
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe corporis tenetur dolorum est
-                        asperiores veritatis praesentium quibusdam molestias nisi cum laudantium optio animi, sapiente
-                        aut illo soluta delectus sed. Molestiae?
+                        Promovemos la mejora continua, a través de la genialidad y excelencia del capital humano, para
+                        lograr la productividad en la cultura organizacional.
                     </CCardBody>
                 </CCard>
             </CCol>
@@ -28,52 +27,72 @@
                 <CCard>
                     <CCardHeader class="bg-black text-white">Visión de Global Escom®.</CCardHeader>
                     <CCardBody>
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tenetur ratione facere possimus ipsam
-                        soluta dignissimos provident aut, voluptate ullam quod consequatur voluptatem iusto
-                        reprehenderit sequi repudiandae quisquam, voluptas, unde quo.
+                        Seremos su aliado estratégico en la transformación organizacional; a través de experiencias
+                        innovadoras para facultar al capital humano.
                     </CCardBody>
                 </CCard>
             </CCol>
         </CRow>
     </CContainer>
     <CContainer class="mt-5">
-        <CTable bordered>
-            <CTableHead>
-                <CTableRow class="bg-black">
-                    <CTableHeaderCell scope="col">Valores</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Conductas y creencias de Global Escom®.</CTableHeaderCell>
+        <CTable class="rounded-2" bordered>
+            <CTableHead class="rounded-2">
+                <CTableRow class="rounded-2">
+                    <CTableHeaderCell class="bg-black text-white" scope="col">Valores</CTableHeaderCell>
+                    <CTableHeaderCell class="bg-black text-white">Conductas y creencias de Global Escom®.</CTableHeaderCell>
                 </CTableRow>
             </CTableHead>
             <CTableBody>
                 <CTableRow>
-                    <CTableDataCell></CTableDataCell>
-                    <CTableDataCell></CTableDataCell>
+                    <CTableDataCell><strong>Excelencia:</strong></CTableDataCell>
+                    <CTableDataCell>
+                        Buscamos constantemente ser una solución eficiente y eficaz, para apoyar a nuestros clientes;
+                        basándonos en la mejora continua y la calidad integral.
+                    </CTableDataCell>
                 </CTableRow>
                 <CTableRow>
-                    <CTableDataCell></CTableDataCell>
-                    <CTableDataCell></CTableDataCell>
+                    <CTableDataCell><strong>Pasión:</strong></CTableDataCell>
+                    <CTableDataCell>Demostrar el estado coherente de excelencia frente a nuestros clientes; ofreciendo
+                        soluciones y alternativas que logren satisfacer y superar sus expectativas.</CTableDataCell>
                 </CTableRow>
                 <CTableRow>
-                    <CTableDataCell></CTableDataCell>
-                    <CTableDataCell></CTableDataCell>
+                    <CTableDataCell><strong>Innovación:</strong></CTableDataCell>
+                    <CTableDataCell>Dentro del desarrollo de nuestros servicios profesionales, implantamos e
+                        implementamos técnicas y metodologías, centradas en la generación de valor a nuestros clientes.
+                    </CTableDataCell>
+                </CTableRow>
+                <CTableRow>
+                    <CTableDataCell><strong>Coherencia:</strong></CTableDataCell>
+                    <CTableDataCell>Nos conducimos bajo la premisa: pensar, sentir, decir y actuar de forma integral;
+                        conectamos con el desarrollo cognitivo, físico y espiritual del ser humano.</CTableDataCell>
+                </CTableRow>
+                <CTableRow>
+                    <CTableDataCell><strong>Optimismo:</strong></CTableDataCell>
+                    <CTableDataCell>Somos felices creando experiencias de aprendizaje y nos caracterizamos por reconocer
+                        la genialidad, creatividad y excelencia de las personas, equipos y organizaciones.
+                    </CTableDataCell>
                 </CTableRow>
             </CTableBody>
         </CTable>
     </CContainer>
-    <CContainer class="text-center">
+    <CContainer v-if="!isAdmin" class="text-center">
         <router-link to="/herramientas/bizig/perspectivas/1" class="btn btn-secondary">Ver progreso</router-link><br>
     </CContainer>
 </template>
 
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { getMyCompany } from '../../../services/api/companies-service';
 import { useAlerts } from '../../../store/alert'
+import useUser from '../../../composables/useUserComposable';
 
 const alert = useAlerts();
+const { user } = useUser();
 
 const company = ref(null);
+
+const isAdmin = computed(() => user.value?.role_name === 'admin');
 
 onMounted(() => {
     loadMyCompanyInfo();
@@ -83,9 +102,9 @@ const loadMyCompanyInfo = async () => {
     try {
         const response = await getMyCompany();
         company.value = response.data;
-        alert.add({ title: 'Información de la empresa cargada', content: 'Se ha cargado la información de la empresa.'})
+        alert.add({ title: 'Información de la empresa cargada', content: 'Se ha cargado la información de la empresa.' })
     } catch (error) {
-        alert.add({ title: 'No se puede cargar la información de la empresa', content: 'Puede que no esté asociado a ninguna empresa o que no se pueda cargar la información de la empresa.'})
+        alert.add({ title: 'No se puede cargar la información de la empresa', content: 'Puede que no esté asociado a ninguna empresa o que no se pueda cargar la información de la empresa.' })
     }
 }
 </script>

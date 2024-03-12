@@ -70,20 +70,21 @@ const sendCompany = async (event) => {
     isLoading.value = true;
     try {
         // validate form
-        if (formState.name === '' || formState.email === '' || formState.password === '') {
+        if ((props.isEditing && !formState.name || !formState.logo) ||
+            (!props.isEditing && (!formState.name || !formState.logo || !formState.email || !formState.password))) {
             alert.add({ title: 'Error',  content: 'Por favor, complete todos los campos'});
         }
 
-        console.log('formState', formState.logo);
-
         // create form request
         const formData = new FormData();
+
         formData.append('name', formState.name);
         formData.append('logo', formState.logo);
-        formData.append('email', formState.email);
-        formData.append('password', formState.password);
 
-        console.log('formData', formData);
+        if (!isEditing) {
+            formData.append('email', formState.email);
+            formData.append('password', formState.password);
+        }
 
         // send request
         if (props.isEditing) {

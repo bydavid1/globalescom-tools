@@ -25,7 +25,7 @@
                                     </CInputGroup>
                                     <CRow>
                                         <CCol :xs="6">
-                                            <CustomLoadingButton class="btn btn-primary" type="submit" :loading="isLoading">
+                                            <CustomLoadingButton class="btn btn-primary text-white" type="submit" :loading="isLoading">
                                                 Iniciar sesion
                                             </CustomLoadingButton>
                                         </CCol>

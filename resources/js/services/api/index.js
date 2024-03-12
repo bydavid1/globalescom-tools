@@ -25,7 +25,6 @@ api.interceptors.response.use(
       return response
   },
   error => {
-      console.log(error);
       if (!error.response) {
           return Promise.reject(error)
       }

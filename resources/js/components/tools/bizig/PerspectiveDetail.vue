@@ -11,7 +11,6 @@
             <CCol xs="6" class="text-center">
                 Metas de Inteligencia de Negocios de Global Escom ● BIZIG 2024 <br>
                 <strong>Global Escom, Social Audit • Training • Innovation Consulting.</strong>
-                <strong>Nombre de los Responsables:</strong> Ernesto Chíchique.
             </CCol>
             <CCol xs="2">
                 <CImage src="/assets/logos/BIZIG.png" width="130" />
