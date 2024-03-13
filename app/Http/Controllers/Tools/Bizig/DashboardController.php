@@ -55,6 +55,18 @@ class DashboardController extends Controller
             $perspective->bigs = $bigs;
             $perspective->initiatives = $initiatives;
 
+            // Cargar el progreso de cada "iniciativa"
+            foreach ($initiatives as $initiative) {
+                $progress = $this->progressService->calculateProgressFromAnswerBatches(
+                    $initiative->answerBatches->where('company_id', $companyId)
+                );
+                $initiative->progress = $progress;
+                $perspectiveProgress += $progress;
+
+                unset($initiative->answerBatches); // clean answerBatches
+                unset($initiative->sectionType); // clean sectionType
+            }
+
             // load progress of wach initiatives and bigs
             // Cargar el progreso de cada "big"
             foreach ($bigs as $big) {
@@ -66,18 +78,6 @@ class DashboardController extends Controller
 
                 unset($big->answerBatches); // clean answerBatches
                 unset($big->sectionType); // clean sectionType
-            }
-
-            // Cargar el progreso de cada "iniciativa"
-            foreach ($initiatives as $initiative) {
-                $progress = $this->progressService->calculateProgressFromAnswerBatches(
-                    $initiative->answerBatches->where('company_id', $companyId)
-                );
-                $initiative->progress = $progress;
-                $perspectiveProgress += $progress;
-
-                unset($initiative->answerBatches); // clean answerBatches
-                unset($initiative->sectionType); // clean sectionType
             }
 
             // calculate progress of perspective

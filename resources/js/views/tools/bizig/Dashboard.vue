@@ -14,7 +14,7 @@
         <h4>Global Escom, Social Audit • Training • Innovation Consulting.</h4>
     </CContainer>
     <CContainer fluid>
-        <CRow class="mb-4">
+        <CRow class="mb-4" :xs="{ gutter: 1 }">
             <CCol xs="2">
                 <CContainer class="text-center mt-5 rounded-2 bg-black text-white py-1">
                     PERSPECTIVAS:
@@ -83,9 +83,7 @@
                 </CCard>
             </CCol>
         </CRow>
-    </CContainer>
-    <CContainer fluid class="my-4">
-        <CRow :xs="{ gutter: 1 }" class="align-items-center">
+        <CRow :xs="{ gutter: 1 }" class="align-items-center mt-4">
             <CCol xs="10" class="text-end pe-5" style="height: 2rem;">
                 <span class="h5">Promedio global de cumplimiento de Global Escom®:</span>
             </CCol>

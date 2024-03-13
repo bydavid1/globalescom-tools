@@ -233,7 +233,7 @@
     margin-right: 10px;
   }
   .select2-container--default .select2-selection--multiple .select2-selection__choice {
-    background-color: #efefef;
+    background-color: #fafafa;
     border: 1px solid #ececec;
     border-radius: 4px;
     cursor: default;
@@ -263,8 +263,10 @@
     outline: 0;
   }
   .select2-container--default.select2-container--disabled .select2-selection--multiple {
-    background-color: #eee;
+    background-color: #d8dbe0;
     cursor: default;
+    height: 30px;
+    overflow: auto;
   }
   .select2-container--default.select2-container--disabled .select2-selection__choice__remove {
     display: none;

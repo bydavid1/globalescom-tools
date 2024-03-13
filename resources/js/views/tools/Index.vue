@@ -1,6 +1,5 @@
 <template>
     <div>
-        <h3>Bienvenido, {{ user?.user_name }}</h3>
         <div class="mt-5">
             <h5>Herramientas</h5>
             <div class="mt-3">
@@ -11,8 +10,5 @@
 </template>
 
 <script setup>
-import useUser  from '../composables/useUserComposable';
-import ToolList from '../components/tool/ToolList.vue';
-
-const { user } = useUser();
+    import ToolList from '../../components/tool/ToolList.vue';
 </script>

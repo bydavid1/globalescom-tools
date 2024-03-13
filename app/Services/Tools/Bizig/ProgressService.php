@@ -11,9 +11,9 @@ class ProgressService
 
         $total = 0;
 
-        foreach ($answerBatches as $batch) {
+        foreach ($answerBatches as $key => $batch) {
             $progress = $batch->answers->where('input_id', 14)->first();
-            $total += $progress->body;
+            $total += empty($progress?->body) ? 0 : $progress->body;
         }
 
         return $total / count($answerBatches);

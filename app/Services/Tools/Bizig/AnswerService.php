@@ -28,7 +28,7 @@ class AnswerService
         $answers = collect($answers)->map(function ($answer) {
             return new Answer([
                 'input_id' => $answer['input_id'],
-                'body' => $answer['body']
+                'body' => $answer['body'] ?? ''
             ]);
         });
 
@@ -39,11 +39,28 @@ class AnswerService
 
     public function updateBatch(array $answers) : void
     {
-        foreach ($answers as $answer) {
+        $answerBatchId = null;
+
+        foreach ($answers as $key => $answer) {
             $answerModel = Answer::find($answer['id']);
-            $answerModel->update([
-                'body' => $answer['body']
-            ]);
+
+            if ($answerBatchId === null) {
+                $answerBatchId = $answerModel->batch?->id; // lo uso por si hay una respuesta que no esta guardada
+            }
+
+            if ($answerModel) {
+                $answerModel->update([
+                    'body' => $answer['body'] ?? ''
+                ]);
+            } else {
+                $answerModel = new Answer([
+                    'answer_batch_id' => $answerBatchId,
+                    'input_id' => $answer['input_id'],
+                    'body' => $answer['body'] ?? ''
+                ]);
+
+                $answerModel->save();
+            }
         }
     }
 

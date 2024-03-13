@@ -20,42 +20,41 @@ const router = createRouter({
                 },
                 {
                     path: 'empresas',
-                    name: 'empresas',
+                    name: 'Empresas',
                     component: () => import('../views/company/Companies.vue'),
                 },
                 {
                     path: 'herramientas',
-                    name: 'herramientas',
+                    name: 'Heramientas',
+                    component: () => import('../views/tools/Index.vue'),
+                },
+                {
+                    path: 'bizig',
+                    name: 'Bizig',
+                    component: () => import('../components/tools/bizig/layout/BizigLayout.vue'),
                     children: [
                         {
-                            path: 'bizig',
-                            name: 'Bizig',
-                            component: () => import('../components/tools/bizig/layout/BizigLayout.vue'),
-                            children: [
-                                {
-                                    path: '',
-                                    name: 'presentacion',
-                                    component: () => import('../views/tools/bizig/Presentation.vue'),
-                                },
-                                {
-                                    path: 'perspectivas/:id',
-                                    name: 'perspectiva',
-                                    component: () => import('../views/tools/bizig/Perspectives.vue'),
-                                },
-                                {
-                                    path: 'admin',
-                                    name: 'admin',
-                                    component: () => import('../views/tools/bizig/Administration.vue'),
-                                },
-                                {
-                                    path: 'dashboard/:companyId?',
-                                    name: 'dashboard',
-                                    component: () => import('../views/tools/bizig/Dashboard.vue'),
-                                }
-                            ]
+                            path: '',
+                            name: 'Presentación',
+                            component: () => import('../views/tools/bizig/Presentation.vue'),
                         },
+                        {
+                            path: 'perspectivas/:id',
+                            name: 'Perspectiva',
+                            component: () => import('../views/tools/bizig/Perspectives.vue'),
+                        },
+                        {
+                            path: 'admin',
+                            name: 'Administración',
+                            component: () => import('../views/tools/bizig/Administration.vue'),
+                        },
+                        {
+                            path: 'dashboard/:companyId?',
+                            name: 'Dashboard',
+                            component: () => import('../views/tools/bizig/Dashboard.vue'),
+                        }
                     ]
-                }
+                },
             ]
         },
         {

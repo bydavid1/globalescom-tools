@@ -146,11 +146,17 @@ const initBatches = async () => {
     batches.value.push(reactive({ ...answerBatch, id: Math.random() * 100}));
 };
 
-const progress = computed(() => batches.value.map((b) => b.answers.find(a => a.input_id == 14).body));
+const progress = computed(() => batches.value.map((b) => b.answers.find(a => a.input_id == 14)?.body || 0));
 
 const getModel = (batch, inputId) => {
-    const answer = batch.answers.find(a => a.input_id === inputId);
-    return answer ? answer.body : '';
+    let answer = batch.answers.find(a => a.input_id === inputId);
+    if (!answer) {
+        batch.answers.push({ id: null,  input_id: inputId, body: '' });
+    }
+
+    answer = batch.answers.find(a => a.input_id === inputId);
+
+    return answer.body;
 };
 
 const setModel = (batch, inputId, value) => {
@@ -162,9 +168,10 @@ const setModel = (batch, inputId, value) => {
 
 const syncSelectUsers = (batch, inputId, value) => {
     const answer = batch.answers.find(a => a.input_id === inputId);
-
     if (answer) {
         answer.body = JSON.stringify(value);
+    } else {
+        batch.answers.push({ id: null,  input_id: inputId, body: JSON.stringify(value) });
     }
 }
 
@@ -180,7 +187,6 @@ const setSelectedUsers = (batch, inputId) => {
 const saveAnswer = async (id, index) => {
     try {
         batches.value.find(b => b.id == id).editing = false;
-
         const batch = batches.value.find(b => b.id == id);
 
         if (batch.unhandled) {
@@ -199,7 +205,7 @@ const saveAnswer = async (id, index) => {
             batches.value.push(reactive(newAnswerBatch));
         }
     } catch (error) {
-        console.error('noooo', error);
+        console.error('Error al guardar', error);
     }
 };
 
@@ -220,7 +226,7 @@ const calculateGlobalProgress = () => {
     }
 
     for (let i = 0; i < batches.value.length; i++) {
-        const avance = parseInt(batches.value[i].answers.find(a => a.input_id == 14).body);
+        const avance = parseInt(batches.value[i].answers.find(a => a.input_id == 14)?.body || 0);
         if (!isNaN(avance) && avance >= 0 && avance <= 100) {
             totalProgress += avance;
         }

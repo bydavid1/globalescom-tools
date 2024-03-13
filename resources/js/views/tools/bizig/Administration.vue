@@ -28,8 +28,8 @@
                             <CTableDataCell>{{ company.progress }}%</CTableDataCell>
                             <CTableDataCell class="text-end">
                                 <router-link
-                                    :to="{ name: 'dashboard', params: { companyId: company.id } }"
-                                    class="btn btn-sm btn-success text-white"
+                                    :to="{ name: 'Dashboard', params: { companyId: company.id } }"
+                                    class="btn btn-sm btn-primary text-white"
                                 >
                                     Ver Dashboard
                                 </router-link>

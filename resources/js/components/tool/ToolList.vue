@@ -25,6 +25,13 @@ onMounted(async () => {
 });
 
 const goToTool = (toolName) => {
-    router.push({ path: `/herramientas/${toolName.toLowerCase()}` });
+    router.push({ path: `/${toolName.toLowerCase()}` });
 };
 </script>
+
+<style>
+    .tool-card {
+        width: 18rem;
+        cursor: pointer;
+    }
+</style>

@@ -1,5 +1,5 @@
 <template>
-    <CContainer class="mt-2">
+    <CContainer class="mt-2" fluid>
         <CNav variant="tabs">
             <CNavItem
                 v-for="perspective in perspectives"
@@ -55,7 +55,7 @@ const loadCompanyUsers = async () => {
 }
 
 const choosePerspective = (id) => {
-    router.push({ name: 'perspectiva', params: { id: id } });
+    router.push({ name: 'Perspectiva', params: { id: id } });
 }
 
 const loadPerspectives = async () => {
@@ -65,6 +65,6 @@ const loadPerspectives = async () => {
 }
 
 const goToDashboard = () => {
-    router.push({ path: '/herramientas/bizig/dashboard' });
+    router.push({ path: '/bizig/dashboard' });
 }
 </script>

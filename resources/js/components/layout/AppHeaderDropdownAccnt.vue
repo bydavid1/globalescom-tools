@@ -3,8 +3,7 @@
         <CDropdownToggle placement="bottom-end" :caret="false">
             <CIcon icon="cil-user" size="lg" />
         </CDropdownToggle>
-        <CDropdownMenu class="pt-0">
-            <CDropdownDivider />
+        <CDropdownMenu class="pt-1">
             <CDropdownItem style="cursor: pointer;" @click="endSession">
                 <CIcon icon="cil-lock-locked" /> Cerrar Sesion
             </CDropdownItem>

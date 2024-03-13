@@ -1,4 +1,3 @@
-
 <template>
     <CContainer class="text-center mt-5 rounded-2 py-1" :style="{backgroundColor: perspective.data?.accent_color, color: '#fff'}">
         <span class="h5">{{ perspective.name }}</span>
@@ -17,7 +16,7 @@
             </CCol>
         </CRow>
     </CContainer>
-    <CContainer class="mt-5">
+    <CContainer class="mt-5" fluid>
         <PerspectivaTable
             v-for="(item, index) in perspective.children"
             :loading="isLoading"

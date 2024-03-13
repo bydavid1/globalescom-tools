@@ -1,4 +1,14 @@
 <template>
+    <CContainer v-if="isAdmin" class="my-4">
+        <CRow class="justify-content-end">
+            <CCol xs="2">
+                <router-link to="/bizig/admin" class="btn btn-outline-secondary">
+                    <CIcon icon="cilSettings" size="sm" class="me-1"/>
+                    Administración
+                </router-link>
+            </CCol>
+        </CRow>
+    </CContainer>
     <CContainer class="my-4">
         <CRow class="justify-content-between align-items-center">
             <CCol xs="2">
@@ -39,7 +49,8 @@
             <CTableHead class="rounded-2">
                 <CTableRow class="rounded-2">
                     <CTableHeaderCell class="bg-black text-white" scope="col">Valores</CTableHeaderCell>
-                    <CTableHeaderCell class="bg-black text-white">Conductas y creencias de Global Escom®.</CTableHeaderCell>
+                    <CTableHeaderCell class="bg-black text-white">Conductas y creencias de Global Escom®.
+                    </CTableHeaderCell>
                 </CTableRow>
             </CTableHead>
             <CTableBody>
@@ -75,8 +86,9 @@
             </CTableBody>
         </CTable>
     </CContainer>
-    <CContainer v-if="!isAdmin" class="text-center">
-        <router-link to="/herramientas/bizig/perspectivas/1" class="btn btn-secondary">Ver progreso</router-link><br>
+    <CContainer v-if="!isAdmin" class="text-center mt-5">
+        <router-link to="/bizig/perspectivas/1" class="btn btn-primary btn-lg">Ver
+            progreso</router-link><br>
     </CContainer>
 </template>
 
