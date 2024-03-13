@@ -21,7 +21,13 @@ const logout = async () => {
     localStorage.removeItem('user');
 }
 
+const me = async () => {
+    const response = await api.get('/auth/me');
+    return response.data;
+}
+
 export {
     login,
-    logout
+    logout,
+    me
 }

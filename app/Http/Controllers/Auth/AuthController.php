@@ -53,6 +53,19 @@ class AuthController extends Controller
         }
     }
 
+    public function me(Request $request)
+    {
+        try {
+            $response = $this->authService->me();
+
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return response()->json(['Error al obtener usuario, error interno del servidor'], 500);
+        }
+
+        return response()->json(['data' => $response], 200);
+    }
+
     public function logout()
     {
         try {

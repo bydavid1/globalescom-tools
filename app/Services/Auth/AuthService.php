@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 class AuthService
 {
 
-    public function register(string $name, string $email, string $password) : User
+    public function register(string $name, string $email, string $password): User
     {
         $user = User::create([
             'name' => $name,
@@ -45,6 +45,24 @@ class AuthService
         }
     }
 
+    public function me()
+    {
+        if (!Auth::check()) {
+            throw new AuthenticationException('No hay una sesión activa.');
+        }
+
+        /**
+         * @var User $user
+         */
+        $user = Auth::user();
+
+        return [
+            'user_name'  => $user->name,
+            'role_name' => $user->roles->value('name'),
+            'company_id' => $user->companies?->first()?->id
+        ];
+    }
+
     public function logout()
     {
         if (Auth::check()) {
@@ -56,9 +74,8 @@ class AuthService
             $user->tokens()->delete();
 
             return true;
-        }  else {
-            return [ "message" => "No hay una sesión activa para cerrar."];
+        } else {
+            return ["message" => "No hay una sesión activa para cerrar."];
         }
-
     }
 }

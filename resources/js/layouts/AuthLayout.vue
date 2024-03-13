@@ -13,13 +13,14 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { onMounted } from "vue";
 import { fetchToken, onMessageListener } from "../services/firebase";
 import { CContainer } from '@coreui/vue'
 import AppFooter from '../components/layout/AppFooter.vue'
 import AppHeader from '../components/layout/AppHeader.vue'
 import { useRouter } from "vue-router";
 import { useAlerts } from '../store/alert';
+import { me } from "../services/api/auth-service";
 
 const router = useRouter()
 const alert = useAlerts()
@@ -29,8 +30,8 @@ onMounted(async () => {
     if (!user) {
         router.push({ name: "login" })
     } else {
+        await getMyInfo();
         await fetchToken()
-
         await onMessageListener().then(payload => {
             console.log("payload", payload)
             alert.add({
@@ -41,5 +42,13 @@ onMounted(async () => {
     }
 })
 
+const getMyInfo = async () => {
+    try {
+        return await me()
+    } catch (error) {
+        localStorage.removeItem("user");
+        router.push({ name: "login" })
+    }
+}
 
 </script>
