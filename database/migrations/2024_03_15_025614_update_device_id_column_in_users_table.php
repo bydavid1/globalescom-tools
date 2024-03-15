@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('inputs', function (Blueprint $table) {
-            $table->string('validations')->nullable()->after('options');
-            $table->string('slug')->nullable()->after('options')->unique();
-
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('device_id')->nullable()->change();
         });
     }
 
@@ -23,9 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('inputs', function (Blueprint $table) {
-            $table->dropColumn('slug');
-            $table->dropColumn('validations');
+        Schema::table('users', function (Blueprint $table) {
+            $table->integer('device_id')->nullable()->change();
         });
     }
 };
