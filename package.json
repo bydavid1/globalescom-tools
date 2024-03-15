@@ -8,11 +8,13 @@
     "dependencies": {
         "@coreui/chartjs": "^3.1.2",
         "@coreui/coreui": "^4.2.6",
+        "@coreui/coreui-pro": "^4.6.4",
         "@coreui/icons": "^3.0.1",
         "@coreui/icons-vue": "2.0.0",
         "@coreui/utils": "^2.0.2",
         "@coreui/vue": "^4.10.0",
         "@coreui/vue-chartjs": "2.1.0",
+        "@coreui/vue-pro": "^4.11.3",
         "firebase": "^10.8.1",
         "pinia": "^2.1.7",
         "select2-vue-component": "^6.1.1",

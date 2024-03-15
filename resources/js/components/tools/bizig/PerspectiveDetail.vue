@@ -16,16 +16,14 @@
             </CCol>
         </CRow>
     </CContainer>
-    <CContainer class="mt-5" fluid>
-        <PerspectivaTable
-            v-for="(item, index) in perspective.children"
-            :loading="isLoading"
-            :key="index"
-            :section="item"
-            :form="perspective.form"
-            class="mb-3"
-        />
-    </CContainer>
+    <PerspectivaTable
+        v-for="(item, index) in perspective.children"
+        :loading="isLoading"
+        :key="index"
+        :section="item"
+        :form="perspective.form"
+        class="mb-3"
+    />
 </template>
 
 <script setup>

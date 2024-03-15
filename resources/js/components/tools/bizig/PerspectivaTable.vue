@@ -14,7 +14,7 @@
         </CCardHeader>
         <CCardBody>
             <div v-if="loading" class="d-flex justify-content-center">
-                <CSpinner color="primary"/>
+                <CSpinner color="primary" />
             </div>
             <CTable v-else bordered>
                 <CTableHead>
@@ -25,38 +25,30 @@
                     </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                    <CTableRow
-                        v-for="(batch, batchIndex) in batches" :key="batchIndex"
-                    >
-                        <CTableDataCell
-                            v-for="(input, inputIndex) in form.inputs" :key="inputIndex"
-                        >
-                            <CFormInput
-                                v-if="input.type == 'text'"
-                                :disabled="!batch.editing"
+                    <CTableRow v-for="(batch, batchIndex) in batches" :key="batchIndex">
+                        <CTableDataCell v-for="(input, inputIndex) in form.inputs" :key="inputIndex">
+                            <CFormInput v-if="input.type == 'text'" :disabled="!batch.editing"
                                 :value="getModel(batch, input.id)"
                                 @input="setModel(batch, input.id, $event.target.value)"
                                 placeholder="Ingrese la respuesta" type="text" size="sm" />
                             <select2
-                                v-else-if="input.id == 12"
+                                v-else-if="input.type == 'multiselect'"
                                 :data="users"
                                 :value="setSelectedUsers(batch, input.id)"
                                 :multiple="true"
                                 :disabled="!batch.editing"
                                 @update="syncSelectUsers(batch, input.id, $event)"
                             />
-                            <CFormSelect
-                                v-else-if="input.type == 'select'"
-                                :value="getModel(batch, input.id)"
-                                @input="setModel(batch, input.id, $event.target.value)"
-                                :disabled="!batch.editing"
-                                size="sm"
-                            >
-                                <option
-                                    v-for="(option, optionIndex) in input.options"
-                                    :key="optionIndex"
-                                    :value="option.value"
-                                >
+                            <CDatePicker v-else-if="input.type == 'datepicker'" locale="es-ES" size="sm"
+                                :date="getModel(batch, input.id)"
+                                @update:date="setModel(batch, input.id, $event)"
+                                placeholder="Seleccione la fecha"
+                                :disabled="!batch.editing" />
+                            <CFormSelect v-else-if="input.type == 'select'" :value="getModel(batch, input.id)"
+                                @input="setModel(batch, input.id, $event.target.value)" :disabled="!batch.editing"
+                                size="sm">
+                                <option v-for="(option, optionIndex) in input.options" :key="optionIndex"
+                                    :value="option.value">
                                     {{ option.label }}
                                 </option>
                             </CFormSelect>
@@ -137,13 +129,13 @@ const batches = ref([]);
 
 const globalProgress = ref(0);
 
-const users = computed(() => store.getUsers.map(user => ({ label: user.name, value: user.id })));
+const users = computed(() => store.getUsers.map(user => ({ value: user.id, label: user.name })));
 
 const initBatches = async () => {
     const response = await getMyAnswers(props.section.id);
     batches.value = response.map(batch => reactive({ ...batch }));
     const answerBatch = JSON.parse(JSON.stringify(answersBatchShape));
-    batches.value.push(reactive({ ...answerBatch, id: Math.random() * 100}));
+    batches.value.push(reactive({ ...answerBatch, id: Math.random() * 100 }));
 };
 
 const progress = computed(() => batches.value.map((b) => b.answers.find(a => a.input_id == 14)?.body || 0));
@@ -151,7 +143,7 @@ const progress = computed(() => batches.value.map((b) => b.answers.find(a => a.i
 const getModel = (batch, inputId) => {
     let answer = batch.answers.find(a => a.input_id === inputId);
     if (!answer) {
-        batch.answers.push({ id: null,  input_id: inputId, body: '' });
+        batch.answers.push({ id: null, input_id: inputId, body: '' });
     }
 
     answer = batch.answers.find(a => a.input_id === inputId);
@@ -171,7 +163,7 @@ const syncSelectUsers = (batch, inputId, value) => {
     if (answer) {
         answer.body = JSON.stringify(value);
     } else {
-        batch.answers.push({ id: null,  input_id: inputId, body: JSON.stringify(value) });
+        batch.answers.push({ id: null, input_id: inputId, body: JSON.stringify(value) });
     }
 }
 
