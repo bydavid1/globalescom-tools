@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Answer extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'user_id',
         'answer_batch_id',
@@ -20,7 +21,8 @@ class Answer extends Model
         return $this->belongsTo(AnswerBatch::class, "answer_batch_id");
     }
 
-    public function input(){
+    public function input()
+    {
         return $this->belongsTo(Input::class, "input_id");
     }
 }
