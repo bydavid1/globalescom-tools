@@ -21,6 +21,7 @@ import AppHeader from '../components/layout/AppHeader.vue'
 import { useRouter } from "vue-router";
 import { useAlerts } from '../store/alert';
 import { me } from "../services/api/auth-service";
+import { updateDeviceId } from "../services/api/user-service";
 
 const router = useRouter()
 const alert = useAlerts()
@@ -31,7 +32,8 @@ onMounted(async () => {
         router.push({ name: "login" })
     } else {
         await getMyInfo();
-        await fetchToken()
+        const deviceId = await fetchToken();
+        await updateDeviceId(deviceId);
         await onMessageListener().then(payload => {
             console.log("payload", payload)
             alert.add({

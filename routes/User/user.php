@@ -1,9 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::put('update-device', [
-    App\Http\Controllers\UserController::class,
-    'updateDeviceId'
-])->middleware(["auth:sanctum"]);
+Route::put('update-device-id', [UserController::class, 'updateDeviceId'])->middleware(["auth:sanctum"]);
