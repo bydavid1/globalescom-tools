@@ -18,9 +18,9 @@
                 placeholder="Ingrese la contraseña de la empresa" />
         </CCol>
         <CContainer class="mt-4">
-            <CustomLoadingButton class="btn btn-primary" type="submit" :loading="isLoading" >
+            <CLoadingButton type="submit" color="primary" :loading="isLoading">
                 {{ props.isEditing ? 'Actualizar' : 'Guardar' }}
-            </CustomLoadingButton>
+            </CLoadingButton>
         </CContainer>
     </CForm>
 </template>
@@ -28,7 +28,6 @@
 <script setup>
 import { reactive, ref, watch } from 'vue';
 import { getCompany, saveCompany, updateCompany } from '../../services/api/companies-service';
-import CustomLoadingButton from '../widgets/CustomLoadingButton.vue';
 import { useAlerts } from '../../store/alert';
 
 const alert = useAlerts();

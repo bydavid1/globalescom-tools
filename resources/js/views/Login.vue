@@ -25,9 +25,7 @@
                                     </CInputGroup>
                                     <CRow>
                                         <CCol :xs="6">
-                                            <CustomLoadingButton class="btn btn-primary text-white" type="submit" :loading="isLoading">
-                                                Iniciar sesion
-                                            </CustomLoadingButton>
+                                            <CLoadingButton type="submit" color="primary" :loading="isLoading">Iniciar sesión</CLoadingButton>
                                         </CCol>
                                     </CRow>
                                 </CForm>
@@ -50,7 +48,6 @@
 <script setup>
 import { reactive, ref } from 'vue';
 import { login } from '../services/api/auth-service';
-import CustomLoadingButton from '../components/widgets/CustomLoadingButton.vue';
 import { useRouter } from 'vue-router';
 import { useAlerts } from '../store/alert';
 import { CImage } from '@coreui/vue';

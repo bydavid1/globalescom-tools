@@ -16,10 +16,7 @@
                 <CFormInput v-model="password" type="password" id="password"
                     placeholder="Ingrese la contraseña del usuario" />
             </CCol>
-
-            <CustomLoadingButton type="submit" class="btn btn-primary mt-4" :loading="isLoading">
-                Guardar
-            </CustomLoadingButton>
+            <CLoadingButton type="submit" color="primary" :loading="isLoading">Guardar</CLoadingButton>
         </CForm>
     </div>
 </template>
@@ -27,7 +24,6 @@
 <script setup>
 import { ref } from 'vue';
 import { saveUser } from '../../services/api/companies-service'
-import CustomLoadingButton from '../widgets/CustomLoadingButton.vue';
 import { useAlerts } from '../../store/alert';
 
 const alert = useAlerts();
