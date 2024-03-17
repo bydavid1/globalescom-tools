@@ -1,21 +1,14 @@
 <template>
-    <div>
-        <div class="wrapper d-flex flex-column min-vh-100 bg-light">
-            <AppHeader />
-            <div class="body flex-grow-1 px-3">
-                <CContainer lg>
-                    <router-view />
-                </CContainer>
-            </div>
-            <AppFooter />
-        </div>
+    <div class="wrapper d-flex flex-column bg-light">
+        <AppHeader />
+        <router-view />
+        <AppFooter />
     </div>
 </template>
 
 <script setup>
 import { onMounted } from "vue";
 import { fetchToken, onMessageListener } from "../services/firebase";
-import { CContainer } from '@coreui/vue'
 import AppFooter from '../components/layout/AppFooter.vue'
 import AppHeader from '../components/layout/AppHeader.vue'
 import { useRouter } from "vue-router";

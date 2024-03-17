@@ -95,28 +95,13 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue';
-import { getMyCompany } from '../../../services/api/companies-service';
-import { useAlerts } from '../../../store/alert'
 import useUser from '../../../composables/useUserComposable';
+import { useCompany } from '../../../store/company';
 
-const alert = useAlerts();
+const store = useCompany();
 const { user } = useUser();
 
-const company = ref(null);
+const company = store.company;
 
 const isAdmin = computed(() => user.value?.role_name === 'admin');
-
-onMounted(() => {
-    loadMyCompanyInfo();
-});
-
-const loadMyCompanyInfo = async () => {
-    try {
-        const response = await getMyCompany();
-        company.value = response.data;
-        alert.add({ title: 'Información de la empresa cargada', content: 'Se ha cargado la información de la empresa.' })
-    } catch (error) {
-        alert.add({ title: 'No se puede cargar la información de la empresa', content: 'Puede que no esté asociado a ninguna empresa o que no se pueda cargar la información de la empresa.' })
-    }
-}
 </script>

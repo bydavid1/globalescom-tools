@@ -57,9 +57,6 @@ class BizigToolReminder implements ShouldQueue
             return $user->device_id;
         })->flatten();
 
-        // dd($devices->toArray());
-
-
         Larafirebase::withTitle('BizigTool')
                     ->withBody('Recuerda que tienes tareas pendientes en BizigTool')
                     ->sendNotification($devices->toArray());

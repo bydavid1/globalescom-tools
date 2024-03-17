@@ -1,5 +1,5 @@
 <template>
-  <CHeader position="sticky" class="mb-4">
+  <CHeader position="sticky">
     <CContainer fluid>
       <CHeaderBrand href="/">
           <CImage src="/assets/logos/GLOBAL_ESCOM.png" width="90" />
