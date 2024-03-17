@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="min-vh-100">
         <CRow>
             <CCol>
                 <h4>Empresas</h4>

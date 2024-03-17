@@ -1,7 +1,7 @@
 <template>
     <CRow>
         <CCol sm="auto">
-            <CSidebar :visible="true" :unfoldable="false" color-scheme="light">
+            <CSidebar :visible="true" :unfoldable="false" color-scheme="light" class="h-100">
                 <CSidebarNav>
                     <CNavTitle>Perspectivas</CNavTitle>
                     <CNavItem
