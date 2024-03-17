@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Tools\Bizig;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Tools\Bizig\PerspectiveResource;
 use App\Services\Tools\Bizig\PerspectiveService;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
 class PerspectiveController extends Controller
@@ -18,7 +19,15 @@ class PerspectiveController extends Controller
 
     public function getPerspectives() {
         try {
-            $perspectives = $this->perspectiveService->getPerspectives();
+
+            if (Gate::denies('get-sections', )) {
+                return response()->json(['message' => 'Unauthorized'], 403);
+            }
+
+            $user = auth()->user();
+            $companyId = $user->companies->first()->id;
+
+            $perspectives = $this->perspectiveService->getPerspectives($companyId);
 
             return response()->json($perspectives->map(function ($perspective) {
                 return [
