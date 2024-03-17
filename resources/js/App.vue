@@ -22,6 +22,3 @@ const store = useAlerts()
 const toasts = computed(() => store.getAlerts)
 </script>
 
-<style lang="scss">
-@import '../scss/style';
-</style>
