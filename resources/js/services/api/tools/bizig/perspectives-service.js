@@ -12,7 +12,14 @@ const getPerspective = async (id) => {
     return response.data;
 }
 
+const createPerspective = async (data) => {
+    const response = await api.post('/perspectives', data);
+
+    return response.data;
+}
+
 export {
     getPerspectives,
-    getPerspective
+    getPerspective,
+    createPerspective
 }

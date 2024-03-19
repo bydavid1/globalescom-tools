@@ -8,12 +8,12 @@
             <NoPerspectives v-else @on-add-click="() => { showNewPerspectiveModal = true }"/>
         </div>
     </CContainer>
-    <CModal :visible="showNewPerspectiveModal" @close="() => { showNewPerspectiveModal = false }">
+    <CModal :visible="showNewPerspectiveModal">
         <CModalHeader>
             <CModalTitle>Nueva perspectiva</CModalTitle>
         </CModalHeader>
         <CModalBody>
-            <NewPerspectiveForm/>
+            <NewPerspectiveForm @on-save="onNewPerspective"/>
         </CModalBody>
     </CModal>
 </template>
@@ -46,5 +46,10 @@ const loadCompanyUsers = async () => {
     const response = await getUsers(companyId);
 
     userStore.setUsers(response);
+}
+
+const onNewPerspective = () => {
+    showNewPerspectiveModal.value = true;
+    perspectiveStore.fetchPerspectives();
 }
 </script>
