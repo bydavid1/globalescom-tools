@@ -13,8 +13,11 @@
                     >
                         <CIcon customClassName="nav-icon" icon="cil-puzzle" /> {{ perspective.name }}
                     </CNavItem>
-                    <CNavItem href="#" @click="goToDashboard">
+                    <CNavItem v-if="perspectives.lenght > 0" href="#" @click="goToDashboard">
                         <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Dashboard
+                    </CNavItem>
+                    <CNavItem href="#">
+                        <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Crear perspectiva
                     </CNavItem>
                 </CSidebarNav>
             </CSidebar>
@@ -52,8 +55,8 @@ const route = useRoute();
 const perspectives = computed(() => perspectiveStore.perspectives);
 
 onMounted(async () => {
-    await loadMyCompanyInfo();
     await loadPerspectives();
+    await loadMyCompanyInfo();
 });
 
 const loadMyCompanyInfo = async () => {
@@ -67,10 +70,13 @@ const loadMyCompanyInfo = async () => {
 
 const loadPerspectives = async () => {
     try {
+        perspectiveStore.loadingPerspectives = true
         await perspectiveStore.fetchPerspectives()
         alert.add({ title: 'Perspectivas cargadas', content: 'Se han cargado las perspectivas.' })
     } catch (error) {
         alert.add({ title: 'No se pueden cargar las perspectivas', content: 'Puede que no haya perspectivas asociadas a la empresa o que no se puedan cargar las perspectivas.' })
+    } finally {
+        perspectiveStore.loadingPerspectives = false
     }
 }
 

@@ -7,8 +7,10 @@ use Illuminate\Support\Collection;
 
 class PerspectiveService
 {
-    public function getPerspectives() {
-        $perspectives = Section::whereRelation('sectionType', 'name', 'perspective')->get();
+    public function getPerspectives(int $companyId) : Collection
+    {
+        $perspectives = Section::whereRelation('sectionType', 'name', 'perspective')->where('company_id', $companyId)->get();
+
 
         return $perspectives;
     }

@@ -50,7 +50,6 @@ import { reactive, ref } from 'vue';
 import { login } from '../services/api/auth-service';
 import { useRouter } from 'vue-router';
 import { useAlerts } from '../store/alert';
-import { CImage } from '@coreui/vue';
 
 const router = useRouter();
 const alert = useAlerts();

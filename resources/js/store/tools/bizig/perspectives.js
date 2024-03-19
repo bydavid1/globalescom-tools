@@ -5,6 +5,7 @@ export const usePerspective = defineStore({
   id: 'perspectiveStore',
   state: () => ({
     perspectives: [],
+    loadingPerspectives: false,
   }),
   actions: {
     async fetchPerspectives() {
