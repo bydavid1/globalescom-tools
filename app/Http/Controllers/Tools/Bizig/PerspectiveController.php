@@ -63,4 +63,30 @@ class PerspectiveController extends Controller
             return response()->json(['message' => 'Internal Server Error'], 500);
         }
     }
+
+    public function createPerspective(Request $request) {
+        try {
+            $request->validate([
+                'name' => 'required|string',
+                'accent_color' => 'required|string',
+            ]);
+
+            /**
+             * @var User $user
+             */
+            $user = auth()->user();
+            $companyId = $user->companies->first()?->id;
+
+            // If no company is related to the user, return 404
+            if (!$companyId) return response()->json(['message' => 'No company related'], 404);
+
+            $perspective = $this->perspectiveService->createPerspective($request->input('name'), $request->input('accent_color'), $companyId);
+
+            return response()->json($perspective);
+        } catch (\Error $e) {
+            dd($e->getMessage());
+            Log::error($e->getMessage());
+            return response()->json(['message' => 'Internal Server Error'], 500);
+        }
+    }
 }
