@@ -4,22 +4,33 @@
             <CSpinner />
         </div>
         <div v-else class="text-center mt-5">
-            <PerspectiveDetail v-if="perspectives.length > 0"/>
-            <NoPerspectives v-else/>
+            <PerspectiveDetail v-if="perspectives.length > 0" />
+            <NoPerspectives v-else @on-add-click="() => { showNewPerspectiveModal = true }"/>
         </div>
     </CContainer>
+    <CModal :visible="showNewPerspectiveModal" @close="() => { showNewPerspectiveModal = false }">
+        <CModalHeader>
+            <CModalTitle>Nueva perspectiva</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            <NewPerspectiveForm/>
+        </CModalBody>
+    </CModal>
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { getUsers } from '../../../services/api/companies-service';
 import PerspectiveDetail from '../../../components/tools/bizig/PerspectiveDetail.vue';
 import { useUsers } from '../../../store/user';
 import { usePerspective } from '../../../store/tools/bizig/perspectives';
 import NoPerspectives from '../../../components/tools/bizig/NoPerspectives.vue';
+import NewPerspectiveForm from '../../../components/tools/bizig/NewPerspectiveForm.vue';
 
 const userStore = useUsers();
 const perspectiveStore = usePerspective();
+
+const showNewPerspectiveModal = ref(false);
 
 onMounted(async () => {
     await loadCompanyUsers();

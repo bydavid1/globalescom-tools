@@ -1,0 +1,41 @@
+<template>
+    <CForm @submit.prevent="savePerspective" class="row gy-3 align-items-center">
+        <CCol xs="12">
+            <CFormLabel for="name">Nombre</CFormLabel>
+            <CFormInput v-model="formState.name" type="text" id="name" placeholder="Ingrese el nombre de la perspectiva" />
+        </CCol>
+        <CContainer class="mt-4">
+            <CLoadingButton type="submit" color="primary" :loading="isLoading">
+                Guardar
+            </CLoadingButton>
+        </CContainer>
+    </CForm>
+</template>
+
+<script setup>
+import { reactive, ref, watch } from 'vue';
+import { useAlerts } from '../../../store/alert';
+
+const alert = useAlerts();
+
+const isLoading = ref(false);
+
+const formState = reactive({
+    name: '',
+});
+
+const savePerspective = async () => {
+    isLoading.value = true;
+    try {
+        //validate form
+        if (!formState.name) {
+            alert.add({ title: 'Error', content: 'Por favor, complete todos los campos' });
+            return;
+        }
+    } catch (error) {
+        alert.error('Error al guardar la perspectiva');
+    } finally {
+        isLoading.value = false;
+    }
+}
+</script>
