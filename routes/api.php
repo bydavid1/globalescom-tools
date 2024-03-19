@@ -26,7 +26,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/perspectives', [PerspectiveController::class, 'getPerspectives']);
+Route::get('/perspectives', [PerspectiveController::class, 'getPerspectives'])->middleware('auth:sanctum');
+
 
 Route::get('/perspectives/{id}', [PerspectiveController::class, 'getPerspective']);
 
