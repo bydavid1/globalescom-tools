@@ -19,13 +19,17 @@
     </CContainer>
     <CContainer class="text-start my-5">
         <div class="d-flex align-items-center mb-4">
-            <CIcon icon="cil-puzzle" size="lg" class="me-2"/>
+            <CIcon icon="cil-puzzle" size="lg" class="me-2" />
             <h4>Bigs</h4>
         </div>
         <PerspectivaTable v-for="(item, index) in perspective.bigs" :loading="isLoading" :key="index" :section="item"
             :form="perspective.form" class="mb-3" />
         <div class="d-grid gap-2 col-6 mx-auto mt-5">
-            <CButton color="secondary" variant="outline">Agregar big</CButton>
+            <CButton v-if="!showAddBigForm" color="secondary" variant="outline" @click="() => showAddBigForm = true">
+                Agregar big</CButton>
+            <CFormInput v-else placeholder="Nombre de la big" @keydown.esc="() => showAddBigForm = false"/>
+        </div>
+        <div>
         </div>
     </CContainer>
     <CContainer class="text-start my-5">
@@ -36,7 +40,9 @@
         <PerspectivaTable v-for="(item, index) in perspective.initiatives" :loading="isLoading" :key="index"
             :section="item" :form="perspective.form" class="mb-3" />
         <div class="d-grid gap-2 col-6 mx-auto mt-5">
-            <CButton color="secondary" variant="outline">Agregar big</CButton>
+            <CButton v-if="!showAddInitiativeForm" color="secondary" variant="outline"
+                @click="() => showAddInitiativeForm = true">Agregar iniciativa</CButton>
+            <CFormInput v-else placeholder="Nombre de la big" @keydown.esc="() => showAddInitiativeForm = false"/>
         </div>
     </CContainer>
 </template>
@@ -51,6 +57,9 @@ const route = useRoute();
 
 const isLoading = ref(false);
 const perspective = ref({});
+
+const showAddBigForm = ref(false);
+const showAddInitiativeForm = ref(false);
 
 const loadPerspective = async (id) => {
     isLoading.value = true;
