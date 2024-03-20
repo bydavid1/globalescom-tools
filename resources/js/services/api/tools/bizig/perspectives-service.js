@@ -9,7 +9,12 @@ const getPerspectives = async () => {
 const getPerspective = async (id) => {
     const response = await api.get(`/perspectives/${id}`);
 
-    return response.data;
+    const perspective = response.data;
+
+    perspective.bigs = perspective.children.filter(child => child.type === 'big');
+    perspective.initiatives = perspective.children.filter(child => child.type === 'initiative');
+
+    return perspective;
 }
 
 const createPerspective = async (data) => {

@@ -45,8 +45,7 @@ class PerspectiveController extends Controller
                     'data' => json_decode($perspective->data),
                 ];
             }));
-        } catch (\Exception $e) {
-            dd($e->getMessage());
+        } catch (\Error $e) {
             Log::error($e->getMessage());
             return response()->json(['message' => 'Internal Server Error'], 500);
         }
@@ -56,9 +55,10 @@ class PerspectiveController extends Controller
         try {
             $perspective = $this->perspectiveService->getPerspective($id);
 
+            if (!$perspective) return response()->json(['message' => 'Perspective not found'], 404);
+
             return new PerspectiveResource($perspective);
         } catch (\Error $e) {
-            dd($e->getMessage());
             Log::error($e->getMessage());
             return response()->json(['message' => 'Internal Server Error'], 500);
         }
@@ -84,7 +84,7 @@ class PerspectiveController extends Controller
 
             return response()->json($perspective);
         } catch (\Error $e) {
-            dd($e->getMessage());
+
             Log::error($e->getMessage());
             return response()->json(['message' => 'Internal Server Error'], 500);
         }

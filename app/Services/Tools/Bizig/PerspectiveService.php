@@ -12,11 +12,10 @@ class PerspectiveService
     {
         $perspectives = Section::whereRelation('sectionType', 'name', 'perspective')->where('company_id', $companyId)->get();
 
-
         return $perspectives;
     }
 
-    public function getPerspective($id) : Section
+    public function getPerspective($id) : Section|null
     {
         $perspective = Section::whereRelation('sectionType', 'name', 'perspective')
             ->where('id', $id)

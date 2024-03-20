@@ -94,7 +94,7 @@
 
 
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed } from 'vue';
 import useUser from '../../../composables/useUserComposable';
 import { useCompany } from '../../../store/company';
 
