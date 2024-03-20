@@ -6,7 +6,9 @@ use App\Http\Controllers\Tools\Bizig\PerspectiveController;
 use App\Http\Controllers\ReminderController;
 use App\Http\Controllers\ToolController;
 use App\Http\Controllers\Tools\Bizig\AdminController;
+use App\Http\Controllers\Tools\Bizig\BigController;
 use App\Http\Controllers\Tools\Bizig\DashboardController;
+use App\Http\Controllers\Tools\Bizig\InitiativeController;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +33,10 @@ Route::get('/perspectives', [PerspectiveController::class, 'getPerspectives'])->
 Route::post('/perspectives', [PerspectiveController::class, 'createPerspective'])->middleware('auth:sanctum');
 
 Route::get('/perspectives/{id}', [PerspectiveController::class, 'getPerspective']);
+
+Route::post('/bigs', [BigController::class, 'createBig'])->middleware('auth:sanctum');
+
+Route::post('/initiatives', [InitiativeController::class, 'createInitiative'])->middleware('auth:sanctum');
 
 Route::post('/answers/batch', [AnswerController::class, 'saveBatch'])->middleware('auth:sanctum');
 
