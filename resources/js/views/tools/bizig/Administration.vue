@@ -1,8 +1,9 @@
 <template>
-    <CContainer class="my-4">
+    <div class="min-vh-100">
+        <CContainer class="my-4">
         <CRow>
             <CCol>
-                <h4>Administracion</h4>
+                <h4>Administración</h4>
             </CCol>
         </CRow>
     </CContainer>
@@ -40,6 +41,7 @@
             </CCardBody>
         </CCard>
     </CContainer>
+    </div>
 </template>
 
 <script setup>

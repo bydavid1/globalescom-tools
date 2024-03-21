@@ -3,7 +3,11 @@
         <CCol sm="auto">
             <CSidebar :visible="true" :unfoldable="false" color-scheme="light" class="h-100">
                 <CSidebarNav>
-                    <CNavTitle>Perspectivas</CNavTitle>
+                    <CNavTitle>Bizig</CNavTitle>
+                    <CNavItem href="/bizig">
+                        <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Bizig
+                    </CNavItem>
+                    <CNavTitle v-if="perspectives.length > 0">Perspectivas</CNavTitle>
                     <CNavItem
                         href="#"
                         v-for="perspective in perspectives"
@@ -13,11 +17,16 @@
                     >
                         <CIcon customClassName="nav-icon" icon="cil-puzzle" /> {{ perspective.name }}
                     </CNavItem>
-                    <CNavItem v-if="perspectives.lenght > 0" href="#" @click="goToDashboard">
+                    <CNavItem v-if="!isAdmin" href="#" @click="() => showNewPerspectiveModal = true">
+                        <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Crear perspectiva
+                    </CNavItem>
+                    <CNavTitle v-if="perspectives.length > 0">Resumen</CNavTitle>
+                    <CNavItem v-if="perspectives.length > 0" href="/bizig/dashboard">
                         <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Dashboard
                     </CNavItem>
-                    <CNavItem href="#">
-                        <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Crear perspectiva
+                    <CNavTitle v-if="isAdmin">Administración</CNavTitle>
+                    <CNavItem v-if="isAdmin" href="/bizig/admin">
+                        <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Administración
                     </CNavItem>
                 </CSidebarNav>
             </CSidebar>
@@ -36,23 +45,38 @@
         la previa autorización. <br>
         Metodología de trabajo bajo la metodología de BIZIG.
     </CContainer>
+    <CModal :visible="showNewPerspectiveModal">
+        <CModalHeader>
+            <CModalTitle>Nueva perspectiva</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            <NewPerspectiveForm @on-save="onNewPerspective"/>
+        </CModalBody>
+    </CModal>
 </template>
 
 <script setup>
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useCompany } from "../../../../store/company";
 import { usePerspective } from "../../../../store/tools/bizig/perspectives";
 import { useAlerts } from "../../../../store/alert";
-import { useRouter, useRoute } from "vue-router";
+import { useRouter } from "vue-router";
+import useUser from "../../../../composables/useUserComposable"
+import NewPerspectiveForm from "../../../../components/tools/bizig/NewPerspectiveForm.vue";
 
 const companyStore = useCompany();
 const perspectiveStore = usePerspective();
 const alert = useAlerts();
 
+const { user } = useUser();
+
 const router = useRouter();
-const route = useRoute();
+
+const showNewPerspectiveModal = ref(false);
 
 const perspectives = computed(() => perspectiveStore.perspectives);
+
+const isAdmin = computed(() => user.value?.role_name === 'admin');
 
 onMounted(async () => {
     await loadPerspectives();
@@ -84,8 +108,9 @@ const choosePerspective = (id) => {
     router.push({ name: 'Perspectiva', params: { id: id } });
 }
 
-const goToDashboard = () => {
-    router.push({ path: '/bizig/dashboard' });
+const onNewPerspective = () => {
+    showNewPerspectiveModal.value = false;
+    perspectiveStore.fetchPerspectives();
 }
 
 </script>

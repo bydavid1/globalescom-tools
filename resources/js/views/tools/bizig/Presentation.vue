@@ -1,14 +1,4 @@
 <template>
-    <CContainer v-if="isAdmin" class="my-4">
-        <CRow class="justify-content-end">
-            <CCol xs="2">
-                <router-link to="/bizig/admin" class="btn btn-outline-secondary">
-                    <CIcon icon="cilSettings" size="sm" class="me-1"/>
-                    Administración
-                </router-link>
-            </CCol>
-        </CRow>
-    </CContainer>
     <CContainer class="my-4">
         <CRow class="justify-content-between align-items-center">
             <CCol xs="2">
@@ -86,22 +76,13 @@
             </CTableBody>
         </CTable>
     </CContainer>
-    <CContainer v-if="!isAdmin" class="text-center mt-5">
-        <router-link to="/bizig/perspectivas/1" class="btn btn-primary btn-lg">Ver
-            progreso</router-link><br>
-    </CContainer>
 </template>
 
 
 <script setup>
-import { computed } from 'vue';
-import useUser from '../../../composables/useUserComposable';
 import { useCompany } from '../../../store/company';
 
 const store = useCompany();
-const { user } = useUser();
 
 const company = store.company;
-
-const isAdmin = computed(() => user.value?.role_name === 'admin');
 </script>

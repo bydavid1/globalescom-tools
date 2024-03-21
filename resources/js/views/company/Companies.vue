@@ -1,48 +1,51 @@
 <template>
     <div class="min-vh-100">
-        <CRow>
-            <CCol>
-                <h4>Empresas</h4>
-            </CCol>
-            <CCol class="text-end">
-                <CButton @click="openCreateModal" size="sm" color="primary">Nueva Empresa</CButton>
-            </CCol>
-        </CRow>
-        <CCard class="mt-3">
-            <CCardBody>
-                <CTable v-if="companies.length > 0" small>
-                    <CTableHead>
-                        <CTableRow>
-                            <CTableHeaderCell scope="col">ID</CTableHeaderCell>
-                            <CTableHeaderCell scope="col">Nombre</CTableHeaderCell>
-                            <CTableHeaderCell scope="col">Email</CTableHeaderCell>
-                            <CTableHeaderCell scope="col" class="text-end">Acciones</CTableHeaderCell>
-                        </CTableRow>
-                    </CTableHead>
-                    <CTableBody>
-                        <CTableRow v-for="company in companies" :key="company.id">
-                            <CTableDataCell>{{ company.id }}</CTableDataCell>
-                            <CTableDataCell>{{ company.name }}</CTableDataCell>
-                            <CTableDataCell>{{ company.email }}</CTableDataCell>
-                            <CTableDataCell class="text-end">
-                                <CDropdown variant="btn-group">
-                                    <CDropdownToggle color="secondary" size="sm">Opciones</CDropdownToggle>
-                                    <CDropdownMenu>
-                                        <CDropdownItem @click="openEditModal(company.id)">Editar</CDropdownItem>
-                                        <CDropdownItem @click="openUsersModal(company.id)">Ver Usuarios</CDropdownItem>
-                                        <CDropdownItem @click="openCreateUserModal(company.id)">Nuevo Usuario
-                                        </CDropdownItem>
-                                    </CDropdownMenu>
-                                </CDropdown>
-                            </CTableDataCell>
-                        </CTableRow>
-                    </CTableBody>
-                </CTable>
-                <div v-else class="text-center mt-2">
-                    <h6>No hay empresas registradas</h6>
-                </div>
-            </CCardBody>
-        </CCard>
+        <CContainer class="mt-5">
+            <CRow>
+                <CCol>
+                    <h4>Empresas</h4>
+                </CCol>
+                <CCol class="text-end">
+                    <CButton @click="openCreateModal" size="sm" color="primary">Nueva Empresa</CButton>
+                </CCol>
+            </CRow>
+            <CCard class="mt-3">
+                <CCardBody>
+                    <CTable v-if="companies.length > 0" small>
+                        <CTableHead>
+                            <CTableRow>
+                                <CTableHeaderCell scope="col">ID</CTableHeaderCell>
+                                <CTableHeaderCell scope="col">Nombre</CTableHeaderCell>
+                                <CTableHeaderCell scope="col">Email</CTableHeaderCell>
+                                <CTableHeaderCell scope="col" class="text-end">Acciones</CTableHeaderCell>
+                            </CTableRow>
+                        </CTableHead>
+                        <CTableBody>
+                            <CTableRow v-for="company in companies" :key="company.id">
+                                <CTableDataCell>{{ company.id }}</CTableDataCell>
+                                <CTableDataCell>{{ company.name }}</CTableDataCell>
+                                <CTableDataCell>{{ company.email }}</CTableDataCell>
+                                <CTableDataCell class="text-end">
+                                    <CDropdown variant="btn-group">
+                                        <CDropdownToggle color="secondary" size="sm">Opciones</CDropdownToggle>
+                                        <CDropdownMenu>
+                                            <CDropdownItem @click="openEditModal(company.id)">Editar</CDropdownItem>
+                                            <CDropdownItem @click="openUsersModal(company.id)">Ver Usuarios
+                                            </CDropdownItem>
+                                            <CDropdownItem @click="openCreateUserModal(company.id)">Nuevo Usuario
+                                            </CDropdownItem>
+                                        </CDropdownMenu>
+                                    </CDropdown>
+                                </CTableDataCell>
+                            </CTableRow>
+                        </CTableBody>
+                    </CTable>
+                    <div v-else class="text-center mt-2">
+                        <h6>No hay empresas registradas</h6>
+                    </div>
+                </CCardBody>
+            </CCard>
+        </CContainer>
         <CModal :visible="showUsersModal" size="xl" @close="() => { showUsersModal = false }">
             <CModalBody>
                 <ViewUsers :company-id="currentCompanyId" />
@@ -53,9 +56,10 @@
                 <AddUser :company-id="currentCompanyId" @onSuccess="closeModals" />
             </CModalBody>
         </CModal>
-        <CModal :visible="showCompanyModal" size="lg"  @close="() => { showCompanyModal = false }">
+        <CModal :visible="showCompanyModal" size="lg" @close="() => { showCompanyModal = false }">
             <CModalBody>
-                <CreateOrUpdateCompany :is-editing="isEditing" :company-id="currentCompanyId" @onSuccess="closeModals" />
+                <CreateOrUpdateCompany :is-editing="isEditing" :company-id="currentCompanyId"
+                    @onSuccess="closeModals" />
             </CModalBody>
         </CModal>
     </div>
