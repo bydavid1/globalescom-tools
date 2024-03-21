@@ -17,6 +17,7 @@ class PerspectiveResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'data' => json_decode($this->data),
             'children' => $this->children->map(function ($child) {

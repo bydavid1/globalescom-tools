@@ -24,10 +24,11 @@
         </div>
         <PerspectivaTable v-for="(item, index) in perspective.bigs" :loading="isLoading" :key="index" :section="item"
             :form="perspective.form" class="mb-3" />
-        <div class="d-grid gap-2 col-6 mx-auto mt-5">
+        <div v-if="perspective.bigs?.length > 3" class="d-grid gap-2 col-6 mx-auto mt-5">
             <CButton v-if="!showAddBigForm" color="secondary" variant="outline" @click="() => showAddBigForm = true">
                 Agregar big</CButton>
-            <CFormInput v-else placeholder="Nombre de la big" @keydown.esc="() => showAddBigForm = false"/>
+            <CFormInput v-else v-model="newBigInput" placeholder="Nombre de la big"
+                @keydown.esc="() => showAddBigForm = false" @keydown.enter="addNewBig"/>
         </div>
         <div>
         </div>
@@ -39,10 +40,11 @@
         </div>
         <PerspectivaTable v-for="(item, index) in perspective.initiatives" :loading="isLoading" :key="index"
             :section="item" :form="perspective.form" class="mb-3" />
-        <div class="d-grid gap-2 col-6 mx-auto mt-5">
+        <div v-if="perspective.initiatives?.length > 3" class="d-grid gap-2 col-6 mx-auto mt-5">
             <CButton v-if="!showAddInitiativeForm" color="secondary" variant="outline"
                 @click="() => showAddInitiativeForm = true">Agregar iniciativa</CButton>
-            <CFormInput v-else placeholder="Nombre de la big" @keydown.esc="() => showAddInitiativeForm = false"/>
+            <CFormInput v-else v-model="newInitiativeInput" placeholder="Nombre de la big"
+                @keydown.esc="() => showAddInitiativeForm = false" @keydown.enter="addNewInitiative"/>
         </div>
     </CContainer>
 </template>
@@ -52,8 +54,13 @@ import { ref, watch } from 'vue';
 import PerspectivaTable from './PerspectivaTable.vue';
 import { getPerspective } from '../../../services/api/tools/bizig/perspectives-service';
 import { useRoute } from 'vue-router';
+import { useAlerts } from '../../../store/alert';
+import { createBig } from '../../../services/api/tools/bizig/big-service';
+import { createInitiative } from '../../../services/api/tools/bizig/initiative-service';
 
 const route = useRoute();
+
+const alert = useAlerts();
 
 const isLoading = ref(false);
 const perspective = ref({});
@@ -61,11 +68,50 @@ const perspective = ref({});
 const showAddBigForm = ref(false);
 const showAddInitiativeForm = ref(false);
 
+const newBigInput = ref('');
+const newInitiativeInput = ref('');
+
 const loadPerspective = async (id) => {
     isLoading.value = true;
     const response = await getPerspective(id);
     perspective.value = response;
     isLoading.value = false;
+}
+
+const addNewBig = async () => {
+    try {
+        if (!newBigInput.value) return;
+
+        await createBig({
+            name: newBigInput.value,
+            parent_id: perspective.value.id
+        });
+
+        await loadPerspective(perspective.value.id);
+    } catch (error) {
+        alert.add({ title: 'Error', content: 'Ocurrió un error al agregar la big' });
+    } finally {
+        newBigInput.value = '';
+        showAddBigForm.value = false;
+    }
+}
+
+const addNewInitiative = async () => {
+    try {
+        if (!newInitiativeInput.value) return;
+
+        await createInitiative({
+            name: newInitiativeInput.value,
+            parent_id: perspective.value.id
+        });
+
+        await loadPerspective(perspective.value.id);
+    } catch (error) {
+        alert.add({ title: 'Error', content: 'Ocurrió un error al agregar la iniciativa' });
+    } finally {
+        newInitiativeInput.value = '';
+        showAddInitiativeForm.value = false;
+    }
 }
 
 watch(() => route.params.id, async () => {
