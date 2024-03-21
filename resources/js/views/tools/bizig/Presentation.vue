@@ -1,14 +1,4 @@
 <template>
-    <CContainer v-if="isAdmin" class="my-4">
-        <CRow class="justify-content-end">
-            <CCol xs="2">
-                <router-link to="/bizig/admin" class="btn btn-outline-secondary">
-                    <CIcon icon="cilSettings" size="sm" class="me-1"/>
-                    Administración
-                </router-link>
-            </CCol>
-        </CRow>
-    </CContainer>
     <CContainer class="my-4">
         <CRow class="justify-content-between align-items-center">
             <CCol xs="2">

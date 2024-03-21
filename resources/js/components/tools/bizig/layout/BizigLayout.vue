@@ -4,10 +4,10 @@
             <CSidebar :visible="true" :unfoldable="false" color-scheme="light" class="h-100">
                 <CSidebarNav>
                     <CNavTitle>Bizig</CNavTitle>
-                    <CNavItem href="#" @click="goToPresentation">
+                    <CNavItem href="/bizig">
                         <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Bizig
                     </CNavItem>
-                    <CNavTitle>Perspectivas</CNavTitle>
+                    <CNavTitle v-if="perspectives.length > 0">Perspectivas</CNavTitle>
                     <CNavItem
                         href="#"
                         v-for="perspective in perspectives"
@@ -17,12 +17,16 @@
                     >
                         <CIcon customClassName="nav-icon" icon="cil-puzzle" /> {{ perspective.name }}
                     </CNavItem>
-                    <CNavItem href="#" @click="() => showNewPerspectiveModal = true">
+                    <CNavItem v-if="!isAdmin" href="#" @click="() => showNewPerspectiveModal = true">
                         <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Crear perspectiva
                     </CNavItem>
-                    <CNavTitle>Resumen</CNavTitle>
-                    <CNavItem v-if="perspectives.length > 0" href="#" @click="goToDashboard">
+                    <CNavTitle v-if="perspectives.length > 0">Resumen</CNavTitle>
+                    <CNavItem v-if="perspectives.length > 0" href="/bizig/dashboard">
                         <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Dashboard
+                    </CNavItem>
+                    <CNavTitle v-if="isAdmin">Administración</CNavTitle>
+                    <CNavItem v-if="isAdmin" href="/bizig/admin">
+                        <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Administración
                     </CNavItem>
                 </CSidebarNav>
             </CSidebar>
@@ -56,19 +60,23 @@ import { computed, onMounted, ref } from "vue";
 import { useCompany } from "../../../../store/company";
 import { usePerspective } from "../../../../store/tools/bizig/perspectives";
 import { useAlerts } from "../../../../store/alert";
-import { useRouter, useRoute } from "vue-router";
+import { useRouter } from "vue-router";
+import useUser from "../../../../composables/useUserComposable"
 import NewPerspectiveForm from "../../../../components/tools/bizig/NewPerspectiveForm.vue";
 
 const companyStore = useCompany();
 const perspectiveStore = usePerspective();
 const alert = useAlerts();
 
+const { user } = useUser();
+
 const router = useRouter();
-const route = useRoute();
 
 const showNewPerspectiveModal = ref(false);
 
 const perspectives = computed(() => perspectiveStore.perspectives);
+
+const isAdmin = computed(() => user.value?.role_name === 'admin');
 
 onMounted(async () => {
     await loadPerspectives();
@@ -98,14 +106,6 @@ const loadPerspectives = async () => {
 
 const choosePerspective = (id) => {
     router.push({ name: 'Perspectiva', params: { id: id } });
-}
-
-const goToDashboard = () => {
-    router.push({ path: '/bizig/dashboard' });
-}
-
-const goToPresentation = () => {
-    router.push({ path: '/bizig' });
 }
 
 const onNewPerspective = () => {

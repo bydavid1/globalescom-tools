@@ -1,11 +1,9 @@
 <template>
     <div class="min-vh-100">
         <CContainer class="py-5">
-            <div class="mt-5">
-                <h5>Herramientas</h5>
-                <div class="mt-3">
-                    <ToolList />
-                </div>
+            <h4>Herramientas</h4>
+            <div class="mt-3">
+                <ToolList />
             </div>
         </CContainer>
     </div>
