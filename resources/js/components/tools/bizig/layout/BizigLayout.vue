@@ -16,7 +16,7 @@
                     <CNavItem v-if="perspectives.lenght > 0" href="#" @click="goToDashboard">
                         <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Dashboard
                     </CNavItem>
-                    <CNavItem href="#">
+                    <CNavItem href="#" @click="() => showNewPerspectiveModal = true">
                         <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Crear perspectiva
                     </CNavItem>
                 </CSidebarNav>
@@ -36,14 +36,23 @@
         la previa autorización. <br>
         Metodología de trabajo bajo la metodología de BIZIG.
     </CContainer>
+    <CModal :visible="showNewPerspectiveModal">
+        <CModalHeader>
+            <CModalTitle>Nueva perspectiva</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            <NewPerspectiveForm @on-save="onNewPerspective"/>
+        </CModalBody>
+    </CModal>
 </template>
 
 <script setup>
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useCompany } from "../../../../store/company";
 import { usePerspective } from "../../../../store/tools/bizig/perspectives";
 import { useAlerts } from "../../../../store/alert";
 import { useRouter, useRoute } from "vue-router";
+import NewPerspectiveForm from "../../../../components/tools/bizig/NewPerspectiveForm.vue";
 
 const companyStore = useCompany();
 const perspectiveStore = usePerspective();
@@ -51,6 +60,8 @@ const alert = useAlerts();
 
 const router = useRouter();
 const route = useRoute();
+
+const showNewPerspectiveModal = ref(false);
 
 const perspectives = computed(() => perspectiveStore.perspectives);
 
@@ -86,6 +97,11 @@ const choosePerspective = (id) => {
 
 const goToDashboard = () => {
     router.push({ path: '/bizig/dashboard' });
+}
+
+const onNewPerspective = () => {
+    showNewPerspectiveModal.value = false;
+    perspectiveStore.fetchPerspectives();
 }
 
 </script>

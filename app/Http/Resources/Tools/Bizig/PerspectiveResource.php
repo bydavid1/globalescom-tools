@@ -28,7 +28,7 @@ class PerspectiveResource extends JsonResource
 
                 ];
             }),
-            'form' => FormResource::make($this->children->first()->forms->first())
+            'form' => FormResource::make($this->forms->first())
         ];
     }
 }
