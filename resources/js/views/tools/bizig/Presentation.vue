@@ -86,22 +86,13 @@
             </CTableBody>
         </CTable>
     </CContainer>
-    <CContainer v-if="!isAdmin" class="text-center mt-5">
-        <router-link to="/bizig/perspectivas/1" class="btn btn-primary btn-lg">Ver
-            progreso</router-link><br>
-    </CContainer>
 </template>
 
 
 <script setup>
-import { computed } from 'vue';
-import useUser from '../../../composables/useUserComposable';
 import { useCompany } from '../../../store/company';
 
 const store = useCompany();
-const { user } = useUser();
 
 const company = store.company;
-
-const isAdmin = computed(() => user.value?.role_name === 'admin');
 </script>

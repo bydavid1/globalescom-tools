@@ -34,7 +34,7 @@ class DashboardController extends Controller
 
         $perspectives = Section::whereRelation('sectionType', function ($query) {
             $query->where('name', 'perspective');
-        })->get();
+        })->where('company_id', $companyId)->get();
 
         $globalProgress = 0;
 

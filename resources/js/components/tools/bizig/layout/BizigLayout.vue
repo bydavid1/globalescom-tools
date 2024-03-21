@@ -3,6 +3,10 @@
         <CCol sm="auto">
             <CSidebar :visible="true" :unfoldable="false" color-scheme="light" class="h-100">
                 <CSidebarNav>
+                    <CNavTitle>Bizig</CNavTitle>
+                    <CNavItem href="#" @click="goToPresentation">
+                        <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Bizig
+                    </CNavItem>
                     <CNavTitle>Perspectivas</CNavTitle>
                     <CNavItem
                         href="#"
@@ -13,11 +17,12 @@
                     >
                         <CIcon customClassName="nav-icon" icon="cil-puzzle" /> {{ perspective.name }}
                     </CNavItem>
-                    <CNavItem v-if="perspectives.lenght > 0" href="#" @click="goToDashboard">
-                        <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Dashboard
-                    </CNavItem>
                     <CNavItem href="#" @click="() => showNewPerspectiveModal = true">
                         <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Crear perspectiva
+                    </CNavItem>
+                    <CNavTitle>Resumen</CNavTitle>
+                    <CNavItem v-if="perspectives.length > 0" href="#" @click="goToDashboard">
+                        <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Dashboard
                     </CNavItem>
                 </CSidebarNav>
             </CSidebar>
@@ -97,6 +102,10 @@ const choosePerspective = (id) => {
 
 const goToDashboard = () => {
     router.push({ path: '/bizig/dashboard' });
+}
+
+const goToPresentation = () => {
+    router.push({ path: '/bizig' });
 }
 
 const onNewPerspective = () => {
