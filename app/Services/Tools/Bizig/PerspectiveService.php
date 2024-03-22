@@ -24,13 +24,13 @@ class PerspectiveService
         return $perspective;
     }
 
-    public function createPerspective(string $name, string $accentColor, int $companyId) : Section
+    public function createPerspective(string $name, string $accentColor, string $icon, int $companyId) : Section
     {
         $sectionTypeId = SectionType::where('name', 'perspective')->first()->id;
 
         $perspective = new Section();
         $perspective->name = $name;
-        $perspective->data = json_encode(['accent_color' => $accentColor]);
+        $perspective->data = json_encode(['accent_color' => $accentColor, 'icon' => $icon]);
         $perspective->section_type_id = $sectionTypeId;
         $perspective->tool_id = 1; // TODO: Change this to a dynamic value
         $perspective->company_id = $companyId;

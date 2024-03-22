@@ -69,6 +69,7 @@ class PerspectiveController extends Controller
             $request->validate([
                 'name' => 'required|string',
                 'accent_color' => 'required|string',
+                'icon' => 'required|string',
             ]);
 
             /**
@@ -80,7 +81,12 @@ class PerspectiveController extends Controller
             // If no company is related to the user, return 404
             if (!$companyId) return response()->json(['message' => 'No company related'], 404);
 
-            $perspective = $this->perspectiveService->createPerspective($request->input('name'), $request->input('accent_color'), $companyId);
+            $perspective = $this->perspectiveService->createPerspective(
+                $request->input('name'),
+                $request->input('accent_color'),
+                $request->input('icon'),
+                $companyId
+            );
 
             return response()->json($perspective);
         } catch (\Error $e) {

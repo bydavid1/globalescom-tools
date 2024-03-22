@@ -15,7 +15,7 @@
                         :style="{ color: perspective.data.accent_color }"
                         @click="choosePerspective(perspective.id)"
                     >
-                        <CIcon customClassName="nav-icon" icon="cil-puzzle" /> {{ perspective.name }}
+                        <CIcon customClassName="nav-icon" :icon="perspective.data.icon || 'cil-puzzle'" /> {{ perspective.name }}
                     </CNavItem>
                     <CNavItem v-if="!isAdmin" href="#" @click="() => showNewPerspectiveModal = true">
                         <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Crear perspectiva

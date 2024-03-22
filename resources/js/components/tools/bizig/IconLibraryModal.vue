@@ -6,8 +6,10 @@
         <CModalBody>
             <CRow class="text-center">
                 <template v-for="(icon, iconName) in icons" :key="iconName">
-                    <CCol class="mb-5" :xs="3" :sm="2" @click="chooseIcon">
-                        <CIcon :content="icon" size="xxl" />
+                    <CCol class="mb-5" :xs="3">
+                        <CButton @click="chooseIcon(iconName)">
+                            <CIcon :content="icon" size="sm" />
+                        </CButton>
                     </CCol>
                 </template>
             </CRow>
@@ -16,19 +18,21 @@
 </template>
 
 <script setup>
-import { freeSet } from '@coreui/icons'
+import { iconsSet } from '../../../../icons';
+import { CButton } from '@coreui/vue-pro';
 
-const emit = defineEmits(['update:show', 'update:modelValue'])
+const emit = defineEmits(['onChoose'])
 
-const icons = freeSet
+const icon = defineModel('icon', { required: true })
+
+const icons = iconsSet
 
 const toKebabCase = (str) => str.replace(/([a-z])([A-Z0-9])/g, '$1-$2').toLowerCase()
 
-const chooseIcon = (icon) => {
-    const iconName = toKebabCase(icon)
-
-    emit('update:modelValue', iconName)
-    emit('update:show', false)
+const chooseIcon = (iconName) => {
+    console.log(toKebabCase(iconName))
+    icon.value = toKebabCase(iconName)
+    emit('onChoose')
 }
 
 </script>
