@@ -85,6 +85,10 @@ onMounted(async () => {
 
 const loadMyCompanyInfo = async () => {
     try {
+        if (isAdmin.value) {
+            return;
+        }
+
         await companyStore.fetchCompanyInfo()
         alert.add({ title: 'Información de la empresa cargada', content: 'Se ha cargado la información de la empresa.' })
     } catch (error) {
@@ -94,6 +98,10 @@ const loadMyCompanyInfo = async () => {
 
 const loadPerspectives = async () => {
     try {
+        if (isAdmin.value) {
+            return;
+        }
+
         perspectiveStore.loadingPerspectives = true
         await perspectiveStore.fetchPerspectives()
         alert.add({ title: 'Perspectivas cargadas', content: 'Se han cargado las perspectivas.' })

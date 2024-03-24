@@ -81,8 +81,8 @@ class DashboardController extends Controller
             }
 
             // calculate progress of perspective
-
-            $perspective->progress = intval($perspectiveProgress / (count($bigs) + count($initiatives)));
+            $totalSections = count($bigs) + count($initiatives);
+            $perspective->progress = $totalSections > 0 ? intval($perspectiveProgress / (count($bigs) + count($initiatives))) : 0;
             $globalProgress += $perspective->progress;
 
             unset($perspective->children); // clean children
