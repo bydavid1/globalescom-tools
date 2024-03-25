@@ -15,7 +15,12 @@
                         :style="{ color: perspective.data.accent_color }"
                         @click="choosePerspective(perspective.id)"
                     >
-                        <CIcon customClassName="nav-icon" :icon="perspective.data.icon || 'cil-puzzle'" /> {{ perspective.name }}
+                        <CIcon
+                            :style="{ color: perspective.data.accent_color }"
+                            customClassName="nav-icon"
+                            :icon="perspective.data.icon || 'cil-puzzle'"
+                        />
+                        {{ perspective.name }}
                     </CNavItem>
                     <CNavItem v-if="!isAdmin" href="#" @click="() => showNewPerspectiveModal = true">
                         <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Crear perspectiva
@@ -24,8 +29,8 @@
                     <CNavItem v-if="perspectives.length > 0" href="#" @click="goToDashboard">
                         <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Dashboard
                     </CNavItem>
-                    <CNavTitle v-if="showAdminMenu">Administración</CNavTitle>
-                    <CNavItem v-if="showAdminMenu" href="/bizig/admin">
+                    <CNavTitle v-if="isAdmin">Administración</CNavTitle>
+                    <CNavItem v-if="isAdmin" href="/bizig/admin">
                         <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Administración
                     </CNavItem>
                 </CSidebarNav>
@@ -84,8 +89,6 @@ const showAsAdmin = computed(() => bizigStore.showAsAdmin);
 const companyId = computed(() => bizigStore.companyId);
 const perspectives = computed(() => perspectiveStore.perspectives);
 const isAdmin = computed(() => user.value?.role_name === 'admin');
-const showAdminMenu = computed(() => !showAsAdmin.value && isAdmin.value);
-
 
 /// Lifecycle hooks
 onMounted(async () => {

@@ -36,10 +36,10 @@
                 </CContainer>
             </CCol>
         </CRow>
-        <CRow v-for="(item, i) in perspectives" :xs="{ gutter: 1 }" :key="i" style="font-size: 12px;" class="mt-2">
+        <CRow v-for="(item, i) in perspectives" :key="i" style="font-size: 12px;" class="mt-2">
             <CCol xs="2">
                 <CCard
-                    style="min-height: 9rem; width: 9rem; display: flex; justify-content: center; align-items: center;"
+                    style="min-height: 8.7rem; width: 8.7rem; display: flex; justify-content: center; align-items: center;"
                     :style="{ backgroundColor: item.data?.accent_color, color: '#fff' }">
                     <CCardBody class="p-2">
                         {{ item.name }}
@@ -49,7 +49,7 @@
             <CCol xs="4">
                 <CRow :xs="{ gutter: 1 }">
                     <CCol v-for="(big, j) in item.bigs" :key="j">
-                        <CCard style="min-height: 9rem; width: 9rem;" :class="`bg-${getColor(big.progress)}`"
+                        <CCard style="min-height: 8.7rem; width: 8.7rem;" :class="`bg-${getColor(big.progress)}`"
                             class="text-white">
                             <CCardBody>
                                 {{ big.name }}
