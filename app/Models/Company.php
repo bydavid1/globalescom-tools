@@ -18,7 +18,7 @@ class Company extends Model
     protected function logo() : Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => Storage::url($this::$mediaPath . '' . $value)
+            get: fn (string|null $value) => $value ? Storage::url($this::$mediaPath . $value) : null
         );
     }
 

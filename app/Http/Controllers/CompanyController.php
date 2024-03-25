@@ -27,10 +27,15 @@ class CompanyController extends Controller
         }
     }
 
-    public function getCompany($id)
+    public function getCompany(int $id)
     {
         try {
             $company = $this->companyService->getCompany($id);
+
+            if (!$company) {
+                return response()->json(['message' => 'Company not found'], 404);
+            }
+
             return response()->json($company);
         } catch (\Exception $e) {
             Log::error($e->getMessage());

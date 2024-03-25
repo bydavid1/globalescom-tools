@@ -13,7 +13,7 @@ class CompanyService
         return $companies;
     }
 
-    public function getCompany($id) : Company|null
+    public function getCompany(int $id) : Company|null
     {
         $company = Company::find($id);
 
