@@ -21,11 +21,11 @@
                         <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Crear perspectiva
                     </CNavItem>
                     <CNavTitle v-if="perspectives.length > 0">Resumen</CNavTitle>
-                    <CNavItem v-if="perspectives.length > 0" href="/bizig/dashboard">
+                    <CNavItem v-if="perspectives.length > 0" href="#" @click="goToDashboard">
                         <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Dashboard
                     </CNavItem>
-                    <CNavTitle v-if="isAdmin">Administración</CNavTitle>
-                    <CNavItem v-if="isAdmin" href="/bizig/admin">
+                    <CNavTitle v-if="showAdminMenu">Administración</CNavTitle>
+                    <CNavItem v-if="showAdminMenu" href="/bizig/admin">
                         <CIcon customClassName="nav-icon" icon="cil-speedometer" /> Administración
                     </CNavItem>
                 </CSidebarNav>
@@ -61,51 +61,68 @@ import { useCompany } from "../../../../store/company";
 import { usePerspective } from "../../../../store/tools/bizig/perspectives";
 import { useAlerts } from "../../../../store/alert";
 import { useRouter } from "vue-router";
+import useAdminQueryParams from "../../../../composables/useAdminQueryParams";
 import useUser from "../../../../composables/useUserComposable"
 import NewPerspectiveForm from "../../../../components/tools/bizig/NewPerspectiveForm.vue";
 
+/// Hooks
 const companyStore = useCompany();
 const perspectiveStore = usePerspective();
 const alert = useAlerts();
-
 const { user } = useUser();
-
 const router = useRouter();
 
+const { validateQueryParams, showAsAdmin, companyId } = useAdminQueryParams();
+
+
+/// Reactive variables
 const showNewPerspectiveModal = ref(false);
 
+
+/// Computed
 const perspectives = computed(() => perspectiveStore.perspectives);
-
 const isAdmin = computed(() => user.value?.role_name === 'admin');
+const showAdminMenu = computed(() => !showAsAdmin.value && isAdmin.value);
 
+
+/// Lifecycle hooks
 onMounted(async () => {
+    validateQueryParams();
+
+    if (showAsAdmin.value && !isAdmin.value) {
+        alert.add({ title: 'No tienes permisos', content: 'No tienes permisos para acceder a esta sección.' })
+        router.push({ path: '/' });
+        return;
+    }
+
     await loadPerspectives();
-    await loadMyCompanyInfo();
+    await loadCompanyInfo();
 });
 
-const loadMyCompanyInfo = async () => {
+
+/// Methods
+const loadCompanyInfo = async () => {
     try {
-        if (isAdmin.value) {
-            return;
+        if (showAsAdmin.value) {
+            await companyStore.fetchCompanyInfo(companyId.value)
+        } else {
+            await companyStore.fetchMyCompanyInfo()
         }
 
-        await companyStore.fetchCompanyInfo()
         alert.add({ title: 'Información de la empresa cargada', content: 'Se ha cargado la información de la empresa.' })
     } catch (error) {
-        alert.add({ title: 'No se puede cargar la información de la empresa', content: 'Puede que no esté asociado a ninguna empresa o que no se pueda cargar la información de la empresa.' })
+        console.log(error)
+        alert.add({ title: 'No se puede cargar la información de la empresa', content: 'Puede que no haya información de la empresa o que no se pueda cargar la información de la empresa.' })
     }
 }
 
 const loadPerspectives = async () => {
     try {
-        if (isAdmin.value) {
-            return;
-        }
-
         perspectiveStore.loadingPerspectives = true
-        await perspectiveStore.fetchPerspectives()
+        await perspectiveStore.fetchPerspectives(companyId.value)
         alert.add({ title: 'Perspectivas cargadas', content: 'Se han cargado las perspectivas.' })
     } catch (error) {
+        console.log(error)
         alert.add({ title: 'No se pueden cargar las perspectivas', content: 'Puede que no haya perspectivas asociadas a la empresa o que no se puedan cargar las perspectivas.' })
     } finally {
         perspectiveStore.loadingPerspectives = false
@@ -113,10 +130,29 @@ const loadPerspectives = async () => {
 }
 
 const choosePerspective = (id) => {
-    router.push({ name: 'Perspectiva', params: { id: id } });
+    if (showAsAdmin.value) {
+        router.push({ name: 'Perspectiva', query: { id: id, asAdmin: 'true', companyId: companyId.value } });
+        return;
+    }
+
+    router.push({ name: 'Perspectiva', query: { id: id } });
+}
+
+const goToDashboard = () => {
+    if (showAsAdmin.value) {
+        router.push({ name: 'Dashboard', query: { asAdmin: 'true', companyId: companyId.value } });
+        return;
+    }
+
+    router.push({ name: 'Dashboard' });
 }
 
 const onNewPerspective = () => {
+    if (showAsAdmin.value) {
+        alert.add({ title: 'No se puede crear perspectiva', content: 'No se puede crear perspectiva en modo administrador.' })
+        return;
+    }
+
     showNewPerspectiveModal.value = false;
     perspectiveStore.fetchPerspectives();
 }

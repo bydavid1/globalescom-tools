@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import PerspectivaTable from './PerspectivaTable.vue';
 import { getPerspective } from '../../../services/api/tools/bizig/perspectives-service';
 import { useRoute } from 'vue-router';
@@ -58,10 +58,12 @@ import { useAlerts } from '../../../store/alert';
 import { createBig } from '../../../services/api/tools/bizig/big-service';
 import { createInitiative } from '../../../services/api/tools/bizig/initiative-service';
 
+/// Hooks
 const route = useRoute();
-
 const alert = useAlerts();
 
+
+/// Reactive variables
 const isLoading = ref(false);
 const perspective = ref({});
 
@@ -71,6 +73,8 @@ const showAddInitiativeForm = ref(false);
 const newBigInput = ref('');
 const newInitiativeInput = ref('');
 
+
+/// Methods
 const loadPerspective = async (id) => {
     isLoading.value = true;
     const response = await getPerspective(id);
@@ -114,7 +118,9 @@ const addNewInitiative = async () => {
     }
 }
 
-watch(() => route.params.id, async () => {
-    await loadPerspective(route.params.id);
+
+/// Watchers
+watch(() => route.query.id, async () => {
+    await loadPerspective(route.query.id);
 }, { immediate: true });
 </script>

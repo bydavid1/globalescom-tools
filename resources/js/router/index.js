@@ -39,7 +39,7 @@ const router = createRouter({
                             component: () => import('../views/tools/bizig/Presentation.vue'),
                         },
                         {
-                            path: 'perspectivas/:id',
+                            path: 'perspectiva',
                             name: 'Perspectiva',
                             component: () => import('../views/tools/bizig/Perspectives.vue'),
                         },
@@ -49,7 +49,7 @@ const router = createRouter({
                             component: () => import('../views/tools/bizig/Administration.vue'),
                         },
                         {
-                            path: 'dashboard/:companyId?',
+                            path: 'dashboard',
                             name: 'Dashboard',
                             component: () => import('../views/tools/bizig/Dashboard.vue'),
                         }

@@ -21,31 +21,57 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { getUsers } from '../../../services/api/companies-service';
-import PerspectiveDetail from '../../../components/tools/bizig/PerspectiveDetail.vue';
 import { useUsers } from '../../../store/user';
 import { usePerspective } from '../../../store/tools/bizig/perspectives';
+import useAdminQueryParams from "../../../composables/useAdminQueryParams";
+import useUser from "../../../composables/useUserComposable"
 import NoPerspectives from '../../../components/tools/bizig/NoPerspectives.vue';
 import NewPerspectiveForm from '../../../components/tools/bizig/NewPerspectiveForm.vue';
+import PerspectiveDetail from '../../../components/tools/bizig/PerspectiveDetail.vue';
 
+/// Hooks
 const userStore = useUsers();
 const perspectiveStore = usePerspective();
+const { validateQueryParams, showAsAdmin, companyId } = useAdminQueryParams();
+const { user } = useUser();
 
+/// Reactive variables
 const showNewPerspectiveModal = ref(false);
 
+
+/// Computed properties
+const perspectives = computed(() => perspectiveStore.perspectives);
+const isLoading = computed(() => perspectiveStore.loadingPerspectives);
+const isAdmin = computed(() => user.value?.role_name === 'admin');
+
+
+/// Lifecycle hooks
 onMounted(async () => {
+    validateQueryParams();
+
+    if (showAsAdmin.value && !isAdmin.value) {
+        alert.add({ title: 'No tienes permisos', content: 'No tienes permisos para acceder a esta sección.' })
+        router.push({ path: '/' });
+        return;
+    }
+
     await loadCompanyUsers();
 });
 
-const perspectives = computed(() => perspectiveStore.perspectives);
 
-const isLoading = computed(() => perspectiveStore.loadingPerspectives);
-
+/// Methods
 const loadCompanyUsers = async () => {
-    // get company id from local store
-    const companyId = JSON.parse(localStorage.getItem('user')).company_id;
-    const response = await getUsers(companyId);
 
-    userStore.setUsers(response);
+    if (showAsAdmin.value) {
+        const response = await getUsers(companyId.value);
+        userStore.setUsers(response);
+    } else {
+        // get company id from local store
+        const companyId = JSON.parse(localStorage.getItem('user')).company_id;
+        const response = await getUsers(companyId);
+        userStore.setUsers(response);
+    }
+
 }
 
 const onNewPerspective = () => {

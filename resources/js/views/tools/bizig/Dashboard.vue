@@ -106,26 +106,41 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { loadDashboard } from '../../../services/api/tools/bizig/dashboard-service';
-import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
+import useAdminQueryParams from "../../../composables/useAdminQueryParams";
+import useUser from "../../../composables/useUserComposable"
 
-const route = useRoute();
+/// Hooks
+const router = useRouter();
+const { validateQueryParams, showAsAdmin, companyId } = useAdminQueryParams();
+const { user } = useUser();
 
+
+/// Reactive variables
 const perspectives = ref([]);
 const globalProgress = ref(0);
 
-onMounted(async () => {
 
-    if (route.params.companyId && !isUserAdmin) {
-        router.push({ name: 'home' });
+/// Computed properties
+const isAdmin = computed(() => user.value?.role_name === 'admin');
+
+
+/// Lifecycle hooks
+onMounted(async () => {
+    validateQueryParams();
+
+    if (showAsAdmin.value && !isAdmin.value) {
+        router.push({ path: '/' });
+        return;
     }
 
     await getData();
 });
 
-const isUserAdmin = () => JSON.parse(localStorage.getItem('user')).role_name === 'admin';
 
+/// Methods
 const getData = async () => {
-    const response = await loadDashboard(route.params.companyId ?? null);
+    const response = await loadDashboard(companyId.value);
     perspectives.value = response.perspectives;
     globalProgress.value = response.global_progress;
 }

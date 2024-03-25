@@ -29,6 +29,12 @@
                             <CTableDataCell>{{ company.progress }}%</CTableDataCell>
                             <CTableDataCell class="text-end">
                                 <router-link
+                                    :to="{ name: 'Bizig', query: { asAdmin: 'true', companyId: company.id }}"
+                                    class="btn btn-sm btn-success text-white"
+                                >
+                                    Ver Dashboard
+                                </router-link>
+                                <router-link
                                     :to="{ name: 'Dashboard', params: { companyId: company.id } }"
                                     class="btn btn-sm btn-primary text-white"
                                 >

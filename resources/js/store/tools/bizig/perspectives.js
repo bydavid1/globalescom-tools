@@ -8,8 +8,8 @@ export const usePerspective = defineStore({
     loadingPerspectives: false,
   }),
   actions: {
-    async fetchPerspectives() {
-        const response = await getPerspectives()
+    async fetchPerspectives(companyId = null) {
+        const response = await getPerspectives(companyId)
         this.perspectives = response
     },
   },
