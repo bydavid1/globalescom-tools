@@ -16,68 +16,63 @@
             <div v-if="loading" class="d-flex justify-content-center">
                 <CSpinner color="primary" />
             </div>
-            <CTable v-else bordered>
-                <CTableHead>
-                    <CTableRow>
-                        <CTableHeaderCell v-for="(input, index) in form.inputs" :key="index">{{ input.label }}
-                        </CTableHeaderCell>
-                        <CTableHeaderCell v-if="!showAsAdmin">Acción</CTableHeaderCell>
-                    </CTableRow>
-                </CTableHead>
-                <CTableBody>
-                    <CTableRow v-for="(batch, batchIndex) in batches" :key="batchIndex">
-                        <template v-if="batch.editing">
-                            <CTableDataCell v-for="(input, inputIndex) in form.inputs" :key="inputIndex">
-                                <CFormInput v-if="input.type == 'text'"
-                                    :value="getModel(batch, input.id)"
-                                    @input="setModel(batch, input.id, $event.target.value)"
-                                    placeholder="Ingrese la respuesta" type="text" size="sm" />
-                                <select2
-                                    v-else-if="input.type == 'multiselect'"
-                                    :data="users"
-                                    :value="setSelectedUsers(batch, input.id)"
-                                    :multiple="true"
-                                    @update="syncSelectUsers(batch, input.id, $event)"
-                                />
-                                <CDatePicker v-else-if="input.type == 'datepicker'" locale="es-ES" size="sm"
-                                    :date="getModel(batch, input.id)"
-                                    @update:date="setModel(batch, input.id, $event)"
-                                    placeholder="Seleccione la fecha"
-                                />
-                                <CFormSelect v-else-if="input.type == 'select'"
-                                    :value="getModel(batch, input.id)"
-                                    @input="setModel(batch, input.id, $event.target.value)"
-                                    size="sm"
-                                >
-                                    <option v-for="(option, optionIndex) in input.options" :key="optionIndex"
-                                        :value="option.value">
-                                        {{ option.label }}
-                                    </option>
-                                </CFormSelect>
+            <template v-else>
+                <CAlert v-if="showAsAdmin && batches.length === 0" color="info">
+                    La empresa no ha respondido a esta sección.
+                </CAlert>
+                <CTable v-else bordered>
+                    <CTableHead>
+                        <CTableRow>
+                            <CTableHeaderCell v-for="(input, index) in form.inputs" :key="index">{{ input.label }}
+                            </CTableHeaderCell>
+                            <CTableHeaderCell v-if="!showAsAdmin">Acción</CTableHeaderCell>
+                        </CTableRow>
+                    </CTableHead>
+                    <CTableBody>
+                        <CTableRow v-for="(batch, batchIndex) in batches" :key="batchIndex">
+                            <template v-if="batch.editing">
+                                <CTableDataCell v-for="(input, inputIndex) in form.inputs" :key="inputIndex">
+                                    <CFormInput v-if="input.type == 'text'" :value="getModel(batch, input.id)"
+                                        @input="setModel(batch, input.id, $event.target.value)"
+                                        placeholder="Ingrese la respuesta" type="text" size="sm" />
+                                    <select2 v-else-if="input.type == 'multiselect'" :data="users"
+                                        :value="setSelectedUsers(batch, input.id)" :multiple="true"
+                                        @update="syncSelectUsers(batch, input.id, $event)" />
+                                    <CDatePicker v-else-if="input.type == 'datepicker'" locale="es-ES" size="sm"
+                                        :date="getModel(batch, input.id)"
+                                        @update:date="setModel(batch, input.id, $event)"
+                                        placeholder="Seleccione la fecha" />
+                                    <CFormSelect v-else-if="input.type == 'select'" :value="getModel(batch, input.id)"
+                                        @input="setModel(batch, input.id, $event.target.value)" size="sm">
+                                        <option v-for="(option, optionIndex) in input.options" :key="optionIndex"
+                                            :value="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </CFormSelect>
+                                </CTableDataCell>
+                            </template>
+                            <template v-else>
+                                <CTableDataCell v-for="(input, inputIndex) in form.inputs" :key="inputIndex"
+                                    style="font-size: 14px;">
+                                    {{ getAnswer(batch, input.id, input.type) }}
+                                </CTableDataCell>
+                            </template>
+                            <CTableDataCell v-if="!showAsAdmin" class="text-white">
+                                <CButton v-if="batch.editing" color="primary" size="sm"
+                                    @click="saveAnswer(batch.id, batchIndex)">
+                                    Guardar
+                                </CButton>
+                                <CButton v-else color="success" size="sm" @click="editAnswer(batch.id)">
+                                    Editar
+                                </CButton>
                             </CTableDataCell>
-                        </template>
-                        <template v-else>
-                            <CTableDataCell v-for="(input, inputIndex) in form.inputs" :key="inputIndex" style="font-size: 14px;">
-                                {{ getAnswer(batch, input.id, input.type) }}
-                            </CTableDataCell>
-                        </template>
-                        <CTableDataCell v-if="!showAsAdmin" class="text-white">
-                            <CButton v-if="batch.editing" color="primary" size="sm"
-                                @click="saveAnswer(batch.id, batchIndex)">
-                                Guardar
-                            </CButton>
-                            <CButton v-else color="success" size="sm" @click="editAnswer(batch.id)">
-                                Editar
-                            </CButton>
-                        </CTableDataCell>
-                    </CTableRow>
-                </CTableBody>
-            </CTable>
-
+                        </CTableRow>
+                    </CTableBody>
+                </CTable>
+            </template>
         </CCardBody>
     </CCard>
 </template>
-
 <script setup>
 import { computed, reactive, ref, watch } from 'vue';
 import { updateBatch, saveBatch, getMyAnswers, getAnswersByCompany } from '../../../services/api/tools/bizig/answer-service';

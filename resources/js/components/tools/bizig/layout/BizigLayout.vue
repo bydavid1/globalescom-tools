@@ -15,11 +15,12 @@
                         :style="{ color: perspective.data.accent_color }"
                         @click="choosePerspective(perspective.id)"
                     >
-                        <CIcon
-                            :style="{ color: perspective.data.accent_color }"
-                            customClassName="nav-icon"
-                            :icon="perspective.data.icon || 'cil-puzzle'"
-                        />
+                        <div class="icon-container" :style="{ backgroundColor: perspective.data.accent_color }">
+                            <CIcon
+                                style="color: white;"
+                                :icon="perspective.data.icon || 'cil-puzzle'"
+                            />
+                        </div>
                         {{ perspective.name }}
                     </CNavItem>
                     <CNavItem v-if="!isAdmin" href="#" @click="() => showNewPerspectiveModal = true">
@@ -109,10 +110,9 @@ const loadCompanyInfo = async () => {
         if (showAsAdmin.value) {
             await companyStore.fetchCompanyInfo(companyId.value)
         } else {
-            await companyStore.fetchMyCompanyInfo()
+            if (!isAdmin.value) await companyStore.fetchMyCompanyInfo()
         }
 
-        alert.add({ title: 'Información de la empresa cargada', content: 'Se ha cargado la información de la empresa.' })
     } catch (error) {
         console.log(error)
         alert.add({ title: 'No se puede cargar la información de la empresa', content: 'Puede que no haya información de la empresa o que no se pueda cargar la información de la empresa.' })
@@ -122,8 +122,7 @@ const loadCompanyInfo = async () => {
 const loadPerspectives = async () => {
     try {
         perspectiveStore.loadingPerspectives = true
-        await perspectiveStore.fetchPerspectives(companyId.value)
-        alert.add({ title: 'Perspectivas cargadas', content: 'Se han cargado las perspectivas.' })
+        if (!isAdmin.value || (showAsAdmin.value || isAdmin.value))  await perspectiveStore.fetchPerspectives(companyId.value)
     } catch (error) {
         console.log(error)
         alert.add({ title: 'No se pueden cargar las perspectivas', content: 'Puede que no haya perspectivas asociadas a la empresa o que no se puedan cargar las perspectivas.' })
@@ -171,3 +170,15 @@ watch(() => route.query, async () => {
     }
 }, { immediate: true });
 </script>
+
+<style scoped>
+.icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+</style>

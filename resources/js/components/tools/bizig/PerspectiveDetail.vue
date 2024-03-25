@@ -22,15 +22,16 @@
             <CIcon icon="cil-puzzle" size="lg" class="me-2" />
             <h4>Bigs</h4>
         </div>
+        <CAlert v-if="showAsAdmin && perspective.bigs?.length === 0" color="info">
+            La empresa no ha agregado bigs.
+        </CAlert>
         <PerspectivaTable v-for="(item, index) in perspective.bigs" :loading="isLoading" :key="index" :section="item"
             :form="perspective.form" class="mb-3" />
         <div v-if="perspective.bigs?.length < 3 && !showAsAdmin" class="d-grid gap-2 col-6 mx-auto mt-5">
             <CButton v-if="!showAddBigForm" color="secondary" variant="outline" @click="() => showAddBigForm = true">
                 Agregar big</CButton>
             <CFormInput v-else v-model="newBigInput" placeholder="Nombre de la big"
-                @keydown.esc="() => showAddBigForm = false" @keydown.enter="addNewBig"/>
-        </div>
-        <div>
+                @keydown.esc="() => showAddBigForm = false" @keydown.enter="addNewBig" />
         </div>
     </CContainer>
     <CContainer class="text-start my-5">
@@ -38,13 +39,16 @@
             <CIcon icon="cil-puzzle" size="lg" class="me-2" />
             <h4>Iniciativas</h4>
         </div>
+        <CAlert v-if="showAsAdmin && perspective.initiatives?.length === 0" color="info">
+            La empresa no ha agregado iniciativas.
+        </CAlert>
         <PerspectivaTable v-for="(item, index) in perspective.initiatives" :loading="isLoading" :key="index"
             :section="item" :form="perspective.form" class="mb-3" />
         <div v-if="perspective.initiatives?.length < 3 && !showAsAdmin" class="d-grid gap-2 col-6 mx-auto mt-5">
             <CButton v-if="!showAddInitiativeForm" color="secondary" variant="outline"
                 @click="() => showAddInitiativeForm = true">Agregar iniciativa</CButton>
             <CFormInput v-else v-model="newInitiativeInput" placeholder="Nombre de la big"
-                @keydown.esc="() => showAddInitiativeForm = false" @keydown.enter="addNewInitiative"/>
+                @keydown.esc="() => showAddInitiativeForm = false" @keydown.enter="addNewInitiative" />
         </div>
     </CContainer>
 </template>
