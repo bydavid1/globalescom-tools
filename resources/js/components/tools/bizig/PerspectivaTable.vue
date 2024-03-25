@@ -21,7 +21,7 @@
                     <CTableRow>
                         <CTableHeaderCell v-for="(input, index) in form.inputs" :key="index">{{ input.label }}
                         </CTableHeaderCell>
-                        <CTableHeaderCell>Acción</CTableHeaderCell>
+                        <CTableHeaderCell v-if="!showAsAdmin">Acción</CTableHeaderCell>
                     </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -61,7 +61,7 @@
                                 {{ getAnswer(batch, input.id, input.type) }}
                             </CTableDataCell>
                         </template>
-                        <CTableDataCell class="text-white">
+                        <CTableDataCell v-if="!showAsAdmin" class="text-white">
                             <CButton v-if="batch.editing" color="primary" size="sm"
                                 @click="saveAnswer(batch.id, batchIndex)">
                                 Guardar
@@ -80,11 +80,16 @@
 
 <script setup>
 import { computed, reactive, ref, watch } from 'vue';
-import { updateBatch, saveBatch, getMyAnswers } from '../../../services/api/tools/bizig/answer-service';
+import { updateBatch, saveBatch, getMyAnswers, getAnswersByCompany } from '../../../services/api/tools/bizig/answer-service';
 import { useUsers } from '../../../store/user';
+import useAdminQueryParams from "../../../composables/useAdminQueryParams";
 
+/// Hooks
 const store = useUsers();
+const { validateQueryParams, showAsAdmin, companyId } = useAdminQueryParams();
 
+
+/// Props
 const props = defineProps({
     section: {
         type: Object
@@ -97,6 +102,8 @@ const props = defineProps({
     }
 });
 
+
+/// Static variables
 const answersBatchShape = {
     answers: [
         {
@@ -133,20 +140,33 @@ const answersBatchShape = {
 };
 
 
+/// Reactive variables
 const batches = ref([]);
-
 const globalProgress = ref(0);
 
-const users = computed(() => store.getUsers.map(user => ({ value: user.id, label: user.name })));
 
+/// Computed properties
+const users = computed(() => store.getUsers.map(user => ({ value: user.id, label: user.name })));
+const progress = computed(() => batches.value.map((b) => b.answers.find(a => a.input_id == 14)?.body || 0));
+
+
+
+/// Methods
 const initBatches = async () => {
-    const response = await getMyAnswers(props.section.id);
+    let response;
+    if (showAsAdmin.value) {
+        response = await getAnswersByCompany(companyId.value, props.section.id);
+    } else {
+        response = await getMyAnswers(props.section.id);
+    }
+
     batches.value = response.map(batch => reactive({ ...batch }));
     const answerBatch = JSON.parse(JSON.stringify(answersBatchShape));
-    batches.value.push(reactive({ ...answerBatch, id: Math.random() * 100 }));
+
+
+    if (!showAsAdmin) batches.value.push(reactive({ ...answerBatch, id: Math.random() * 100 }));
 };
 
-const progress = computed(() => batches.value.map((b) => b.answers.find(a => a.input_id == 14)?.body || 0));
 
 const getModel = (batch, inputId) => {
     let answer = batch.answers.find(a => a.input_id === inputId);
@@ -233,10 +253,6 @@ const editAnswer = (id) => {
     batches.value.find(b => b.id == id).editing = true;
 };
 
-watch(progress, (newProgress) => {
-    calculateGlobalProgress();
-});
-
 const calculateGlobalProgress = () => {
     let totalProgress = 0;
 
@@ -255,7 +271,14 @@ const calculateGlobalProgress = () => {
     globalProgress.value = parseInt((totalProgress / batches.value.length).toFixed(0));
 };
 
+
+/// Watchers
+watch(progress, (newProgress) => {
+    calculateGlobalProgress();
+});
+
 watch(() => props.section, () => {
+    validateQueryParams();
     initBatches();
     calculateGlobalProgress();
 }, { immediate: true });

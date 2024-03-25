@@ -22,10 +22,10 @@ const getMyAnswers = async (sectionId) => {
     return response.data;
 }
 
-const getAnswersByUser = async (userId, sectionId) => {
+const getAnswersByCompany = async (companyId, sectionId) => {
     const response = await api.get(`/answers`, {
         params: {
-            user_id: userId,
+            company_id: companyId,
             section_id: sectionId
         }
     });
@@ -37,5 +37,5 @@ export {
     saveBatch,
     updateBatch,
     getMyAnswers,
-    getAnswersByUser
+    getAnswersByCompany
 }
