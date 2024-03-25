@@ -82,11 +82,11 @@
 import { computed, reactive, ref, watch } from 'vue';
 import { updateBatch, saveBatch, getMyAnswers, getAnswersByCompany } from '../../../services/api/tools/bizig/answer-service';
 import { useUsers } from '../../../store/user';
-import useAdminQueryParams from "../../../composables/useAdminQueryParams";
+import { useBizig } from "../../../store/tools/bizig/bizig"
 
 /// Hooks
 const store = useUsers();
-const { validateQueryParams, showAsAdmin, companyId } = useAdminQueryParams();
+const bizigStore = useBizig();
 
 
 /// Props
@@ -148,7 +148,8 @@ const globalProgress = ref(0);
 /// Computed properties
 const users = computed(() => store.getUsers.map(user => ({ value: user.id, label: user.name })));
 const progress = computed(() => batches.value.map((b) => b.answers.find(a => a.input_id == 14)?.body || 0));
-
+const showAsAdmin = computed(() => bizigStore.showAsAdmin);
+const companyId = computed(() => bizigStore.companyId);
 
 
 /// Methods
@@ -278,7 +279,6 @@ watch(progress, (newProgress) => {
 });
 
 watch(() => props.section, () => {
-    validateQueryParams();
     initBatches();
     calculateGlobalProgress();
 }, { immediate: true });

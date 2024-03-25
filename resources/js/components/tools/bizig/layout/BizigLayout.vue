@@ -56,23 +56,23 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useCompany } from "../../../../store/company";
 import { usePerspective } from "../../../../store/tools/bizig/perspectives";
+import { useBizig } from "../../../../store/tools/bizig/bizig";
 import { useAlerts } from "../../../../store/alert";
-import { useRouter } from "vue-router";
-import useAdminQueryParams from "../../../../composables/useAdminQueryParams";
+import { useRouter, useRoute } from "vue-router";
 import useUser from "../../../../composables/useUserComposable"
 import NewPerspectiveForm from "../../../../components/tools/bizig/NewPerspectiveForm.vue";
 
 /// Hooks
 const companyStore = useCompany();
 const perspectiveStore = usePerspective();
+const bizigStore = useBizig();
 const alert = useAlerts();
 const { user } = useUser();
 const router = useRouter();
-
-const { validateQueryParams, showAsAdmin, companyId } = useAdminQueryParams();
+const route = useRoute();
 
 
 /// Reactive variables
@@ -80,6 +80,8 @@ const showNewPerspectiveModal = ref(false);
 
 
 /// Computed
+const showAsAdmin = computed(() => bizigStore.showAsAdmin);
+const companyId = computed(() => bizigStore.companyId);
 const perspectives = computed(() => perspectiveStore.perspectives);
 const isAdmin = computed(() => user.value?.role_name === 'admin');
 const showAdminMenu = computed(() => !showAsAdmin.value && isAdmin.value);
@@ -87,8 +89,6 @@ const showAdminMenu = computed(() => !showAsAdmin.value && isAdmin.value);
 
 /// Lifecycle hooks
 onMounted(async () => {
-    validateQueryParams();
-
     if (showAsAdmin.value && !isAdmin.value) {
         alert.add({ title: 'No tienes permisos', content: 'No tienes permisos para acceder a esta sección.' })
         router.push({ path: '/' });
@@ -157,4 +157,14 @@ const onNewPerspective = () => {
     perspectiveStore.fetchPerspectives();
 }
 
+
+/// Watchers
+watch(() => route.query, async () => {
+    const { query } = route;
+
+    if (query && query.asAdmin === 'true' && query.companyId) {
+        bizigStore.showAsAdmin = true;
+        bizigStore.companyId = query.companyId;
+    }
+}, { immediate: true });
 </script>

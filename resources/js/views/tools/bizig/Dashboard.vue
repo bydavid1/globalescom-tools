@@ -107,13 +107,13 @@
 import { computed, onMounted, ref } from 'vue';
 import { loadDashboard } from '../../../services/api/tools/bizig/dashboard-service';
 import { useRouter } from 'vue-router';
-import useAdminQueryParams from "../../../composables/useAdminQueryParams";
+import { useBizig } from "../../../store/tools/bizig/bizig";
 import useUser from "../../../composables/useUserComposable"
 
 /// Hooks
 const router = useRouter();
-const { validateQueryParams, showAsAdmin, companyId } = useAdminQueryParams();
 const { user } = useUser();
+const bizigStore = useBizig();
 
 
 /// Reactive variables
@@ -123,12 +123,11 @@ const globalProgress = ref(0);
 
 /// Computed properties
 const isAdmin = computed(() => user.value?.role_name === 'admin');
-
+const showAsAdmin = computed(() => bizigStore.showAsAdmin);
+const companyId = computed(() => bizigStore.companyId);
 
 /// Lifecycle hooks
 onMounted(async () => {
-    validateQueryParams();
-
     if (showAsAdmin.value && !isAdmin.value) {
         router.push({ path: '/' });
         return;

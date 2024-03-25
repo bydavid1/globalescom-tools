@@ -24,7 +24,7 @@
         </div>
         <PerspectivaTable v-for="(item, index) in perspective.bigs" :loading="isLoading" :key="index" :section="item"
             :form="perspective.form" class="mb-3" />
-        <div v-if="perspective.bigs?.length < 3" class="d-grid gap-2 col-6 mx-auto mt-5">
+        <div v-if="perspective.bigs?.length < 3 && !showAsAdmin" class="d-grid gap-2 col-6 mx-auto mt-5">
             <CButton v-if="!showAddBigForm" color="secondary" variant="outline" @click="() => showAddBigForm = true">
                 Agregar big</CButton>
             <CFormInput v-else v-model="newBigInput" placeholder="Nombre de la big"
@@ -40,7 +40,7 @@
         </div>
         <PerspectivaTable v-for="(item, index) in perspective.initiatives" :loading="isLoading" :key="index"
             :section="item" :form="perspective.form" class="mb-3" />
-        <div v-if="perspective.initiatives?.length < 3" class="d-grid gap-2 col-6 mx-auto mt-5">
+        <div v-if="perspective.initiatives?.length < 3 && !showAsAdmin" class="d-grid gap-2 col-6 mx-auto mt-5">
             <CButton v-if="!showAddInitiativeForm" color="secondary" variant="outline"
                 @click="() => showAddInitiativeForm = true">Agregar iniciativa</CButton>
             <CFormInput v-else v-model="newInitiativeInput" placeholder="Nombre de la big"
@@ -50,18 +50,19 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import PerspectivaTable from './PerspectivaTable.vue';
 import { getPerspective } from '../../../services/api/tools/bizig/perspectives-service';
 import { useRoute } from 'vue-router';
 import { useAlerts } from '../../../store/alert';
+import { useBizig } from "../../../store/tools/bizig/bizig"
 import { createBig } from '../../../services/api/tools/bizig/big-service';
 import { createInitiative } from '../../../services/api/tools/bizig/initiative-service';
 
 /// Hooks
 const route = useRoute();
 const alert = useAlerts();
-
+const bizigStore = useBizig();
 
 /// Reactive variables
 const isLoading = ref(false);
@@ -72,6 +73,10 @@ const showAddInitiativeForm = ref(false);
 
 const newBigInput = ref('');
 const newInitiativeInput = ref('');
+
+
+/// Computed properties
+const showAsAdmin = computed(() => bizigStore.showAsAdmin);
 
 
 /// Methods
