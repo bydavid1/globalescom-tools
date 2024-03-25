@@ -80,7 +80,7 @@ const sendCompany = async (event) => {
         formData.append('name', formState.name);
         formData.append('logo', formState.logo);
 
-        if (!isEditing) {
+        if (!props.isEditing) {
             formData.append('email', formState.email);
             formData.append('password', formState.password);
         }
@@ -102,7 +102,6 @@ const sendCompany = async (event) => {
 }
 
 const getFileFromInput = (event) => {
-    console.log('event', event.target.files[0]);
     formState.logo = event.target.files[0];
 }
 

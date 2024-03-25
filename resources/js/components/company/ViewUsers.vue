@@ -1,7 +1,6 @@
 <template>
     <div>
-        <h5>Usuarios</h5>
-        <CTable v-if="users.length > 0" small class="mt-3">
+        <CTable v-if="users.length > 0" small>
             <CTableHead>
                 <CTableRow>
                     <CTableHeaderCell scope="col">ID</CTableHeaderCell>

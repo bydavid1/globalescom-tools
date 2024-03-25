@@ -47,16 +47,25 @@
             </CCard>
         </CContainer>
         <CModal :visible="showUsersModal" size="xl" @close="() => { showUsersModal = false }">
+            <CModalHeader>
+                <CModalTitle>Usuarios</CModalTitle>
+            </CModalHeader>
             <CModalBody>
                 <ViewUsers :company-id="currentCompanyId" />
             </CModalBody>
         </CModal>
         <CModal :visible="showCreateUserModal" size="lg" @close="() => { showCreateUserModal = false }">
+            <CModalHeader>
+                <CModalTitle>Nuevo Usuario</CModalTitle>
+            </CModalHeader>
             <CModalBody>
                 <AddUser :company-id="currentCompanyId" @onSuccess="closeModals" />
             </CModalBody>
         </CModal>
         <CModal :visible="showCompanyModal" size="lg" @close="() => { showCompanyModal = false }">
+            <CModalHeader>
+                <CModalTitle>{{ isEditing ? 'Editar' : 'Nueva' }} Empresa</CModalTitle>
+            </CModalHeader>
             <CModalBody>
                 <CreateOrUpdateCompany :is-editing="isEditing" :company-id="currentCompanyId"
                     @onSuccess="closeModals" />

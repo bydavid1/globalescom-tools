@@ -16,7 +16,7 @@
                 <CFormInput v-model="password" type="password" id="password"
                     placeholder="Ingrese la contraseña del usuario" />
             </CCol>
-            <CLoadingButton type="submit" color="primary" :loading="isLoading">Guardar</CLoadingButton>
+            <CLoadingButton type="submit" color="primary" class="mt-3" :loading="isLoading">Guardar</CLoadingButton>
         </CForm>
     </div>
 </template>
