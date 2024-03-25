@@ -165,10 +165,7 @@ const initBatches = async () => {
     const answerBatch = JSON.parse(JSON.stringify(answersBatchShape));
 
 
-    if (!showAsAdmin.value) {
-        console.log('No es admin')
-        batches.value.push(reactive({ ...answerBatch, id: Math.random() * 100 }));
-    }
+    if (!showAsAdmin.value) batches.value.push(reactive({ ...answerBatch, id: Math.random() * 100 }));
 };
 
 

@@ -41,7 +41,6 @@ const getMyCompany = async () => {
 }
 
 const getUsers = async (id) => {
-    console.log(id);
     const response = await api.get(`/companies/${id}/users`);
 
     return response.data;

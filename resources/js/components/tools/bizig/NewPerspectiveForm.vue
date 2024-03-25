@@ -10,9 +10,7 @@
         </CCol>
         <CCol xs="12">
             <CFormLabel for="icon">Icono</CFormLabel><br>
-            <CButton @click="iconLibraryModalVisible = true">
-                <CIcon :icon="formState.icon" size="sm" />
-            </CButton>
+            <InputIcon v-model="formState.icon" />
         </CCol>
         <CContainer class="mt-4">
             <CLoadingButton type="submit" color="primary" :loading="isLoading">
@@ -20,26 +18,19 @@
             </CLoadingButton>
         </CContainer>
     </CForm>
-    <icon-library-modal
-        v-model:icon="formState.icon"
-        :visible="iconLibraryModalVisible"
-        @close="() => { iconLibraryModalVisible = false }"
-        @onChoose="() => { iconLibraryModalVisible = false }"
-    />
 </template>
 
 <script setup>
-import { reactive, ref, watch } from 'vue';
+import { reactive, ref } from 'vue';
 import { useAlerts } from '../../../store/alert';
 import { createPerspective } from '../../../services/api/tools/bizig/perspectives-service';
-import IconLibraryModal from './IconLibraryModal.vue';
+import InputIcon from '../../widgets/InputIcon/InputIcon.vue';
 
 const emit = defineEmits(['onSave']);
 
 const alert = useAlerts();
 
 const isLoading = ref(false);
-const iconLibraryModalVisible = ref(false);
 
 const formState = reactive({
     name: '',
