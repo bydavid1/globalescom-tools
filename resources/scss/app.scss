@@ -1,0 +1,9 @@
+// If you want to override variables do it here
+@import "variables";
+
+// Import styles
+@import "../../node_modules/@coreui/coreui-pro/scss/coreui.scss";
+
+// Plugins
+@import "plugins/select2";
+

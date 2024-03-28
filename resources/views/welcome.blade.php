@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Global Escom</title>
-
-        @vite('resources/css/app.css')
+        <link href="https://fonts.cdnfonts.com/css/gill-sans-mt-2" rel="stylesheet">
+        @vite('resources/scss/app.scss')
     </head>
     <body>
         <div id="app"></div>
